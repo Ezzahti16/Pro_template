@@ -314,7 +314,7 @@ watermark = doc.name
         ROTATE,
         string="Text Rotation (0°-360°):",
         required=True,
-        default="0",
+        default="45",
         help=
         "Rotates the watermark text a given number of degrees counter clockwise\
                     around its centre")
@@ -322,7 +322,7 @@ watermark = doc.name
         OPACITY,
         string="Opacity (0.05-1.0):",
         required=True,
-        default="0.5",
+        default="0.1",
         help=
         "Sets the opacity of the watermark text. \nGive a number between 0.05 and 1.0 with \
                     1.0 being opaque and 0.05 being almost transparent")

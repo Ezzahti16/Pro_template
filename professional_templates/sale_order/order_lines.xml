@@ -17,6 +17,8 @@
             <t t-set="col_span" t-value="8 if display_discount else 7"/>
                 <!-- common th styles -->
             <t t-set="th_style" t-value="'border-bottom: 1px solid #ddd !important;white-space:nowrap;'"/>
+                <!-- Default to tax-excluded amounts unless the user's tax display preference explicitly asks for tax-included -->
+            <t t-set="show_tax_included" t-value="user.has_group('account.group_show_line_subtotals_tax_included')"/>
             <table class="table  table-sm" t-attf-style="color:{{style.text_color}};" >
                 <thead t-attf-style="background-color:{{style.theme_color if not style.transparent else 'transparent'}} !important; page-break-inside: avoid; color:{{style.theme_txt_color if not style.transparent else style.text_color}};">
                     <tr t-attf-style="page-break-inside: avoid !important; border-bottom: 1px solid {{style.text_color}} !important;font-size:{{int(style.body_font)+2}}px;">
@@ -28,8 +30,8 @@
                         <th t-if="display_discount" class="text-right" t-attf-style="{{th_style}}" groups="product.group_discount_per_so_line"><i class="fa fa-minus-square"/> Discount(%)</th>
                         <th t-if="display_taxes" class="text-center" t-attf-style="{{th_style}}"><i class="fa fa-pencil-square"/> Taxes</th>
                         <th class="text-right" t-attf-style="{{th_style}}"><i class="fa fa-money"/>
-                            <t groups="account.group_show_line_subtotals_tax_excluded">Amount</t>
-                            <t groups="account.group_show_line_subtotals_tax_included">Total Price</t>
+                            <t t-if="not show_tax_included">Amount</t>
+                            <t t-if="show_tax_included">Total Price</t>
                         </th>
 
                     </tr>
@@ -39,8 +41,7 @@
                     <t t-set="item_count" t-value="0"/>
                     <t t-foreach="doc.order_line" t-as="l">
                         <t t-set="item_count" t-value="item_count + 1"/>
-                        <t t-set="current_subtotal" t-value="current_subtotal + l.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                        <t t-set="current_subtotal" t-value="current_subtotal + l.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + (l.price_total if show_tax_included else l.price_subtotal)"/>
                         <tr t-attf-style="background-color:{{style.odd if (l_parity in 'odd' and not style.transparent) else (not style.transparent and style.even) or 'transparent'}}; page-break-inside: avoid">
                             <t t-if="not l.display_type">
                                 <td><span t-esc="item_count"/></td>
@@ -58,8 +59,8 @@
                                     <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_ids))"/>
                                 </td>
                                 <td class="text-right">
-                                    <span t-field="l.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
-                                    <span t-field="l.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    <span t-if="not show_tax_included" t-field="l.price_subtotal"/>
+                                    <span t-if="show_tax_included" t-field="l.price_total"/>
                                 </td>
                             </t>
 
