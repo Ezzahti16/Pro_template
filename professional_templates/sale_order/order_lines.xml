@@ -45,7 +45,7 @@
                         <tr t-attf-style="background-color:{{style.odd if (l_parity in 'odd' and not style.transparent) else (not style.transparent and style.even) or 'transparent'}}; page-break-inside: avoid">
                             <t t-if="not l.display_type">
                                 <td><span t-esc="item_count"/></td>
-                                <td t-if="style.show_img"><span itemprop="image" t-field="l.sudo().product_id.image_128" t-options='{"widget": "image"}'/></td>
+                                <td t-if="style.show_img"><span t-if="l.sudo().product_id.image_128" itemprop="image" t-field="l.sudo().product_id.image_128" t-options='{"widget": "image"}'/></td>
                                 <td><span t-field="l.name"/></td>
                                 <td class="text-right">
                                     <span t-field="l.product_uom_qty"/>

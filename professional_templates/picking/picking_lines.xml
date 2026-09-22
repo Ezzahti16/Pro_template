@@ -26,7 +26,7 @@
                         <tr t-attf-style="background-color:{{style.odd if (move_line_parity in 'odd' and not style.transparent) else (not style.transparent and style.even)  or 'transparent'}}; page-break-inside: avoid !important;">
                             <td><span t-esc="move_line_index + 1"/></td>
                             <td t-if="style.show_img">
-                                <span t-if="move_line.product_id" itemprop="image" t-field="move_line.product_id.image_128" t-options='{"widget": "image"}'/>
+                                <span t-if="move_line.product_id.image_128" itemprop="image" t-field="move_line.product_id.image_128" t-options='{"widget": "image"}'/>
                             </td>
                             <td class="text-center">
                                 <span t-field="move_line.product_id.display_name"/><br/>
