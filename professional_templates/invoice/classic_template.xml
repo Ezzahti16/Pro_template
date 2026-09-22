@@ -13,13 +13,10 @@
                 <t t-if="style.header">
                     <div class="col-7 float-left" style="padding-left:0px;">
                         <span t-if="style.logo">
-                            <span itemprop="image" t-field="style.logo" t-options='{"widget": "image"}'/>
+                            <span itemprop="image" t-field="style.logo" t-options='{"widget": "image"}' style="max-height:90px;max-width:220px;"/>
                         </span>
                         <span t-if="not style.logo and company.logo">
-                            <span itemprop="image" t-field="company.logo" t-options='{"widget": "image"}'/>
-                        </span>
-                        <span t-if="not style.logo and not company.logo">
-                            <span itemprop="image" t-field="company.logo" t-options='{"widget": "image"}'/>
+                            <span itemprop="image" t-field="company.logo" t-options='{"widget": "image"}' style="max-height:90px;max-width:220px;"/>
                         </span>
                         <div t-if="company.twitter or company.facebook or company.facebook" t-attf-style="background-color:{{style.theme_color}}; width:auto; float:left; padding-left:15px; color:{{style.theme_txt_color}}; padding-right:15px; padding-top:4px; padding-bottom:2px;" class="float-left">
                             <span t-if="company.twitter" style="padding-left:0px;" class="fa fa-twitter-square "/>&#160;<span t-field="company.twitter"/>
@@ -35,8 +32,8 @@
                 </t>
             </div> <!--end of Header-->
             <!-- START OF PAGE -->
-            <div class="article page" t-attf-data-oe-model="account.move" t-attf-data-oe-id="{{o.id}}" t-attf-style="color:{{style.text_color}} !important;font-size:{{int(style.body_font)}}px !important;font-family:{{style.font_family}} !important;">
-                <div class="col-12" t-attf-style="white-space:pre-line;color:#{style.wm_color};left:#{style.leftpadding}mm; top:#{style.toppadding}mm;font-size:#{style.fontsize}px; opacity:#{style.opacity};z-index:-99; -webkit-transform:rotate(-#{style.rotate}deg);position:fixed;"><t t-esc="style.wm_eval(o, time, user, res_company)"/></div>
+            <div class="article page" t-attf-data-oe-model="account.move" t-attf-data-oe-id="{{o.id}}" t-attf-style="position:relative;color:{{style.text_color}} !important;font-size:{{int(style.body_font)}}px !important;font-family:{{style.font_family}} !important;">
+                <div class="col-12" t-attf-style="white-space:pre-line;text-align:center;color:#{style.wm_color};left:#{style.leftpadding}mm; top:#{style.toppadding}mm;font-size:#{style.fontsize}px; opacity:#{style.opacity};z-index:-99; -webkit-transform:rotate(-#{style.rotate}deg);position:absolute;"><t t-esc="style.wm_eval(o, time, user, res_company)"/></div>
                 <div class="col-12 float-left" t-attf-style="margin-top:0px;padding-top:1px;padding-left:0px;padding-right:0px;color:{{style.theme_txt_color}} !important;background-color:{{style.theme_color}} !important;">
                     <div class="col-12 float-left">
                         <h3 style="margin-top:10px;">
