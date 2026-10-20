@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bilan_passif_report" model="account.report">
+        <field name="name">Bilan (Passif)</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="True"/>
+        <field name="filter_journals" eval="True"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="True"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_passif_column_n" model="account.report.column">
+                <field name="name">Exercice N</field>
+                <field name="expression_label">n</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_passif_column_n_prev" model="account.report.column">
+                <field name="name">Exercice N - 1</field>
+                <field name="expression_label">n_prev</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_passif_line_a_capitaux_propres" model="account.report.line">
+                <field name="name">CAPITAUX PROPRES (A)</field>
+                <field name="code">A_CAPITAUX_PROPRES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_capital_social" model="account.report.line">
+                <field name="name">Capital social ou personnel (1)</field>
+                <field name="code">AC_CAPITAL_SOCIAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_capital_social_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13400</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_capital_social_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13411</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_actionnaires" model="account.report.line">
+                <field name="name">Moins : Actionnaires, capital souscrit non appelé</field>
+                <field name="code">AC_ACTIONNAIRES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_actionnaires_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13401</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_actionnaires_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13412</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_capital_appele" model="account.report.line">
+                <field name="name">Moins : Capital appelé</field>
+                <field name="code">AC_CAPITAL_APPELE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">40</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_capital_appele_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13402</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_capital_appele_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13413</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_dont_verse" model="account.report.line">
+                <field name="name">Moins : dont versé</field>
+                <field name="code">AC_DONT_VERSE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">50</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_dont_verse_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13403</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_dont_verse_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13414</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_prime_emission" model="account.report.line">
+                <field name="name">Prime d'émission, de fusion, d'apport</field>
+                <field name="code">AC_PRIME_EMISSION</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">60</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_prime_emission_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13404</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_prime_emission_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13415</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_ecarts_reval" model="account.report.line">
+                <field name="name">Ecarts de réévaluation</field>
+                <field name="code">AC_ECARTS_REVAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_ecarts_reval_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13405</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_ecarts_reval_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13416</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_reserve_legale" model="account.report.line">
+                <field name="name">Réserve légale</field>
+                <field name="code">AC_RESERVE_LEGALE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">80</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_reserve_legale_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13406</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_reserve_legale_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13417</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_autres_reserves" model="account.report.line">
+                <field name="name">Autres réserves</field>
+                <field name="code">AC_AUTRES_RESERVES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">90</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_autres_reserves_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13407</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_autres_reserves_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13418</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_report_nouveau" model="account.report.line">
+                <field name="name">Report à nouveau (2)</field>
+                <field name="code">AC_REPORT_NOUVEAU</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">100</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_report_nouveau_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13408</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_report_nouveau_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13419</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_resultats_inst" model="account.report.line">
+                <field name="name">Résultats nets en instance d'affectation (2)</field>
+                <field name="code">AC_RESULTATS_INST</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">110</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_resultats_inst_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14001</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_resultats_inst_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14002</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_resultat_exc" model="account.report.line">
+                <field name="name">Résultat net de l'exercice (2)</field>
+                <field name="code">AC_RESULTAT_EXC</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">120</field>
+                <field name="parent_id" ref="bilan_passif_line_a_capitaux_propres"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ac_resultat_exc_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13409</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_resultat_exc_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13420</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ac_total" model="account.report.line">
+                <field name="name">TOTAL CAPITAUX PROPRES (A)</field>
+                <field name="code">AC_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">130</field>
+                <field name="expression_ids">
+                    <!--
+                        edi_13410's own formule embeds EDI('13409') (Résultat net de
+                        l'exercice), which is a P&L-flow figure meant to be read with
+                        date_scope="strict_range" (see AC_RESULTAT_EXC below). Evaluating
+                        the whole edi_13410 tree under a single date_scope="from_beginning"
+                        re-evaluates that nested EDI('13409') at from_beginning too, which
+                        sweeps in the prior year's un-closed P&L movements - the same
+                        amount already reflected in "Report à nouveau" (AC_REPORT_NOUVEAU),
+                        effectively double-counting it in the total.
+                        Fix: aggregate the sibling lines' own already-correctly-scoped
+                        values instead of recomputing edi_13410 from scratch, so the total
+                        always equals exactly what's displayed above it.
+                    -->
+                    <record id="bilan_passif_expr_ac_total_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">AC_CAPITAL_SOCIAL.n + AC_PRIME_EMISSION.n + AC_ECARTS_REVAL.n + AC_RESERVE_LEGALE.n + AC_AUTRES_RESERVES.n + AC_REPORT_NOUVEAU.n + AC_RESULTATS_INST.n + AC_RESULTAT_EXC.n</field>
+                        <!-- Clears the previous engine="custom" record's leftover
+                             subformula/date_scope (edi_13410 / from_beginning) - an
+                             XML record update only overwrites the fields listed here,
+                             so a stale subformula is misread by the aggregation engine
+                             as a bounds expression (if_above/round/...) and crashes. -->
+                        <field name="subformula"/>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_passif_expr_ac_total_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">AC_CAPITAL_SOCIAL.n_prev + AC_PRIME_EMISSION.n_prev + AC_ECARTS_REVAL.n_prev + AC_RESERVE_LEGALE.n_prev + AC_AUTRES_RESERVES.n_prev + AC_REPORT_NOUVEAU.n_prev + AC_RESULTATS_INST.n_prev + AC_RESULTAT_EXC.n_prev</field>
+                        <field name="subformula"/>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_b_capitaux_assimiles" model="account.report.line">
+                <field name="name">CAPITAUX PROPRES ASSIMILÉS (B)</field>
+                <field name="code">B_CAPITAUX_ASSIMILES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">140</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_ba_total" model="account.report.line">
+                <field name="name">Capitaux propres assimilés (B)</field>
+                <field name="code">BA_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">150</field>
+                <field name="parent_id" ref="bilan_passif_line_b_capitaux_assimiles"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ba_total_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13397</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ba_total_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13422</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ba_subventions" model="account.report.line">
+                <field name="name">Subvention d'investissement</field>
+                <field name="code">BA_SUBVENTIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">160</field>
+                <field name="parent_id" ref="bilan_passif_line_b_capitaux_assimiles"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ba_subventions_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13398</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ba_subventions_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13423</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ba_provisions_reg" model="account.report.line">
+                <field name="name">Provisions réglementées</field>
+                <field name="code">BA_PROVISIONS_REG</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">170</field>
+                <field name="parent_id" ref="bilan_passif_line_b_capitaux_assimiles"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ba_provisions_reg_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13399</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ba_provisions_reg_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13424</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_c_dettes_fin" model="account.report.line">
+                <field name="name">DETTES DE FINANCEMENT (C)</field>
+                <field name="code">C_DETTES_FIN</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">180</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_ca_total" model="account.report.line">
+                <field name="name">Dettes de financement (C)</field>
+                <field name="code">CA_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">190</field>
+                <field name="parent_id" ref="bilan_passif_line_c_dettes_fin"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ca_total_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13393</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ca_total_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13426</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ca_emprunts_oblig" model="account.report.line">
+                <field name="name">Emprunts obligataires</field>
+                <field name="code">CA_EMPRUNTS_OBLIG</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">200</field>
+                <field name="parent_id" ref="bilan_passif_line_c_dettes_fin"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ca_emprunts_oblig_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13394</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ca_emprunts_oblig_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13427</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ca_autres_dettes" model="account.report.line">
+                <field name="name">Autres dettes de financement</field>
+                <field name="code">CA_AUTRES_DETTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">210</field>
+                <field name="parent_id" ref="bilan_passif_line_c_dettes_fin"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ca_autres_dettes_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13395</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ca_autres_dettes_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13428</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_d_provisions_durables" model="account.report.line">
+                <field name="name">PROVISIONS DURABLES POUR RISQUES ET CHARGES (D)</field>
+                <field name="code">D_PROVISIONS_DURABLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">220</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_da_total" model="account.report.line">
+                <field name="name">Provisions durables pour risques et charges (D)</field>
+                <field name="code">DA_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">230</field>
+                <field name="parent_id" ref="bilan_passif_line_d_provisions_durables"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_da_total_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13389</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_da_total_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13430</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_da_risques" model="account.report.line">
+                <field name="name">Provisions pour risques</field>
+                <field name="code">DA_RISQUES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">240</field>
+                <field name="parent_id" ref="bilan_passif_line_d_provisions_durables"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_da_risques_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13390</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_da_risques_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13431</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_da_charges" model="account.report.line">
+                <field name="name">Provisions pour charges</field>
+                <field name="code">DA_CHARGES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">250</field>
+                <field name="parent_id" ref="bilan_passif_line_d_provisions_durables"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_da_charges_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13391</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_da_charges_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13432</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_e_ecarts_conversion" model="account.report.line">
+                <field name="name">ÉCARTS DE CONVERSION - PASSIF (E)</field>
+                <field name="code">E_ECARTS_CONVERSION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">260</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_ea_total" model="account.report.line">
+                <field name="name">Ecarts de conversion - passif (E)</field>
+                <field name="code">EA_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">270</field>
+                <field name="parent_id" ref="bilan_passif_line_e_ecarts_conversion"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ea_total_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13386</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ea_total_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13433</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ea_augment_creances" model="account.report.line">
+                <field name="name">Augmentation des créances immobilisées</field>
+                <field name="code">EA_AUGMENT_CREANCES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">280</field>
+                <field name="parent_id" ref="bilan_passif_line_e_ecarts_conversion"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ea_augment_creances_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13387</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ea_augment_creances_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13434</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_ea_diminution_dettes" model="account.report.line">
+                <field name="name">Diminution des dettes de financement</field>
+                <field name="code">EA_DIMINUTION_DETTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">290</field>
+                <field name="parent_id" ref="bilan_passif_line_e_ecarts_conversion"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_ea_diminution_dettes_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13388</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_ea_diminution_dettes_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13435</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_total_1" model="account.report.line">
+                <field name="name">TOTAL I (A+B+C+D+E)</field>
+                <field name="code">TOTAL_1</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">300</field>
+                <field name="expression_ids">
+                    <!--
+                        edi_13385 = EDI('13410')+EDI('13397')+EDI('13393')+EDI('13386')+EDI('13389'),
+                        and edi_13410 is the same double-counting formula fixed on AC_TOTAL
+                        above (it re-evaluates the nested P&L-flow EDI('13409') at
+                        from_beginning instead of strict_range). Aggregating the sibling
+                        A/B/C/D/E total lines' own values instead avoids recomputing that
+                        flawed chain, so this total inherits AC_TOTAL's fix automatically.
+                    -->
+                    <record id="bilan_passif_expr_total_1_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">AC_TOTAL.n + BA_TOTAL.n + CA_TOTAL.n + DA_TOTAL.n + EA_TOTAL.n</field>
+                        <field name="subformula"/>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_passif_expr_total_1_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">AC_TOTAL.n_prev + BA_TOTAL.n_prev + CA_TOTAL.n_prev + DA_TOTAL.n_prev + EA_TOTAL.n_prev</field>
+                        <field name="subformula"/>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_f_passif_circulant" model="account.report.line">
+                <field name="name">DETTES DU PASSIF CIRCULANT (F)</field>
+                <field name="code">F_PASSIF_CIRCULANT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">310</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_fournisseurs" model="account.report.line">
+                <field name="name">Fournisseurs et comptes rattachés</field>
+                <field name="code">FA_FOURNISSEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">320</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_fournisseurs_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13377</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_fournisseurs_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13438</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_clients" model="account.report.line">
+                <field name="name">Clients créditeurs, avances et acomptes</field>
+                <field name="code">FA_CLIENTS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">330</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_clients_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13378</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_clients_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13439</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_personnel" model="account.report.line">
+                <field name="name">Personnel</field>
+                <field name="code">FA_PERSONNEL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">340</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_personnel_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13379</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_personnel_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13440</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_org_sociaux" model="account.report.line">
+                <field name="name">Organismes sociaux</field>
+                <field name="code">FA_ORG_SOCIAUX</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">350</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_org_sociaux_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13380</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_org_sociaux_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13441</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_etat" model="account.report.line">
+                <field name="name">Etat</field>
+                <field name="code">FA_ETAT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">360</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_etat_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13381</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_etat_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13442</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_associes" model="account.report.line">
+                <field name="name">Comptes d'associés</field>
+                <field name="code">FA_ASSOCIES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">370</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_associes_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13382</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_associes_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13443</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_autres_creanciers" model="account.report.line">
+                <field name="name">Autres créanciers</field>
+                <field name="code">FA_AUTRES_CREANCIERS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">380</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_autres_creanciers_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13383</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_autres_creanciers_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13444</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_fa_regul_passif" model="account.report.line">
+                <field name="name">Comptes de régularisation-passif</field>
+                <field name="code">FA_REGUL_PASSIF</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">390</field>
+                <field name="parent_id" ref="bilan_passif_line_f_passif_circulant"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_fa_regul_passif_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13384</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_fa_regul_passif_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13445</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_f_total" model="account.report.line">
+                <field name="name">Dettes du passif circulant (F)</field>
+                <field name="code">F_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">400</field>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_f_total_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13376</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_f_total_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13437</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_g_autres_provisions" model="account.report.line">
+                <field name="name">AUTRES PROVISIONS POUR RISQUES ET CHARGES (G)</field>
+                <field name="code">G_AUTRES_PROVISIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">410</field>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_g_autres_provisions_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13375</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_g_autres_provisions_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13446</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_h_ecarts_circulants" model="account.report.line">
+                <field name="name">ÉCARTS DE CONVERSION - PASSIF (Eléments circulants) (H)</field>
+                <field name="code">H_ECARTS_CIRCULANTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">420</field>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_h_ecarts_circulants_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13374</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_h_ecarts_circulants_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13447</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_total_2" model="account.report.line">
+                <field name="name">TOTAL II (F+G+H)</field>
+                <field name="code">TOTAL_2</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">430</field>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_total_2_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13373</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_total_2_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13448</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_tresorerie_passif" model="account.report.line">
+                <field name="name">TRÉSORERIE - PASSIF</field>
+                <field name="code">TRESORERIE_PASSIF</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">440</field>
+                <field name="expression_ids">
+                </field>
+            </record>
+            <record id="bilan_passif_line_tr_escompte" model="account.report.line">
+                <field name="name">Crédits d'escompte</field>
+                <field name="code">TR_ESCOMPTE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">450</field>
+                <field name="parent_id" ref="bilan_passif_line_tresorerie_passif"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_tr_escompte_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13370</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_tr_escompte_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13449</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_tr_tresorerie" model="account.report.line">
+                <field name="name">Crédits de trésorerie</field>
+                <field name="code">TR_TRESORERIE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">460</field>
+                <field name="parent_id" ref="bilan_passif_line_tresorerie_passif"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_tr_tresorerie_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13371</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_tr_tresorerie_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13450</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_tr_banques" model="account.report.line">
+                <field name="name">Banques ( Soldes Créditeurs )</field>
+                <field name="code">TR_BANQUES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">470</field>
+                <field name="parent_id" ref="bilan_passif_line_tresorerie_passif"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_tr_banques_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13372</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_tr_banques_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13451</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_total_3" model="account.report.line">
+                <field name="name">TOTAL III</field>
+                <field name="code">TOTAL_3</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">480</field>
+                <field name="expression_ids">
+                    <record id="bilan_passif_expr_total_3_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13369</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_passif_expr_total_3_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_13452</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_passif_line_total_general" model="account.report.line">
+                <field name="name">TOTAL GÉNÉRAL I + II + III</field>
+                <field name="code">TOTAL_GENERAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">490</field>
+                <field name="expression_ids">
+                    <!--
+                        edi_13368 = EDI('13385')+EDI('13373')+EDI('13369') (I+II+III), and
+                        13385 (TOTAL I) is the same flawed chain fixed above via TOTAL_1.
+                        Aggregating TOTAL_1/TOTAL_2/TOTAL_3's own values instead of
+                        recomputing edi_13368 makes this total inherit that fix too.
+                    -->
+                    <record id="bilan_passif_expr_total_general_n" model="account.report.expression">
+                        <field name="label">n</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">TOTAL_1.n + TOTAL_2.n + TOTAL_3.n</field>
+                        <field name="subformula"/>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_passif_expr_total_general_n_prev" model="account.report.expression">
+                        <field name="label">n_prev</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">TOTAL_1.n_prev + TOTAL_2.n_prev + TOTAL_3.n_prev</field>
+                        <field name="subformula"/>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <record id="action_ma_bilan_passif_report" model="ir.actions.client">
+        <field name="name">Bilan (Passif)</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-passif</field>
+        <field name="context" eval="{'report_id': ref('bilan_passif_report')}"/>
+    </record>
+
+    <menuitem id="menu_ma_bilan_passif_report"
+              name="Bilan (Passif)"
+              action="action_ma_bilan_passif_report"
+              parent="account.account_reports_legal_statements_menu"
+              groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

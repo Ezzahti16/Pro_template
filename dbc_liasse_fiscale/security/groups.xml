@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Gates visibility of every Moroccan fiscal report menu item at once
+        (see the `groups="dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"`
+        attribute on each report's <menuitem> in data/*.xml).
+
+        Membership of this group is managed entirely in code, not by hand:
+        toggling "Activer les rapports fiscal" in Settings adds/removes every
+        user currently in account.group_account_readonly from this group
+        (see ResConfigSettings._ma_sync_reports_group). implied_ids ensures
+        anyone granted this group also keeps the normal accounting read
+        access it depends on.
+    -->
+    <record id="group_ma_fiscal_reports_enabled" model="res.groups">
+        <field name="name">Rapports Fiscaux Maroc - Activé</field>
+        <field name="implied_ids" eval="[(4, ref('account.group_account_readonly'))]"/>
+    </record>
+
+</odoo>

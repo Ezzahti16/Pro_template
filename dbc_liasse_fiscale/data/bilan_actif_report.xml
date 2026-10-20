@@ -1,0 +1,1859 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bilan_actif_report" model="account.report">
+        <field name="name">Bilan (Actif)</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="True"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_actif_column_brut" model="account.report.column">
+                <field name="name">Brut</field>
+                <field name="expression_label">brut</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_actif_column_amort" model="account.report.column">
+                <field name="name">Amortissements et Provisions</field>
+                <field name="expression_label">amort</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_actif_column_net" model="account.report.column">
+                <field name="name">Net N</field>
+                <field name="expression_label">net</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_actif_column_net_prev" model="account.report.column">
+                <field name="name">Net N-1</field>
+                <field name="expression_label">net_prev</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_actif_line_a_non_valeur" model="account.report.line">
+                <field name="name">IMMOBILISATIONS EN NON VALEUR (A)</field>
+                <field name="code">A_NON_VALEUR</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_a_non_valeur_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_497</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_a_non_valeur_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_498</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_a_non_valeur_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_499</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_a_non_valeur_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_500</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_frais_prelim" model="account.report.line">
+                <field name="name">Frais préliminaires</field>
+                <field name="code">FRAIS_PRELIM</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="parent_id" ref="bilan_actif_line_a_non_valeur"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_frais_prelim_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_238</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_frais_prelim_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_241</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_frais_prelim_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_244</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_frais_prelim_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_247</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_chges_repartir" model="account.report.line">
+                <field name="name">Charges à répartir sur plusieurs exercices</field>
+                <field name="code">CHGES_REPARTIR</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="parent_id" ref="bilan_actif_line_a_non_valeur"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_chges_repartir_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_239</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_chges_repartir_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_242</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_chges_repartir_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_245</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_chges_repartir_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_248</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_primes_remb" model="account.report.line">
+                <field name="name">Primes de remboursement des obligations</field>
+                <field name="code">PRIMES_REMB</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">40</field>
+                <field name="parent_id" ref="bilan_actif_line_a_non_valeur"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_primes_remb_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_240</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_primes_remb_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_243</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_primes_remb_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_246</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_primes_remb_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_249</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_b_incorporelles" model="account.report.line">
+                <field name="name">IMMOBILISATIONS INCORPORELLES (B)</field>
+                <field name="code">B_INCORPORELLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_b_incorporelles_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_502</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_b_incorporelles_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_503</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_b_incorporelles_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_504</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_b_incorporelles_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_505</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_rech_dev" model="account.report.line">
+                <field name="name">Immobilisations en recherche et développement</field>
+                <field name="code">RECH_DEV</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">60</field>
+                <field name="parent_id" ref="bilan_actif_line_b_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_rech_dev_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_274</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_rech_dev_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_278</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_rech_dev_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_282</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_rech_dev_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_286</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_brevets_marques" model="account.report.line">
+                <field name="name">Brevets, marques, droits et valeurs similaires</field>
+                <field name="code">BREVETS_MARQUES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="parent_id" ref="bilan_actif_line_b_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_brevets_marques_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_275</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_brevets_marques_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_279</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_brevets_marques_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_283</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_brevets_marques_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_287</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_fonds_commercial" model="account.report.line">
+                <field name="name">Fonds commercial</field>
+                <field name="code">FONDS_COMMERCIAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">80</field>
+                <field name="parent_id" ref="bilan_actif_line_b_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_fonds_commercial_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_276</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_fonds_commercial_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_280</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_fonds_commercial_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_284</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_fonds_commercial_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_288</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_autres_incorp" model="account.report.line">
+                <field name="name">Autres immobilisations incorporelles</field>
+                <field name="code">AUTRES_INCORP</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">90</field>
+                <field name="parent_id" ref="bilan_actif_line_b_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_autres_incorp_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_277</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_incorp_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_281</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_incorp_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_285</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_incorp_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_289</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_c_corporelles" model="account.report.line">
+                <field name="name">IMMOBILISATIONS CORPORELLES (C)</field>
+                <field name="code">C_CORPORELLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_c_corporelles_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_507</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_c_corporelles_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_508</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_c_corporelles_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_509</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_c_corporelles_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_510</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_terrains" model="account.report.line">
+                <field name="name">Terrains</field>
+                <field name="code">TERRAINS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">110</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_terrains_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_207</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_terrains_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_214</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_terrains_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_221</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_terrains_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_228</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_constructions" model="account.report.line">
+                <field name="name">Constructions</field>
+                <field name="code">CONSTRUCTIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">120</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_constructions_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_208</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_constructions_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_215</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_constructions_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_222</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_constructions_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_229</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_installations_tech" model="account.report.line">
+                <field name="name">Installations techniques, matériel et outillage</field>
+                <field name="code">INSTALLATIONS_TECH</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">130</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_installations_tech_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_209</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_installations_tech_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_216</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_installations_tech_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_223</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_installations_tech_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_230</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_materiel_transport" model="account.report.line">
+                <field name="name">Matériel de transport</field>
+                <field name="code">MATERIEL_TRANSPORT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">140</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_materiel_transport_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_210</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_materiel_transport_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_217</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_materiel_transport_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_224</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_materiel_transport_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_231</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_mobilier_bureau" model="account.report.line">
+                <field name="name">Mobilier, matériel de bureau et aménagements divers</field>
+                <field name="code">MOBILIER_BUREAU</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">150</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_mobilier_bureau_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_211</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_mobilier_bureau_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_218</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_mobilier_bureau_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_225</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_mobilier_bureau_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_232</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_autres_corporelles" model="account.report.line">
+                <field name="name">Autres immobilisations corporelles</field>
+                <field name="code">AUTRES_CORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">160</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_autres_corporelles_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_212</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_corporelles_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_219</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_corporelles_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_226</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_corporelles_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_233</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_corp_en_cours" model="account.report.line">
+                <field name="name">Immobilisations corporelles en cours</field>
+                <field name="code">CORP_EN_COURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">170</field>
+                <field name="parent_id" ref="bilan_actif_line_c_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_corp_en_cours_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_213</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_corp_en_cours_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_220</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_corp_en_cours_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_227</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_corp_en_cours_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_234</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_d_financieres" model="account.report.line">
+                <field name="name">IMMOBILISATIONS FINANCIÈRES (D)</field>
+                <field name="code">D_FINANCIERES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">180</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_d_financieres_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_512</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_d_financieres_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_513</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_d_financieres_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_514</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_d_financieres_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_515</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_prets_immobilises" model="account.report.line">
+                <field name="name">Prêts immobilisés</field>
+                <field name="code">PRETS_IMMOBILISES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">190</field>
+                <field name="parent_id" ref="bilan_actif_line_d_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_prets_immobilises_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_254</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_prets_immobilises_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_258</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_prets_immobilises_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_262</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_prets_immobilises_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_266</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_autres_creances_fin" model="account.report.line">
+                <field name="name">Autres créances financières</field>
+                <field name="code">AUTRES_CREANCES_FIN</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">200</field>
+                <field name="parent_id" ref="bilan_actif_line_d_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_autres_creances_fin_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_255</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_creances_fin_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_259</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_creances_fin_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_263</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_creances_fin_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_267</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_titres_participation" model="account.report.line">
+                <field name="name">Titres de participation</field>
+                <field name="code">TITRES_PARTICIPATION</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">210</field>
+                <field name="parent_id" ref="bilan_actif_line_d_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_titres_participation_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_256</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_titres_participation_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_260</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_titres_participation_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_264</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_titres_participation_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_268</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_autres_titres_immob" model="account.report.line">
+                <field name="name">Autres titres immobilisés</field>
+                <field name="code">AUTRES_TITRES_IMMOB</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">220</field>
+                <field name="parent_id" ref="bilan_actif_line_d_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_autres_titres_immob_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_257</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_titres_immob_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_261</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_titres_immob_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_265</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_titres_immob_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_269</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_e_ecarts_conversion" model="account.report.line">
+                <field name="name">ÉCARTS DE CONVERSION - ACTIF (E)</field>
+                <field name="code">E_ECARTS_CONVERSION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">230</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_e_ecarts_conversion_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_517</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_e_ecarts_conversion_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_518</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_e_ecarts_conversion_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_519</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_e_ecarts_conversion_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_520</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_diminution_creances" model="account.report.line">
+                <field name="name">Diminution des créances immobilisées</field>
+                <field name="code">DIMINUTION_CREANCES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">240</field>
+                <field name="parent_id" ref="bilan_actif_line_e_ecarts_conversion"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_diminution_creances_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_192</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_diminution_creances_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_194</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_diminution_creances_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_196</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_diminution_creances_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_198</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_augmentation_dettes" model="account.report.line">
+                <field name="name">Augmentations des dettes de financement</field>
+                <field name="code">AUGMENTATION_DETTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">250</field>
+                <field name="parent_id" ref="bilan_actif_line_e_ecarts_conversion"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_augmentation_dettes_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_193</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_augmentation_dettes_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_195</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_augmentation_dettes_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_197</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_augmentation_dettes_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_199</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_total_1" model="account.report.line">
+                <field name="name">TOTAL I (A+B+C+D+E)</field>
+                <field name="code">TOTAL_1</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">260</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_total_1_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_291</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_1_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_292</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_1_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_293</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_1_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_294</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_f_stocks" model="account.report.line">
+                <field name="name">STOCKS (F)</field>
+                <field name="code">F_STOCKS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">270</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_f_stocks_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_522</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_f_stocks_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_523</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_f_stocks_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_524</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_f_stocks_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_525</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_marchandises" model="account.report.line">
+                <field name="name">Marchandises</field>
+                <field name="code">MARCHANDISES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">280</field>
+                <field name="parent_id" ref="bilan_actif_line_f_stocks"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_marchandises_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_160</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_marchandises_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_165</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_marchandises_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_170</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_marchandises_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_175</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_matieres_fournitures" model="account.report.line">
+                <field name="name">Matières et fournitures consommables</field>
+                <field name="code">MATIERES_FOURNITURES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">290</field>
+                <field name="parent_id" ref="bilan_actif_line_f_stocks"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_matieres_fournitures_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_161</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_matieres_fournitures_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_166</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_matieres_fournitures_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_171</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_matieres_fournitures_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_176</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_produits_en_cours" model="account.report.line">
+                <field name="name">Produits en cours</field>
+                <field name="code">PRODUITS_EN_COURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">300</field>
+                <field name="parent_id" ref="bilan_actif_line_f_stocks"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_produits_en_cours_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_162</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_en_cours_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_167</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_en_cours_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_172</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_en_cours_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_177</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_produits_intermediaires" model="account.report.line">
+                <field name="name">Produits intermédiaires et produits résiduels</field>
+                <field name="code">PRODUITS_INTERMEDIAIRES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">310</field>
+                <field name="parent_id" ref="bilan_actif_line_f_stocks"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_produits_intermediaires_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_163</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_intermediaires_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_168</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_intermediaires_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_173</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_intermediaires_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_178</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_produits_finis" model="account.report.line">
+                <field name="name">Produits finis</field>
+                <field name="code">PRODUITS_FINIS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">320</field>
+                <field name="parent_id" ref="bilan_actif_line_f_stocks"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_produits_finis_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_164</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_finis_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_169</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_finis_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_174</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_produits_finis_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_179</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_g_creances" model="account.report.line">
+                <field name="name">CRÉANCES DE L'ACTIF CIRCULANT (G)</field>
+                <field name="code">G_CREANCES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">330</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_g_creances_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_527</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_g_creances_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_528</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_g_creances_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_529</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_g_creances_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_530</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_fournisseurs_debiteurs" model="account.report.line">
+                <field name="name">Fournisseurs débiteurs, avances et acomptes</field>
+                <field name="code">FOURNISSEURS_DEBITEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">340</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_fournisseurs_debiteurs_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_122</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_fournisseurs_debiteurs_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_129</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_fournisseurs_debiteurs_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_136</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_fournisseurs_debiteurs_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_143</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_clients_rattaches" model="account.report.line">
+                <field name="name">Clients et comptes rattachés</field>
+                <field name="code">CLIENTS_RATTACHES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">350</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_clients_rattaches_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_123</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_clients_rattaches_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_130</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_clients_rattaches_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_137</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_clients_rattaches_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_144</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_personnel" model="account.report.line">
+                <field name="name">Personnel</field>
+                <field name="code">PERSONNEL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">360</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_personnel_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_124</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_personnel_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_131</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_personnel_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_138</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_personnel_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_145</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_etat" model="account.report.line">
+                <field name="name">État</field>
+                <field name="code">ETAT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">370</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_etat_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_125</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_etat_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_132</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_etat_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_139</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_etat_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_146</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_comptes_associes" model="account.report.line">
+                <field name="name">Comptes d'associés</field>
+                <field name="code">COMPTES_ASSOCIES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">380</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_comptes_associes_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_126</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_comptes_associes_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_133</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_comptes_associes_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_140</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_comptes_associes_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_147</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_autres_debiteurs" model="account.report.line">
+                <field name="name">Autres débiteurs</field>
+                <field name="code">AUTRES_DEBITEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">390</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_autres_debiteurs_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_127</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_debiteurs_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_134</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_debiteurs_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_141</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_autres_debiteurs_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_148</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_comptes_regul_actif" model="account.report.line">
+                <field name="name">Comptes de régularisation - Actif</field>
+                <field name="code">COMPTES_REGUL_ACTIF</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">400</field>
+                <field name="parent_id" ref="bilan_actif_line_g_creances"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_comptes_regul_actif_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_128</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_comptes_regul_actif_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_135</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_comptes_regul_actif_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_142</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_comptes_regul_actif_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_149</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_h_titres_placement" model="account.report.line">
+                <field name="name">TITRES ET VALEURS DE PLACEMENT (H)</field>
+                <field name="code">H_TITRES_PLACEMENT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">410</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_h_titres_placement_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_181</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_h_titres_placement_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_182</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_h_titres_placement_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_183</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_h_titres_placement_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_184</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_i_ecarts_circulant" model="account.report.line">
+                <field name="name">ÉCARTS DE CONVERSION - ACTIF (I) (Éléments circulants)</field>
+                <field name="code">I_ECARTS_CIRCULANT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">420</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_i_ecarts_circulant_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_151</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_i_ecarts_circulant_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_152</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_i_ecarts_circulant_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_153</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_i_ecarts_circulant_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_154</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_total_2" model="account.report.line">
+                <field name="name">TOTAL II (F+G+H+I)</field>
+                <field name="code">TOTAL_2</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">430</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_total_2_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_296</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_2_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_297</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_2_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_298</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_2_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_299</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_tresorerie_actif" model="account.report.line">
+                <field name="name">TRÉSORERIE - ACTIF</field>
+                <field name="code">TRESORERIE_ACTIF</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">440</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_tresorerie_actif_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_532</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_tresorerie_actif_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_533</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_tresorerie_actif_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_534</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_tresorerie_actif_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_535</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_cheques_valeurs" model="account.report.line">
+                <field name="name">Chèques et valeurs à encaisser</field>
+                <field name="code">CHEQUES_VALEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">450</field>
+                <field name="parent_id" ref="bilan_actif_line_tresorerie_actif"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_cheques_valeurs_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_303</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_cheques_valeurs_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_306</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_cheques_valeurs_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_309</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_cheques_valeurs_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_312</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_banques_tg" model="account.report.line">
+                <field name="name">Banques, T.G. et C.P.</field>
+                <field name="code">BANQUES_TG</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">460</field>
+                <field name="parent_id" ref="bilan_actif_line_tresorerie_actif"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_banques_tg_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_304</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_banques_tg_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_307</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_banques_tg_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_310</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_banques_tg_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_313</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_caisse_regies" model="account.report.line">
+                <field name="name">Caisse, Régies d'avances et accréditifs</field>
+                <field name="code">CAISSE_REGIES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">470</field>
+                <field name="parent_id" ref="bilan_actif_line_tresorerie_actif"/>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_caisse_regies_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_305</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_caisse_regies_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_308</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_caisse_regies_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_311</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_caisse_regies_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_314</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_total_3" model="account.report.line">
+                <field name="name">TOTAL III</field>
+                <field name="code">TOTAL_3</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">480</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_total_3_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_316</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_3_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_317</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_3_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_318</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_3_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_319</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_actif_line_total_general" model="account.report.line">
+                <field name="name">TOTAL GÉNÉRAL I+II+III</field>
+                <field name="code">TOTAL_GENERAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">490</field>
+                <field name="expression_ids">
+                    <record id="bilan_actif_expr_total_general_brut" model="account.report.expression">
+                        <field name="label">brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_186</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_general_amort" model="account.report.expression">
+                        <field name="label">amort</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_187</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_general_net" model="account.report.expression">
+                        <field name="label">net</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_188</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_actif_expr_total_general_net_prev" model="account.report.expression">
+                        <field name="label">net_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_189</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <record id="action_ma_bilan_actif_report" model="ir.actions.client">
+        <field name="name">Bilan (Actif)</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-actif</field>
+        <field name="context" eval="{'report_id': ref('bilan_actif_report')}"/>
+    </record>
+
+    <menuitem id="menu_ma_bilan_actif_report"
+              name="Bilan (Actif)"
+              action="action_ma_bilan_actif_report"
+              parent="account.account_reports_legal_statements_menu"
+              groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

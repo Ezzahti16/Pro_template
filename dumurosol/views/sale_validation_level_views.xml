@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_validation_level_list" model="ir.ui.view">
+        <field name="name">dumurosol.sale.validation.level.list</field>
+        <field name="model">dumurosol.sale.validation.level</field>
+        <field name="arch" type="xml">
+            <list string="Niveaux de circuit">
+                <field name="rule_id"/>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="user_ids" widget="many2many_tags"/>
+                <field name="sla_hours"/>
+                <field name="escalation_user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sale_validation_level_search" model="ir.ui.view">
+        <field name="name">dumurosol.sale.validation.level.search</field>
+        <field name="model">dumurosol.sale.validation.level</field>
+        <field name="arch" type="xml">
+            <search string="Niveaux de circuit">
+                <field name="name"/>
+                <field name="rule_id"/>
+                <field name="user_ids"/>
+                <group>
+                    <filter string="Règle" name="group_rule" context="{'group_by': 'rule_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sale_validation_level" model="ir.actions.act_window">
+        <field name="name">Niveaux de circuit (vue globale)</field>
+        <field name="res_model">dumurosol.sale.validation.level</field>
+        <field name="view_mode">list</field>
+    </record>
+
+</odoo>

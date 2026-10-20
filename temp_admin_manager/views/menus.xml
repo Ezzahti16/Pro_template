@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="tam_menu_root" name="Temp Admin" sequence="90"
+              web_icon="temp_admin_manager,static/description/icon.png"
+              groups="base.group_system"/>
+    <menuitem id="tam_menu_databases" name="Databases" parent="tam_menu_root"
+              action="tam_database_action" sequence="10"/>
+    <menuitem id="tam_menu_instances" name="Instances" parent="tam_menu_root"
+              action="tam_instance_action" sequence="20"/>
+    <menuitem id="tam_menu_servers" name="Servers" parent="tam_menu_root"
+              action="tam_server_action" sequence="30"/>
+</odoo>

@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_amort_report" model="account.report">
+    <field name="name">Tableau des Amortissements</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_amort_column_cumul_debut" model="account.report.column">
+            <field name="name">Cumul début exercice</field>
+            <field name="expression_label">cumul_debut</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_amort_column_dotations" model="account.report.column">
+            <field name="name">Dotations de l'exercice</field>
+            <field name="expression_label">dotations</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_amort_column_amort_sorties" model="account.report.column">
+            <field name="name">Amortissements sur immobilisations sorties</field>
+            <field name="expression_label">amort_sorties</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_amort_column_cumul_fin" model="account.report.column">
+            <field name="name">Cumul d'amortissement fin exercice</field>
+            <field name="expression_label">cumul_fin</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_amort_column_ecart" model="account.report.column">
+            <field name="name">ECART</field>
+            <field name="expression_label">ecart</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+            <record id="bilan_amort_line_non_valeurs" model="account.report.line">
+                <field name="name">IMMOBILISATIONS EN NON-VALEURS</field>
+                <field name="code">AMORT_NON_VALEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">1</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_non_valeurs_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1231</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1232</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1233</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1231_1232_1233</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1234</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_non_valeurs_1" model="account.report.line">
+                <field name="name">Frais préliminaires</field>
+                <field name="code">AMORT_NON_VALEURS_1</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">2</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_non_valeurs_1_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1236</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_1_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1237</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_1_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1238</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_1_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1236_1237_1238</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_1_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1239</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_non_valeurs_2" model="account.report.line">
+                <field name="name">Charges à répartir sur plusieurs exercices</field>
+                <field name="code">AMORT_NON_VALEURS_2</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">3</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_non_valeurs_2_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1241</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_2_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1242</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_2_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1243</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_2_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1241_1242_1243</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_2_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1244</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_non_valeurs_3" model="account.report.line">
+                <field name="name">Primes de remboursement des obligations</field>
+                <field name="code">AMORT_NON_VALEURS_3</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">4</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_non_valeurs_3_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1246</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_3_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1247</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_3_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1248</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_3_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1246_1247_1248</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_non_valeurs_3_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1249</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_incorporelles" model="account.report.line">
+                <field name="name">IMMOBILISATIONS INCORPORELLES</field>
+                <field name="code">AMORT_INCORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">5</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_incorporelles_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1624</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1629</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1650</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1624_1629_1650</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1679</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_incorporelles_1" model="account.report.line">
+                <field name="name">Immobilisation en recherche et développement</field>
+                <field name="code">AMORT_INCORPORELLES_1</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">6</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_incorporelles_1_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1625</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_1_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1630</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_1_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1651</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_1_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1625_1630_1651</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_1_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1680</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_incorporelles_2" model="account.report.line">
+                <field name="name">Brevets, marques, droits et valeurs similaires</field>
+                <field name="code">AMORT_INCORPORELLES_2</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">7</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_incorporelles_2_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1626</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_2_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1631</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_2_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1652</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_2_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1626_1631_1652</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_2_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1681</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_incorporelles_3" model="account.report.line">
+                <field name="name">Fonds commercial</field>
+                <field name="code">AMORT_INCORPORELLES_3</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">8</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_incorporelles_3_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1627</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_3_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1632</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_3_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1653</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_3_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1627_1632_1653</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_3_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1682</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_incorporelles_4" model="account.report.line">
+                <field name="name">Autres immobilisations incorporelles</field>
+                <field name="code">AMORT_INCORPORELLES_4</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">9</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_incorporelles_4_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1628</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_4_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1633</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_4_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1654</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_4_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1628_1633_1654</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_incorporelles_4_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1683</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles" model="account.report.line">
+                <field name="name">IMMOBILISATIONS CORPORELLES</field>
+                <field name="code">AMORT_CORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1700</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1708</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1716</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1700_1708_1716</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1724</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_1" model="account.report.line">
+                <field name="name">Terrains</field>
+                <field name="code">AMORT_CORPORELLES_1</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">11</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_1_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1701</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_1_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1709</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_1_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1717</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_1_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1701_1709_1717</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_1_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1725</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_2" model="account.report.line">
+                <field name="name">Constructions</field>
+                <field name="code">AMORT_CORPORELLES_2</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">12</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_2_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1702</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_2_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1710</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_2_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1718</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_2_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1702_1710_1718</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_2_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1726</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_3" model="account.report.line">
+                <field name="name">Installations techniques, matériel et outillage</field>
+                <field name="code">AMORT_CORPORELLES_3</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">13</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_3_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1703</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_3_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1711</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_3_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1719</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_3_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1703_1711_1719</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_3_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1727</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_4" model="account.report.line">
+                <field name="name">Matériel de transport</field>
+                <field name="code">AMORT_CORPORELLES_4</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">14</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_4_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1704</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_4_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1712</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_4_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1720</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_4_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1704_1712_1720</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_4_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1728</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_5" model="account.report.line">
+                <field name="name">Mobilier, matériel de bureau et aménagements divers</field>
+                <field name="code">AMORT_CORPORELLES_5</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">15</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_5_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1705</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_5_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1713</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_5_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1721</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_5_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1705_1713_1721</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_5_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1729</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_6" model="account.report.line">
+                <field name="name">Autres immobilisations corporelles</field>
+                <field name="code">AMORT_CORPORELLES_6</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">16</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_6_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1706</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_6_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1714</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_6_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1722</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_6_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1706_1714_1722</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_6_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1730</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_corporelles_7" model="account.report.line">
+                <field name="name">Immobilisations corporelles en cours</field>
+                <field name="code">AMORT_CORPORELLES_7</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">17</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_corporelles_7_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1707</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_7_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1715</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_7_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1723</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_7_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_1707_1715_1723</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_corporelles_7_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1731</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record><record id="bilan_amort_line_total" model="account.report.line">
+                <field name="name">TOTAL GENERAL</field>
+                <field name="code">AMORT_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">18</field>
+                <field name="expression_ids">
+                    <record id="bilan_amort_expr_total_cumul_debut" model="account.report.expression">
+                        <field name="label">cumul_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14061</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_amort_expr_total_dotations" model="account.report.expression">
+                        <field name="label">dotations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14062</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_total_amort_sorties" model="account.report.expression">
+                        <field name="label">amort_sorties</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14063</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_total_cumul_fin" model="account.report.expression">
+                        <field name="label">cumul_fin</field>
+                        <!-- cumul_debut/dotations/amort_sorties, each with its own
+                             correct date_scope - see _report_custom_engine_ma_amort_cumul_fin
+                             (models/account_report.py) for why a plain EDI(...) formula or
+                             an aggregation of the sibling cells both fail here. -->
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
+                        <field name="subformula">cf_14061_14062_14063</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_amort_expr_total_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E14064</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record></field>
+</record>
+
+<record id="action_ma_bilan_amort_report" model="ir.actions.client">
+    <field name="name">Tableau des Amortissements</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-amort</field>
+    <field name="context" eval="{'report_id': ref('bilan_amort_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_amort_report" name="Tableau des Amortissements" action="action_ma_bilan_amort_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

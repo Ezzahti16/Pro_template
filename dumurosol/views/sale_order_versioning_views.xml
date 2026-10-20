@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_versioning_inherit_dumurosol" model="ir.ui.view">
+        <field name="name">sale.order.form.versioning.inherit.dumurosol</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_quotation_versioning.view_order_form_quotation_versioning"/>
+        <field name="arch" type="xml">
+            <!-- Le module Sale Quotation Versioning affiche ce bouton dès
+                 que le devis est figé (state != 'draft'), y compris une fois
+                 confirmé ou annulé. Ici, on ne veut le proposer que sur un
+                 devis encore "Envoyé" : au-delà (commande confirmée ou
+                 devis annulé), créer une nouvelle version n'a pas de sens. -->
+            <button name="action_create_new_version" position="attributes">
+                <attribute name="invisible">state != 'sent' or not is_active_version</attribute>
+            </button>
+        </field>
+    </record>
+</odoo>

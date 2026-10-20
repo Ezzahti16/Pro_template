@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tam_instance_view_list" model="ir.ui.view">
+        <field name="name">tam.instance.list</field>
+        <field name="model">tam.instance</field>
+        <field name="arch" type="xml">
+            <list string="Instances">
+                <field name="server_id"/>
+                <field name="name"/>
+                <field name="path"/>
+                <field name="odoo_service"/>
+                <field name="db_service"/>
+                <field name="pg_user" optional="show"/>
+                <field name="odoo_image" string="Odoo image" optional="show"/>
+                <field name="database_count" string="DBs"/>
+                <field name="active_temp_count" string="Active"/>
+                <button name="action_scan_databases" type="object"
+                        string="Scan databases" icon="fa-refresh"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="tam_instance_view_form" model="ir.ui.view">
+        <field name="name">tam.instance.form</field>
+        <field name="model">tam.instance</field>
+        <field name="arch" type="xml">
+            <form string="Instance">
+                <header>
+                    <button name="action_scan_databases" type="object"
+                            string="Scan Databases" class="btn-primary"/>
+                    <button name="action_detect_services" type="object"
+                            string="Detect Services" class="btn-secondary"/>
+                    <button name="action_restart_odoo" type="object"
+                            string="Restart Odoo" class="btn-secondary"
+                            confirm="Restart the Odoo service of this instance now? Users
+                                     will be briefly disconnected."/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Location">
+                            <field name="server_id" options="{'no_create': True}"/>
+                            <field name="path"/>
+                            <field name="compose_file"/>
+                            <field name="base_url" widget="url"
+                                   placeholder="https://client.example.com"/>
+                        </group>
+                        <group string="Compose services">
+                            <field name="odoo_service" placeholder="odoo"/>
+                            <field name="db_service" placeholder="db"/>
+                            <field name="pg_user"/>
+                            <field name="pg_password" password="True"/>
+                            <field name="pg_maintenance_db"/>
+                            <field name="odoo_shell_args"/>
+                            <field name="pass_db_args"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Temporary admin access">
+                            <field name="access_model"/>
+                            <field name="copy_admin_language"/>
+                            <field name="include_technical"/>
+                        </group>
+                        <group string="Restart the Odoo service">
+                            <field name="restart_after_delete"/>
+                            <field name="restart_after_create"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Publisher notification">
+                            <field name="guard_publisher_cron"/>
+                            <field name="guard_margin"
+                                   invisible="not guard_publisher_cron"/>
+                            <field name="guard_min_life"
+                                   invisible="not guard_publisher_cron"/>
+                            <field name="arm_client_guard"
+                                   invisible="not guard_publisher_cron"/>
+                        </group>
+                    </group>
+                    <group string="Detected from the compose file"
+                           invisible="not detected_services">
+                        <group>
+                            <field name="odoo_image"/>
+                            <field name="db_image"/>
+                        </group>
+                        <group>
+                            <field name="detected_services"/>
+                        </group>
+                    </group>
+                    <group invisible="not last_error">
+                        <field name="last_error" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Databases" name="databases">
+                            <field name="database_ids" readonly="1" context="{'default_instance_id': id}">
+                                <list decoration-success="state == 'active'"
+                                      decoration-muted="state == 'deleted'"
+                                      decoration-warning="state == 'conflict'">
+                                    <field name="name"/>
+                                    <field name="temp_login"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'active'"
+                                           decoration-danger="state == 'conflict'"
+                                           decoration-info="state == 'not_created'"/>
+                                    <field name="expires_at"/>
+                                    <button name="action_create_temp_user" type="object"
+                                            string="Create temp admin" icon="fa-user-plus"
+                                            invisible="state == 'active'"/>
+                                    <button name="action_delete_temp_user" type="object"
+                                            string="Delete now" icon="fa-trash"
+                                            invisible="state != 'active'"
+                                            confirm="Delete the temporary admin from this database now?"/>
+                                    <button name="action_refresh_state" type="object"
+                                            string="Refresh" icon="fa-refresh"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tam_instance_action" model="ir.actions.act_window">
+        <field name="name">Instances</field>
+        <field name="res_model">tam.instance</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No instances yet</p>
+            <p>Open a server, set its instances path and press Scan Instances.</p>
+        </field>
+    </record>
+</odoo>

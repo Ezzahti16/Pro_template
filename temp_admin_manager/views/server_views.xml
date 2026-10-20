@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tam_server_view_list" model="ir.ui.view">
+        <field name="name">tam.server.list</field>
+        <field name="model">tam.server</field>
+        <field name="arch" type="xml">
+            <list string="Servers">
+                <field name="name"/>
+                <field name="host"/>
+                <field name="ssh_user"/>
+                <field name="instances_path"/>
+                <field name="instance_count" string="Instances"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="tam_server_view_form" model="ir.ui.view">
+        <field name="name">tam.server.form</field>
+        <field name="model">tam.server</field>
+        <field name="arch" type="xml">
+            <form string="Server">
+                <header>
+                    <button name="action_test_connection" type="object"
+                            string="Test Connection" class="btn-secondary"/>
+                    <button name="action_scan_instances" type="object"
+                            string="Scan Instances" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_instances" type="object"
+                                class="oe_stat_button" icon="fa-cubes">
+                            <field name="instance_count" widget="statinfo" string="Instances"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Production host"/></h1>
+                    </div>
+                    <group>
+                        <group string="SSH">
+                            <field name="host"/>
+                            <field name="ssh_port"/>
+                            <field name="ssh_user"/>
+                            <field name="auth_type" widget="radio"/>
+                            <field name="ssh_password" password="True"
+                                   invisible="auth_type != 'password'"
+                                   required="auth_type == 'password'"/>
+                            <field name="ssh_key" invisible="auth_type != 'key'"
+                                   required="auth_type == 'key'"
+                                   placeholder="-----BEGIN OPENSSH PRIVATE KEY-----&#10;..."/>
+                            <field name="ssh_key_passphrase" password="True"
+                                   invisible="auth_type != 'key'"/>
+                        </group>
+                        <group string="Docker">
+                            <field name="instances_path" placeholder="/opt/odoo"/>
+                            <field name="compose_cmd"/>
+                            <field name="use_sudo"/>
+                        </group>
+                    </group>
+                    <group string="Host key" invisible="not host_key">
+                        <field name="host_key" nolabel="1"/>
+                        <div colspan="2">
+                            <button name="action_clear_host_key" type="object"
+                                    string="Forget pinned key" class="btn-link"
+                                    confirm="Forget this host key? The next connection will
+                                             trust and pin whatever key the server presents."/>
+                            <span class="text-muted">
+                                Pinned on the first connection. Only forget it if you know the
+                                server's key legitimately changed.
+                            </span>
+                        </div>
+                    </group>
+                    <group invisible="not last_error">
+                        <field name="last_error" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Instances" name="instances">
+                            <field name="instance_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="path"/>
+                                    <field name="odoo_service"/>
+                                    <field name="db_service"/>
+                                    <field name="database_count" string="DBs"/>
+                                    <field name="active_temp_count" string="Active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tam_server_action" model="ir.actions.act_window">
+        <field name="name">Servers</field>
+        <field name="res_model">tam.server</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add a Docker host</p>
+            <p>Register the SSH access to a host, point it at the directory holding your
+               instances, then scan it.</p>
+        </field>
+    </record>
+</odoo>

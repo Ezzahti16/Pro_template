@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Vue formulaire — ajout des boutons, bandeau et historique
+         ================================================================ -->
+    <record id="view_order_form_quotation_versioning" model="ir.ui.view">
+        <field name="name">sale.order.form.quotation.versioning</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Boutons dans le bandeau d'actions (header) -->
+            <xpath expr="//header" position="inside">
+                <button name="action_create_new_version"
+                        string="Créer une nouvelle version"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="not is_locked_version or not is_active_version"/>
+                <button name="action_view_version_history"
+                        string="Historique des versions"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="version_count &lt;= 1"/>
+            </xpath>
+
+            <!-- Bandeau d'alerte si la version n'est plus active -->
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-warning mb-0" role="alert"
+                     invisible="is_active_version">
+                    <strong>Ce devis a été remplacé.</strong>
+                    Une version plus récente existe.
+                    <button name="action_view_version_history"
+                            type="object"
+                            string="Voir l'historique des versions"
+                            class="btn-link p-0 align-baseline"/>
+                </div>
+            </xpath>
+
+            <!-- Affichage du numéro de version à côté de la référence -->
+            <xpath expr="//field[@name='name']" position="after">
+                <span invisible="version_number &lt;= 1">
+                    (version <field name="version_number" readonly="1" class="oe_inline"/>)
+                </span>
+            </xpath>
+
+            <!-- Onglet Historique des versions -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Versionning"
+                      name="quotation_versioning"
+                      invisible="version_count &lt;= 1 and not parent_quotation_id">
+                    <group>
+                        <field name="parent_quotation_id" readonly="1"/>
+                        <field name="root_quotation_id" readonly="1"/>
+                        <field name="is_locked_version" readonly="1"/>
+                        <field name="is_active_version" readonly="1"/>
+                    </group>
+                    <separator string="Écarts avec la version précédente"
+                               invisible="not parent_quotation_id"/>
+                    <field name="version_diff_summary" readonly="1"
+                           invisible="not parent_quotation_id"/>
+                    <separator string="Versions suivantes"
+                               invisible="not child_quotation_ids"/>
+                    <field name="child_quotation_ids" readonly="1"
+                           invisible="not child_quotation_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="version_number"/>
+                            <field name="state"/>
+                            <field name="amount_total"/>
+                            <field name="is_active_version"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Vue liste — colonne version + filtre "versions actives"
+         ================================================================ -->
+    <record id="view_quotation_tree_versioning" model="ir.ui.view">
+        <field name="name">sale.order.list.quotation.versioning</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="Versions actives uniquement"
+                        name="filter_active_version_only"
+                        domain="[('is_active_version', '=', True)]"/>
+                <filter string="Versions remplacées"
+                        name="filter_replaced_versions"
+                        domain="[('is_active_version', '=', False), ('parent_quotation_id', '!=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_quotation_tree_versioning_columns" model="ir.ui.view">
+        <field name="name">sale.order.list.quotation.versioning.columns</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='amount_total']" position="before">
+                <field name="version_number" optional="show" string="Version"/>
+                <field name="is_active_version" optional="hide" string="Active"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

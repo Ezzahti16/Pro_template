@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ma_fiscal_setting_user,ma.fiscal.setting user,model_ma_fiscal_setting,account.group_account_readonly,1,0,0,0
+access_ma_fiscal_setting_manager,ma.fiscal.setting manager,model_ma_fiscal_setting,account.group_account_manager,1,1,1,1

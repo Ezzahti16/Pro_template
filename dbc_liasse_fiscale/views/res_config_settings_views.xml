@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.dbc.liasse.fiscale</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <block id="account_reports_settings" position="inside">
+                <setting id="ma_fiscal_reports_setting"
+                         string="Rapports Fiscaux Maroc"
+                         help="Formules par exercice fiscal (2020 à aujourd'hui), par client">
+                    <div class="o_setting_left_pane">
+                        <field name="ma_fiscal_reports_enabled"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="ma_fiscal_reports_enabled" string="Activer les rapports fiscal" class="fw-bold"/>
+                        <div class="content-group" invisible="not ma_fiscal_reports_enabled">
+                            <div class="mt8">
+                                <label for="ma_fiscal_api_url" class="o_light_label d-block mb-1 fw-bold" string="URL des formules"/>
+                                <field name="ma_fiscal_api_url" class="w-100"
+                                       placeholder="http://app.ozirpaie.ma:2024/api/ma/formules"/>
+                            </div>
+                            <div class="mt8">
+                                <label for="ma_fiscal_register_secret" class="o_light_label d-block mb-1 fw-bold" string="Secret d'enregistrement"/>
+                                <field name="ma_fiscal_register_secret" class="w-100" password="True"/>
+                            </div>
+                            <field name="ma_fiscal_client_id" invisible="1"/>
+                            <div class="mt8" invisible="ma_fiscal_client_id">
+                                <button name="action_ma_register_client" type="object"
+                                        string="Enregistrer ce client" class="btn-primary"/>
+                            </div>
+                        </div>
+                    </div>
+                </setting>
+            </block>
+        </field>
+    </record>
+
+</odoo>

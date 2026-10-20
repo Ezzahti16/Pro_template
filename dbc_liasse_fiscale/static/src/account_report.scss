@@ -1,0 +1,20 @@
+// Points every cell of a manually-entered ("Saisie") column, so users know
+// they can click the pencil and type a value.
+.ma-editable-cell {
+    background-color: #d6e8fb;
+
+    &:hover {
+        background-color: #c3ddf8;
+    }
+}
+
+// "Tableau de Financement de l'Exercice" (report 50) — 2-table custom layout.
+.o_ma_financement_table_title {
+    font-weight: bold;
+    background-color: #e6e6e6;
+    padding: 4px 8px;
+}
+
+.o_ma_financement_bold_row {
+    font-weight: bold;
+}

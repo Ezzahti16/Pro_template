@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="module_category_sale_validation" model="ir.module.category">
+            <field name="name">Workflow Validation Ventes</field>
+            <field name="sequence">21</field>
+        </record>
+
+        <record id="privilege_sale_validation" model="res.groups.privilege">
+            <field name="name">Workflow Validation Ventes</field>
+            <field name="category_id" ref="module_category_sale_validation"/>
+            <field name="sequence">21</field>
+        </record>
+
+        <record id="group_sale_validation_user" model="res.groups">
+            <field name="name">Validateur Ventes</field>
+            <field name="privilege_id" ref="privilege_sale_validation"/>
+            <field name="comment">
+                Accès en lecture aux devis soumis à validation, et action de
+                validation/rejet limitée à ses propres tâches en tant que
+                validateur désigné.
+            </field>
+        </record>
+
+        <record id="group_sale_validation_admin" model="res.groups">
+            <field name="name">Administrateur Workflow Ventes</field>
+            <field name="privilege_id" ref="privilege_sale_validation"/>
+            <field name="implied_ids" eval="[(4, ref('group_sale_validation_user'))]"/>
+            <field name="comment">
+                Accès complet au paramétrage des règles de validation, des
+                circuits, et aux tableaux de bord d'analyse.
+            </field>
+        </record>
+
+    </data>
+</odoo>

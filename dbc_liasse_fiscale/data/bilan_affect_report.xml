@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_affect_report" model="account.report">
+    <field name="name">Affectation des Résultats Intervenus au Cours de l’Exercice</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_affect_column_montant" model="account.report.column">
+            <field name="name">MONTANT</field>
+            <field name="expression_label">montant</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+            <record id="bilan_affect_line_sec_a" model="account.report.line">
+                <field name="name">A. ORIGINE DES RESULTATS A AFFECTER</field>
+                <field name="code">AFFECT_SECTION_A</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">1</field>
+            </record>
+            <record id="bilan_affect_line_report_nouveau" model="account.report.line">
+                <field name="name">Report à nouveau</field>
+                <field name="code">AFFECT_REPORT_NOUVEAU</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">2</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_report_nouveau_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_471</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_resultats_instance" model="account.report.line">
+                <field name="name">Résultats nets en instance d'affectation</field>
+                <field name="code">AFFECT_RESULTATS_INSTANCE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">3</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_resultats_instance_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_473</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_resultat_exercice" model="account.report.line">
+                <field name="name">Résultat net de l'exercice</field>
+                <field name="code">AFFECT_RESULTAT_EXERCICE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">4</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_resultat_exercice_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_475</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_prelevements_reserves" model="account.report.line">
+                <field name="name">Prélèvements sur les réserves</field>
+                <field name="code">AFFECT_PRELEVEMENTS_RESERVES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">5</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_prelevements_reserves_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_477</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_autres_prelevements" model="account.report.line">
+                <field name="name">Autres prélèvements</field>
+                <field name="code">AFFECT_AUTRES_PRELEVEMENTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">6</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_autres_prelevements_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_479</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_total_a" model="account.report.line">
+                <field name="name">TOTAL A</field>
+                <field name="code">AFFECT_TOTAL_A</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">7</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_total_a_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_481</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_sec_b" model="account.report.line">
+                <field name="name">B. AFFECTATION DES RESULTATS</field>
+                <field name="code">AFFECT_SECTION_B</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">8</field>
+            </record>
+            <record id="bilan_affect_line_reserve_legale" model="account.report.line">
+                <field name="name">Réserve légale</field>
+                <field name="code">AFFECT_RESERVE_LEGALE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">9</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_reserve_legale_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_483</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_autres_reserves" model="account.report.line">
+                <field name="name">Autres réserves</field>
+                <field name="code">AFFECT_AUTRES_RESERVES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_autres_reserves_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_485</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_tantiemes" model="account.report.line">
+                <field name="name">Tantièmes</field>
+                <field name="code">AFFECT_TANTIEMES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">11</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_tantiemes_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_487</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_dividendes" model="account.report.line">
+                <field name="name">Dividendes</field>
+                <field name="code">AFFECT_DIVIDENDES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">12</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_dividendes_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_489</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_autres_affectations" model="account.report.line">
+                <field name="name">Autres affectations</field>
+                <field name="code">AFFECT_AUTRES_AFFECTATIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">13</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_autres_affectations_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_491</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_report_nouveau_b" model="account.report.line">
+                <field name="name">Report à nouveau</field>
+                <field name="code">AFFECT_REPORT_NOUVEAU_B</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">14</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_report_nouveau_b_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_493</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_affect_line_total_b" model="account.report.line">
+                <field name="name">TOTAL B</field>
+                <field name="code">AFFECT_TOTAL_B</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">15</field>
+                <field name="expression_ids">
+                    <record id="bilan_affect_expr_total_b_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_495</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_affect_report" model="ir.actions.client">
+    <field name="name">Affectation des Résultats</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-affect</field>
+    <field name="context" eval="{'report_id': ref('bilan_affect_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_affect_report" name="Affectation des Résultats" action="action_ma_bilan_affect_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

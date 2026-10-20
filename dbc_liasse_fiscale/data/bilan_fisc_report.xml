@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+    <record id="bilan_fisc_report" model="account.report">
+        <field name="name">Passage du Résultat Net Comptable au Résultat Net Fiscal</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="True"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_fisc_column_montant_plus" model="account.report.column">
+                <field name="name">MONTANT (+)</field>
+                <field name="expression_label">montant_plus</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_fisc_column_montant_moins" model="account.report.column">
+                <field name="name">MONTANT (-)</field>
+                <field name="expression_label">montant_moins</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_fisc_line_i_resultat_net" model="account.report.line">
+                <field name="name">I- RESULTAT NET COMPTABLE</field>
+                <field name="code">I_RESULTAT_NET</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+            </record>
+            <record id="bilan_fisc_line_benefice_net" model="account.report.line">
+                <field name="name">Bénéfice net</field>
+                <field name="code">BENEFICE_NET</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">11</field>
+                <field name="parent_id" ref="bilan_fisc_line_i_resultat_net"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_benefice_net_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_817</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_fisc_expr_benefice_net_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_819</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_perte_nette" model="account.report.line">
+                <field name="name">Perte nette</field>
+                <field name="code">PERTE_NETTE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">12</field>
+                <field name="parent_id" ref="bilan_fisc_line_i_resultat_net"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_perte_nette_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_818</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_fisc_expr_perte_nette_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_820</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_ii_reintegrations" model="account.report.line">
+                <field name="name">II- REINTEGRATIONS FISCALES</field>
+                <field name="code">REINTEGRATIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_reintegrations_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_18009</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_reintegrations_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_18010</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_reint_courantes" model="account.report.line">
+                <field name="name">1. Courantes</field>
+                <field name="code">REINT_COURANTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">21</field>
+                <field name="parent_id" ref="bilan_fisc_line_ii_reintegrations"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_reint_courantes_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_822</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_reint_courantes_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_823</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_reint_non_courantes" model="account.report.line">
+                <field name="name">2. Non courantes</field>
+                <field name="code">REINT_NON_COURANTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">22</field>
+                <field name="parent_id" ref="bilan_fisc_line_ii_reintegrations"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_reint_non_courantes_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_825</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_reint_non_courantes_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_826</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_iii_deductions" model="account.report.line">
+                <field name="name">III- DEDUCTIONS FISCALES</field>
+                <field name="code">DEDUCTIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_deductions_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_18012</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_deductions_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_18013</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_deduc_courantes" model="account.report.line">
+                <field name="name">1. Courantes</field>
+                <field name="code">DEDUC_COURANTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">31</field>
+                <field name="parent_id" ref="bilan_fisc_line_iii_deductions"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_deduc_courantes_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_828</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_deduc_courantes_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_830</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_deduc_non_courantes" model="account.report.line">
+                <field name="name">2. Non Courantes</field>
+                <field name="code">DEDUC_NON_COURANTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">32</field>
+                <field name="parent_id" ref="bilan_fisc_line_iii_deductions"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_deduc_non_courantes_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_831</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_deduc_non_courantes_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_7830</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_total_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_833</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_total_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_834</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_iv_resultat_brut" model="account.report.line">
+                <field name="name">IV. RESULTAT BRUT FISCAL</field>
+                <field name="code">RESULTAT_BRUT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+            </record>
+            <record id="bilan_fisc_line_benefice_brut" model="account.report.line">
+                <field name="name">Bénéfice brut si T1 &gt; T2 (A)</field>
+                <field name="code">BENEFICE_BRUT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">51</field>
+                <field name="parent_id" ref="bilan_fisc_line_iv_resultat_brut"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_benefice_brut_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_837</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_benefice_brut_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_839</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_deficit_brut" model="account.report.line">
+                <field name="name">Déficit brut fiscal si T2 &gt; T1 (B)</field>
+                <field name="code">DEFICIT_BRUT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">52</field>
+                <field name="parent_id" ref="bilan_fisc_line_iv_resultat_brut"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_deficit_brut_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_838</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_deficit_brut_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_840</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_v_reports" model="account.report.line">
+                <field name="name">V.REPORTS DEFICITAIRES IMPUTES (C) (1)</field>
+                <field name="code">REPORTS_IMPUTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">60</field>
+            </record>
+            <record id="bilan_fisc_line_report_n4" model="account.report.line">
+                <field name="name">- Exercice n-4</field>
+                <field name="code">REPORT_N4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">61</field>
+                <field name="parent_id" ref="bilan_fisc_line_v_reports"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_report_n4_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_845</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_report_n4_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_849</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_report_n3" model="account.report.line">
+                <field name="name">- Exercice n-3</field>
+                <field name="code">REPORT_N3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">62</field>
+                <field name="parent_id" ref="bilan_fisc_line_v_reports"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_report_n3_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_846</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_report_n3_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_850</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_report_n2" model="account.report.line">
+                <field name="name">- Exercice n-2</field>
+                <field name="code">REPORT_N2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">63</field>
+                <field name="parent_id" ref="bilan_fisc_line_v_reports"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_report_n2_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_847</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_report_n2_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_851</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_report_n1" model="account.report.line">
+                <field name="name">- Exercice n-1</field>
+                <field name="code">REPORT_N1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">64</field>
+                <field name="parent_id" ref="bilan_fisc_line_v_reports"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_report_n1_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_848</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_report_n1_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_852</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_vi_resultat_net_fiscal" model="account.report.line">
+                <field name="name">VI.RESULTAT NET FISCAL</field>
+                <field name="code">RESULTAT_NET_FISCAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">70</field>
+            </record>
+            <record id="bilan_fisc_line_benefice_net_fiscal" model="account.report.line">
+                <field name="name">Bénéfice net fiscal (A-C)</field>
+                <field name="code">BENEFICE_NET_FISCAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">71</field>
+                <field name="parent_id" ref="bilan_fisc_line_vi_resultat_net_fiscal"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_benefice_net_fiscal_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_6872</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_benefice_net_fiscal_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_6874</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_deficit_net_fiscal" model="account.report.line">
+                <field name="name">ou déficit net fiscal (B)</field>
+                <field name="code">DEFICIT_NET_FISCAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">72</field>
+                <field name="parent_id" ref="bilan_fisc_line_vi_resultat_net_fiscal"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_deficit_net_fiscal_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_6873</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_deficit_net_fiscal_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_6875</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_vii_cumul_amort" model="account.report.line">
+                <field name="name">VII.CUMUL DES AMORTISSEMENTS FISCALEMENT DIFFERES</field>
+                <field name="code">CUMUL_AMORT_DIFFERES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_cumul_amort_differes_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_854</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_cumul_amort_differes_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_855</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_viii_cumul_deficits" model="account.report.line">
+                <field name="name">VIII. CUMUL DES DEFICITS FISCAUX RESTANT A REPORTER</field>
+                <field name="code">CUMUL_DEFICITS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">90</field>
+            </record>
+            <record id="bilan_fisc_line_cumul_n4" model="account.report.line">
+                <field name="name">- Exercice n-4</field>
+                <field name="code">CUMUL_DEFICIT_N4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">91</field>
+                <field name="parent_id" ref="bilan_fisc_line_viii_cumul_deficits"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_cumul_deficit_n4_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_860</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_cumul_deficit_n4_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_864</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_cumul_n3" model="account.report.line">
+                <field name="name">- Exercice n-3</field>
+                <field name="code">CUMUL_DEFICIT_N3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">92</field>
+                <field name="parent_id" ref="bilan_fisc_line_viii_cumul_deficits"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_cumul_deficit_n3_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_861</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_cumul_deficit_n3_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_865</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_cumul_n2" model="account.report.line">
+                <field name="name">- Exercice n-2</field>
+                <field name="code">CUMUL_DEFICIT_N2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">93</field>
+                <field name="parent_id" ref="bilan_fisc_line_viii_cumul_deficits"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_cumul_deficit_n2_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_862</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_cumul_deficit_n2_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_866</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_fisc_line_cumul_n1" model="account.report.line">
+                <field name="name">- Exercice n-1</field>
+                <field name="code">CUMUL_DEFICIT_N1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">94</field>
+                <field name="parent_id" ref="bilan_fisc_line_viii_cumul_deficits"/>
+                <field name="expression_ids">
+                    <record id="bilan_fisc_expr_cumul_deficit_n1_montant_plus" model="account.report.expression">
+                        <field name="label">montant_plus</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_863</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fisc_expr_cumul_deficit_n1_montant_moins" model="account.report.expression">
+                        <field name="label">montant_moins</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_867</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+    <record id="action_ma_bilan_fisc_report" model="ir.actions.client">
+        <field name="name">Passage du RNC au RNF</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-fisc</field>
+        <field name="context" eval="{'report_id': ref('bilan_fisc_report')}"/>
+    </record>
+    <menuitem id="menu_ma_bilan_fisc_report" name="Passage du RNC au RNF" action="action_ma_bilan_fisc_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

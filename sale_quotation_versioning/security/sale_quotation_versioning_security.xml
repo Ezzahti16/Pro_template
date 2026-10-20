@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Le verrouillage des devis figés est implémenté par surcharge de
+        write() dans models/sale_order.py plutôt que par ir.rule, afin
+        d'éviter qu'une règle sur perm_write ne bloque également les
+        écritures internes légitimes du module (transitions d'état,
+        recalcul des champs stockés). Voir _VERSION_LOCKED_FIELDS et
+        _BYPASS_LOCK_CONTEXT_KEY dans le modèle.
+
+        Ce fichier est conservé comme point d'extension si des règles
+        d'accès par groupe (ex: seul un responsable commercial peut
+        créer une nouvelle version) devaient être ajoutées par la suite.
+    -->
+</odoo>

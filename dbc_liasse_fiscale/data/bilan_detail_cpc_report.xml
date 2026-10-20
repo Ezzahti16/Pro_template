@@ -1,0 +1,1836 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="bilan_detail_cpc_report" model="account.report">
+    <field name="name">Détail des Postes du C.P.C</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_detail_cpc_column_exercice" model="account.report.column">
+            <field name="name">EXERCICE</field>
+            <field name="expression_label">exercice</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_detail_cpc_column_exercice_prev" model="account.report.column">
+            <field name="name">EXERCICE PRECEDENT</field>
+            <field name="expression_label">exercice_prev</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+            <record id="bilan_detail_cpc_line_charges_exploitation" model="account.report.line">
+                <field name="name">CHARGES D'EXPLOITATION</field>
+                <field name="code">DETAIL_CPC_CHARGES_EXPLOITATION</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">11</field>
+            </record>
+            <record id="bilan_detail_cpc_line_611" model="account.report.line">
+                <field name="name">611 - Achats revendus de marchandises</field>
+                <field name="code">DETAIL_CPC_611</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">12</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_611_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1521</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_611_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1562</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_611_1" model="account.report.line">
+                <field name="name">Achats de marchandises</field>
+                <field name="code">DETAIL_CPC_611_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">13</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_611"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_611_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1522</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_611_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1563</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_611_2" model="account.report.line">
+                <field name="name">Variation des stocks de marchandises</field>
+                <field name="code">DETAIL_CPC_611_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">14</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_611"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_611_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1523</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_611_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1564</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_611_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_611_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">15</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_611"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_611_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1524</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_611_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1565</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612" model="account.report.line">
+                <field name="name">612 - Achats consommés de matières et fournitures</field>
+                <field name="code">DETAIL_CPC_612</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">16</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1525</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1566</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_1" model="account.report.line">
+                <field name="name">Achats de matières premières</field>
+                <field name="code">DETAIL_CPC_612_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">17</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1526</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1567</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_2" model="account.report.line">
+                <field name="name">Variation des stocks de matières premières</field>
+                <field name="code">DETAIL_CPC_612_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">18</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1527</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1568</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_3" model="account.report.line">
+                <field name="name">Achats de matières et fournitures consommables et d'emballages</field>
+                <field name="code">DETAIL_CPC_612_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">19</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1528</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1569</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_4" model="account.report.line">
+                <field name="name">Variation des stocks de matières, fournitures et emballages</field>
+                <field name="code">DETAIL_CPC_612_4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_4_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1529</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_4_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1570</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_5" model="account.report.line">
+                <field name="name">Achats non stockés de matières et de fournitures</field>
+                <field name="code">DETAIL_CPC_612_5</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">21</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_5_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1530</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_5_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1571</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_6" model="account.report.line">
+                <field name="name">Achats de travaux, études et prestations de services</field>
+                <field name="code">DETAIL_CPC_612_6</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">22</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_6_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1531</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_6_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1572</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_612_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_612_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">23</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_612"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_612_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1532</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_612_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1573</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614" model="account.report.line">
+                <field name="name">613/614 - Autres charges externes</field>
+                <field name="code">DETAIL_CPC_613_614</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">24</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1533</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1574</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_1" model="account.report.line">
+                <field name="name">Locations et charges locatives</field>
+                <field name="code">DETAIL_CPC_613_614_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">25</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1534</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1575</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_2" model="account.report.line">
+                <field name="name">Redevances de crédit-bail</field>
+                <field name="code">DETAIL_CPC_613_614_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">26</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1535</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1576</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_3" model="account.report.line">
+                <field name="name">Entretien et réparations</field>
+                <field name="code">DETAIL_CPC_613_614_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">27</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1536</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1577</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_4" model="account.report.line">
+                <field name="name">Primes d'assurances</field>
+                <field name="code">DETAIL_CPC_613_614_4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">28</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_4_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1537</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_4_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1578</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_5" model="account.report.line">
+                <field name="name">Rémunérations du personnel extérieur à l'entreprise</field>
+                <field name="code">DETAIL_CPC_613_614_5</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">29</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_5_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1538</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_5_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1579</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_6" model="account.report.line">
+                <field name="name">Rémunérations d'intermédiaires et honoraires</field>
+                <field name="code">DETAIL_CPC_613_614_6</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_6_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1539</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_6_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10091</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_7" model="account.report.line">
+                <field name="name">Redevances pour brevets, marques, droits et valeurs similaires</field>
+                <field name="code">DETAIL_CPC_613_614_7</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">31</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_7_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1540</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_7_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10420</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_8" model="account.report.line">
+                <field name="name">Transports</field>
+                <field name="code">DETAIL_CPC_613_614_8</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">32</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_8_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1541</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_8_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1582</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_9" model="account.report.line">
+                <field name="name">Déplacements, missions et réceptions</field>
+                <field name="code">DETAIL_CPC_613_614_9</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">33</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_9_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1542</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_9_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1583</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_10" model="account.report.line">
+                <field name="name">Reste du poste des autres charges externes</field>
+                <field name="code">DETAIL_CPC_613_614_10</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">34</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_10_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1543</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_10_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1584</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_613_614_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_613_614_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">35</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_613_614"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_613_614_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1544</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_613_614_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1585</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_617" model="account.report.line">
+                <field name="name">617 - Charges de personnel</field>
+                <field name="code">DETAIL_CPC_617</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">36</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_617_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1545</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_617_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1586</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_617_1" model="account.report.line">
+                <field name="name">Rémunération du personnel</field>
+                <field name="code">DETAIL_CPC_617_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">37</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_617"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_617_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1546</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_617_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1587</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_617_2" model="account.report.line">
+                <field name="name">Charges sociales</field>
+                <field name="code">DETAIL_CPC_617_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">38</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_617"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_617_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1547</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_617_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1588</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_617_3" model="account.report.line">
+                <field name="name">Reste du poste des charges de personnel</field>
+                <field name="code">DETAIL_CPC_617_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">39</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_617"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_617_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1548</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_617_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1589</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_617_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_617_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">40</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_617"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_617_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1549</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_617_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1590</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_618" model="account.report.line">
+                <field name="name">618 - Autres charges d'exploitation</field>
+                <field name="code">DETAIL_CPC_618</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">41</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_618_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1550</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_618_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1591</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_618_1" model="account.report.line">
+                <field name="name">Jetons de présence</field>
+                <field name="code">DETAIL_CPC_618_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">42</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_618"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_618_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1551</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_618_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1592</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_618_2" model="account.report.line">
+                <field name="name">Pertes sur créances irrécouvrables</field>
+                <field name="code">DETAIL_CPC_618_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">43</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_618"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_618_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1552</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_618_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1593</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_618_3" model="account.report.line">
+                <field name="name">Reste du poste des autres charges d'exploitation</field>
+                <field name="code">DETAIL_CPC_618_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">44</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_618"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_618_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1553</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_618_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1594</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_618_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_618_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">45</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_618"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_618_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1733</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_618_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1734</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_charges_financieres" model="account.report.line">
+                <field name="name">CHARGES FINANCIERES</field>
+                <field name="code">DETAIL_CPC_CHARGES_FINANCIERES</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">46</field>
+            </record>
+            <record id="bilan_detail_cpc_line_638" model="account.report.line">
+                <field name="name">638 - Autres charges financières</field>
+                <field name="code">DETAIL_CPC_638</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">47</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_638_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1764</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_638_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1814</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_638_1" model="account.report.line">
+                <field name="name">Charges nettes sur cessions de titres et valeurs de placement</field>
+                <field name="code">DETAIL_CPC_638_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">48</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_638"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_638_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1765</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_638_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1815</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_638_2" model="account.report.line">
+                <field name="name">Reste du poste des autres charges financières</field>
+                <field name="code">DETAIL_CPC_638_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">49</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_638"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_638_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1766</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_638_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1816</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_638_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_638_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">50</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_638"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_638_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1767</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_638_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1817</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_charges_non_courantes" model="account.report.line">
+                <field name="name">CHARGES NON COURANTES</field>
+                <field name="code">DETAIL_CPC_CHARGES_NON_COURANTES</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">51</field>
+            </record>
+            <record id="bilan_detail_cpc_line_658" model="account.report.line">
+                <field name="name">658 - Autres charges non courantes</field>
+                <field name="code">DETAIL_CPC_658</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">52</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1792</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1807</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_658_1" model="account.report.line">
+                <field name="name">Pénalités sur marchés et dédits</field>
+                <field name="code">DETAIL_CPC_658_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">53</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_658"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1793</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1808</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_658_2" model="account.report.line">
+                <field name="name">Rappels d'impôts (autres qu'impôts sur les résultats)</field>
+                <field name="code">DETAIL_CPC_658_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">54</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_658"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1794</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1809</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_658_3" model="account.report.line">
+                <field name="name">Pénalités et amendes fiscales et pénales</field>
+                <field name="code">DETAIL_CPC_658_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">55</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_658"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1795</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1810</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_658_4" model="account.report.line">
+                <field name="name">Créances devenues irrécouvrables</field>
+                <field name="code">DETAIL_CPC_658_4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">56</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_658"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_4_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1796</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_4_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1811</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_658_5" model="account.report.line">
+                <field name="name">Reste du poste des autres charges non courantes</field>
+                <field name="code">DETAIL_CPC_658_5</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">57</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_658"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_5_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1797</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_5_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1812</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_658_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_658_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">58</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_658"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_658_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1798</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_658_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1813</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_produits_exploitation" model="account.report.line">
+                <field name="name">PRODUITS D'EXPLOITATION</field>
+                <field name="code">DETAIL_CPC_PRODUITS_EXPLOITATION</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">59</field>
+            </record>
+            <record id="bilan_detail_cpc_line_711" model="account.report.line">
+                <field name="name">711 - Ventes de marchandises</field>
+                <field name="code">DETAIL_CPC_711</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_711_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1963</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_711_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1989</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_711_1" model="account.report.line">
+                <field name="name">Ventes de marchandises au Maroc</field>
+                <field name="code">DETAIL_CPC_711_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">61</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_711"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_711_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1964</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_711_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1990</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_711_2" model="account.report.line">
+                <field name="name">Ventes de marchandises à l'étranger</field>
+                <field name="code">DETAIL_CPC_711_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">62</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_711"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_711_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1965</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_711_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1991</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_711_3" model="account.report.line">
+                <field name="name">Reste du poste des ventes de marchandises</field>
+                <field name="code">DETAIL_CPC_711_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">63</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_711"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_711_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1966</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_711_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1992</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_711_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_711_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">64</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_711"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_711_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1967</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_711_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1993</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712" model="account.report.line">
+                <field name="name">712 - Ventes de biens et services produits</field>
+                <field name="code">DETAIL_CPC_712</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">65</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1968</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1994</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_1" model="account.report.line">
+                <field name="name">Ventes de biens au Maroc</field>
+                <field name="code">DETAIL_CPC_712_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">66</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1969</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1995</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_2" model="account.report.line">
+                <field name="name">Ventes de biens produits à l'étranger</field>
+                <field name="code">DETAIL_CPC_712_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">67</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1970</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1996</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_3" model="account.report.line">
+                <field name="name">Ventes de services au Maroc</field>
+                <field name="code">DETAIL_CPC_712_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">68</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1971</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1997</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_4" model="account.report.line">
+                <field name="name">Ventes de services à l'étranger</field>
+                <field name="code">DETAIL_CPC_712_4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">69</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_4_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1972</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_4_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1998</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_5" model="account.report.line">
+                <field name="name">Redevances pour brevets, marques, droits et valeurs similaires</field>
+                <field name="code">DETAIL_CPC_712_5</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_5_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1973</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_5_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1999</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_6" model="account.report.line">
+                <field name="name">Reste du poste des ventes et services produits</field>
+                <field name="code">DETAIL_CPC_712_6</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">71</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_6_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1974</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_6_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2000</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_712_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_712_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">72</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_712"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_712_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1975</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_712_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2001</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_713" model="account.report.line">
+                <field name="name">713 - Variation des stocks de produits</field>
+                <field name="code">DETAIL_CPC_713</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">73</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_713_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1976</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_713_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2002</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_713_1" model="account.report.line">
+                <field name="name">Variation des stocks des biens produits</field>
+                <field name="code">DETAIL_CPC_713_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">74</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_713"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_713_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1977</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_713_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2003</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_713_2" model="account.report.line">
+                <field name="name">Variation des stocks des services produits</field>
+                <field name="code">DETAIL_CPC_713_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">75</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_713"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_713_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1978</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_713_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2004</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_713_3" model="account.report.line">
+                <field name="name">Variation des stocks des produits en cours</field>
+                <field name="code">DETAIL_CPC_713_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">76</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_713"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_713_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1979</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_713_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2005</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_713_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_713_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">77</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_713"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_713_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1980</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_713_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2006</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_718" model="account.report.line">
+                <field name="name">718 - Autres produits d'exploitation</field>
+                <field name="code">DETAIL_CPC_718</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">78</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_718_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1981</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_718_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2007</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_718_1" model="account.report.line">
+                <field name="name">Jetons de présence reçus</field>
+                <field name="code">DETAIL_CPC_718_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">79</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_718"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_718_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1982</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_718_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2008</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_718_2" model="account.report.line">
+                <field name="name">Reste du poste (produits divers)</field>
+                <field name="code">DETAIL_CPC_718_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">80</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_718"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_718_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1983</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_718_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2009</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_718_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_718_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">81</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_718"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_718_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1984</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_718_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2010</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_719" model="account.report.line">
+                <field name="name">719 - Reprises d'exploitation ; transferts de charges</field>
+                <field name="code">DETAIL_CPC_719</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">82</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_719_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1985</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_719_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2011</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_719_1" model="account.report.line">
+                <field name="name">Reprises</field>
+                <field name="code">DETAIL_CPC_719_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">83</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_719"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_719_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1986</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_719_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2012</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_719_2" model="account.report.line">
+                <field name="name">Transferts de charges</field>
+                <field name="code">DETAIL_CPC_719_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">84</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_719"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_719_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1987</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_719_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2013</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_719_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_719_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">85</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_719"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_719_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1988</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_719_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2014</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_produits_financiers" model="account.report.line">
+                <field name="name">PRODUITS FINANCIERS</field>
+                <field name="code">DETAIL_CPC_PRODUITS_FINANCIERS</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">86</field>
+            </record>
+            <record id="bilan_detail_cpc_line_738" model="account.report.line">
+                <field name="name">738 - Intérêts et autres produits financiers</field>
+                <field name="code">DETAIL_CPC_738</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">87</field>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_738_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2022</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_738_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2029</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_738_1" model="account.report.line">
+                <field name="name">Intérêts et produits assimilés</field>
+                <field name="code">DETAIL_CPC_738_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">88</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_738"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_738_1_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2024</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_738_1_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2031</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_738_2" model="account.report.line">
+                <field name="name">Revenus des créances rattachées à des participations</field>
+                <field name="code">DETAIL_CPC_738_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">89</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_738"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_738_2_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2025</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_738_2_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2032</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_738_3" model="account.report.line">
+                <field name="name">Produits nets sur cessions de titres et valeurs de placement</field>
+                <field name="code">DETAIL_CPC_738_3</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">90</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_738"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_738_3_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2026</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_738_3_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2033</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_738_4" model="account.report.line">
+                <field name="name">Reste du poste intérêts et autres produits financiers</field>
+                <field name="code">DETAIL_CPC_738_4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">91</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_738"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_738_4_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2027</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_738_4_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2034</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_detail_cpc_line_738_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DETAIL_CPC_738_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">92</field>
+                <field name="parent_id" ref="bilan_detail_cpc_line_738"/>
+                <field name="expression_ids">
+                    <record id="bilan_detail_cpc_line_738_total_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2028</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_detail_cpc_line_738_total_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2035</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_detail_cpc_report" model="ir.actions.client">
+    <field name="name">Détail des Postes du C.P.C</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-detail-cpc</field>
+    <field name="context" eval="{'report_id': ref('bilan_detail_cpc_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_detail_cpc_report"
+          name="Détail des Postes du C.P.C"
+          action="action_ma_bilan_detail_cpc_report"
+          parent="account.account_reports_legal_statements_menu"
+          groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

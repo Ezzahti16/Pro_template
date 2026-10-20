@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_ma_formules_root"
+                  name="Morocco Fiscal Formules"
+                  sequence="80"/>
+        <menuitem id="menu_ma_formules_settings"
+                  name="EDI Formulas"
+                  parent="menu_ma_formules_root"
+                  action="ma_fiscal_setting_action"
+                  />
+        <menuitem id="menu_ma_formules_clients"
+                  name="Clients"
+                  parent="menu_ma_formules_root"
+                  action="ma_fiscal_client_action"
+                  sequence="90"
+                  />
+    </data>
+</odoo>

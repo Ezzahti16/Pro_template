@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_fusion_report" model="account.report">
+    <field name="name">Etat des Plus-Values Constatées en Cas de Fusion</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_fusion_report_column_valeur_apport" model="account.report.column">
+            <field name="name">Valeur d'apport</field>
+            <field name="expression_label">valeur_apport</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_valeur_nette" model="account.report.column">
+            <field name="name">Valeur nette comptable</field>
+            <field name="expression_label">valeur_nette</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_plus_value_differee" model="account.report.column">
+            <field name="name">Plus-value constatée et différée</field>
+            <field name="expression_label">plus_value_differee</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_fraction_ant" model="account.report.column">
+            <field name="name">Fraction de la plus-value rapportée aux exercices antérieurs (cumul)</field>
+            <field name="expression_label">fraction_ant</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_fraction_actuel" model="account.report.column">
+            <field name="name">Fraction de la plus-value rapportée à l'exercice actuel</field>
+            <field name="expression_label">fraction_actuel</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_cumul_rapportees" model="account.report.column">
+            <field name="name">Cumul des plus-values rapportées</field>
+            <field name="expression_label">cumul_rapportees</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_solde_non_imputees" model="account.report.column">
+            <field name="name">Solde des plus-values non imputées</field>
+            <field name="expression_label">solde_non_imputees</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_fusion_report_column_observations" model="account.report.column">
+            <field name="name">Observations</field>
+            <field name="expression_label">observations</field>
+            <field name="sequence">80</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+        <record id="bilan_fusion_report_line_FUSION_TERRAIN" model="account.report.line">
+                <field name="name">1 Terrain (1)</field>
+                <field name="code">FUSION_TERRAIN</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1110</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1111</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1112</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1113</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1114</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1115</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1116</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TERRAIN_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1117</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_CONSTRUCTIONS" model="account.report.line">
+                <field name="name">2 Constructions</field>
+                <field name="code">FUSION_CONSTRUCTIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1119</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1120</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1121</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1122</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1123</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1124</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1125</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_CONSTRUCTIONS_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1126</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_MATERIEL_OUTILLAGE" model="account.report.line">
+                <field name="name">3 Matériel et outillages</field>
+                <field name="code">FUSION_MATERIEL_OUTILLAGE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1128</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1129</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1130</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1131</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1132</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1133</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1134</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_OUTILLAGE_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1135</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_MATERIEL_TRANSPORT" model="account.report.line">
+                <field name="name">4 Matériel de transport</field>
+                <field name="code">FUSION_MATERIEL_TRANSPORT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1137</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1138</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1139</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1140</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1141</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1142</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1143</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_MATERIEL_TRANSPORT_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1144</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_AGENCEMENTS" model="account.report.line">
+                <field name="name">5 Agencements-Installations</field>
+                <field name="code">FUSION_AGENCEMENTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1146</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1147</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1148</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1149</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1150</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1151</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1152</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AGENCEMENTS_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1153</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_BREVETS" model="account.report.line">
+                <field name="name">6 Brevets</field>
+                <field name="code">FUSION_BREVETS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1155</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1156</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1157</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1158</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1159</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1160</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1161</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_BREVETS_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1162</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_AUTRES_AMORTISSABLES" model="account.report.line">
+                <field name="name">7 Autres éléments amortissables</field>
+                <field name="code">FUSION_AUTRES_AMORTISSABLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">70</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1164</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1165</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1166</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1167</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1168</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1169</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1170</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_AMORTISSABLES_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1171</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_TITRES_PARTICIPATION" model="account.report.line">
+                <field name="name">8 Titres de participation</field>
+                <field name="code">FUSION_TITRES_PARTICIPATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1173</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1174</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1175</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1176</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1177</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1178</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1179</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TITRES_PARTICIPATION_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1180</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_FONDS_COMMERCE" model="account.report.line">
+                <field name="name">9 Fonds de commerce</field>
+                <field name="code">FUSION_FONDS_COMMERCE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1182</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1183</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1184</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1185</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1186</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1187</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1188</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_FONDS_COMMERCE_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1189</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_AUTRES_NON_AMORTISSABLES" model="account.report.line">
+                <field name="name">10 Autres éléments non amortissables</field>
+                <field name="code">FUSION_AUTRES_NON_AMORTISSABLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1191</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1192</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1193</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1194</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1195</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1196</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1197</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_AUTRES_NON_AMORTISSABLES_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1198</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_fusion_report_line_FUSION_TOTAL" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">FUSION_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">110</field>
+                <field name="expression_ids">
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_valeur_apport" model="account.report.expression">
+                        <field name="label">valeur_apport</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1200</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1201</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_plus_value_differee" model="account.report.expression">
+                        <field name="label">plus_value_differee</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1202</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_fraction_ant" model="account.report.expression">
+                        <field name="label">fraction_ant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1203</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_fraction_actuel" model="account.report.expression">
+                        <field name="label">fraction_actuel</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1204</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_cumul_rapportees" model="account.report.expression">
+                        <field name="label">cumul_rapportees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1205</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_solde_non_imputees" model="account.report.expression">
+                        <field name="label">solde_non_imputees</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1206</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_fusion_report_expr_FUSION_TOTAL_observations" model="account.report.expression">
+                        <field name="label">observations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1207</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_bilan_fusion_report" model="ir.actions.client">
+    <field name="name">Plus-Values (Fusion)</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-fusion</field>
+    <field name="context" eval="{'report_id': ref('bilan_fusion_report')}"/>
+</record>
+
+<menuitem id="menu_bilan_fusion_report" name="Plus-Values (Fusion)" action="action_bilan_fusion_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

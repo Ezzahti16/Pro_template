@@ -1,0 +1,20 @@
+{
+    "name": "Temp Admin Manager",
+    "summary": "Create temporary admin users (auto-deleted after 6h) on Dockerized Odoo instances over SSH",
+    "version": "19.0.1.0.0",
+    "author": "DBC",
+    "category": "Tools",
+    "license": "LGPL-3",
+    "depends": ["base"],
+    "external_dependencies": {"python": ["paramiko"]},
+    "data": [
+        "security/ir.model.access.csv",
+        "data/cron.xml",
+        "views/server_views.xml",
+        "views/instance_views.xml",
+        "views/database_views.xml",
+        "views/menus.xml",
+    ],
+    "installable": True,
+    "application": True,
+}

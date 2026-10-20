@@ -1,0 +1,1346 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+    <record id="bilan_immob_report" model="account.report">
+        <field name="name">Tableau des Immobilisations Autres que Financières</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="True"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_immob_column_debut" model="account.report.column">
+                <field name="name">Montant brut début exercice</field>
+                <field name="expression_label">debut</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_acquisition" model="account.report.column">
+                <field name="name">Augmentations: Acquisitions</field>
+                <field name="expression_label">acquisition</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_production" model="account.report.column">
+                <field name="name">Augmentations: Production par l'entreprise pour elle-même</field>
+                <field name="expression_label">production</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_virement_aug" model="account.report.column">
+                <field name="name">Augmentations: Virements</field>
+                <field name="expression_label">virement_aug</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_cession" model="account.report.column">
+                <field name="name">Diminutions: Cessions</field>
+                <field name="expression_label">cession</field>
+                <field name="sequence">50</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_retrait" model="account.report.column">
+                <field name="name">Diminutions: Retraits</field>
+                <field name="expression_label">retrait</field>
+                <field name="sequence">60</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_virement_dim" model="account.report.column">
+                <field name="name">Diminutions: Virements</field>
+                <field name="expression_label">virement_dim</field>
+                <field name="sequence">70</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_fin" model="account.report.column">
+                <field name="name">Montant brut fin exercice</field>
+                <field name="expression_label">fin</field>
+                <field name="sequence">80</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_immob_column_ecart" model="account.report.column">
+                <field name="name">ECART</field>
+                <field name="expression_label">ecart</field>
+                <field name="sequence">90</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_immob_line_non_valeurs" model="account.report.line">
+                <field name="name">IMMOBILISATION EN NON-VALEURS</field>
+                <field name="code">IMMOB_NON_VALEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_non_valeurs_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10064</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10065</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10066</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10067</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10068</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10069</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10070</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10071</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_non_valeurs_frais_preliminaires" model="account.report.line">
+                <field name="name">Frais préliminaires</field>
+                <field name="code">IMMOB_NON_VALEURS_FRAIS_PRELIMINAIRES</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">11</field>
+                <field name="parent_id" ref="bilan_immob_line_non_valeurs"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_966</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_980</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_994</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1008</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1022</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1036</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1050</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1064</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_frais_preliminaires_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1064</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_non_valeurs_charges_repartir" model="account.report.line">
+                <field name="name">Charges à répartir sur plusieurs exercice</field>
+                <field name="code">IMMOB_NON_VALEURS_CHARGES_REPARTIR</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">12</field>
+                <field name="parent_id" ref="bilan_immob_line_non_valeurs"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_967</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_981</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_995</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1009</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1023</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1037</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1051</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1065</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_charges_repartir_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1065</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_non_valeurs_primes_remboursement" model="account.report.line">
+                <field name="name">Primes de remboursemen des obligations</field>
+                <field name="code">IMMOB_NON_VALEURS_PRIMES_REMBOURSEMENT</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">13</field>
+                <field name="parent_id" ref="bilan_immob_line_non_valeurs"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_968</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_982</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_996</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1010</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1024</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1038</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1052</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1066</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_non_valeurs_primes_remboursement_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1066</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_incorporelles" model="account.report.line">
+                <field name="name">IMMOBILISATION INCORPORELLES</field>
+                <field name="code">IMMOB_INCORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_incorporelles_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10073</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10074</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10075</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10076</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10077</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10078</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10079</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10080</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_incorporelles_recherche_dev" model="account.report.line">
+                <field name="name">Immobilisation en recherche et développement</field>
+                <field name="code">IMMOB_INCORPORELLES_RECHERCHE_DEV</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">21</field>
+                <field name="parent_id" ref="bilan_immob_line_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_969</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_983</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_997</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1011</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1025</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1039</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1053</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1067</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_recherche_dev_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1067</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_incorporelles_brevets" model="account.report.line">
+                <field name="name">Brevets, marques, droits et valeurs similaires</field>
+                <field name="code">IMMOB_INCORPORELLES_BREVETS</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">22</field>
+                <field name="parent_id" ref="bilan_immob_line_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_970</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_984</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_998</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1012</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1026</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1040</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1054</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1068</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_brevets_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1068</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_incorporelles_fonds_commercial" model="account.report.line">
+                <field name="name">Fonds commercial</field>
+                <field name="code">IMMOB_INCORPORELLES_FONDS_COMMERCIAL</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">23</field>
+                <field name="parent_id" ref="bilan_immob_line_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_971</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_985</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_999</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1013</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1027</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1041</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1055</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1069</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_fonds_commercial_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1069</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_incorporelles_autres_incorporelles" model="account.report.line">
+                <field name="name">Autres immobilisations incorporelles</field>
+                <field name="code">IMMOB_INCORPORELLES_AUTRES_INCORPORELLES</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">24</field>
+                <field name="parent_id" ref="bilan_immob_line_incorporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_972</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_986</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1000</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1014</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1028</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1042</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1056</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1070</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_incorporelles_autres_incorporelles_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1070</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles" model="account.report.line">
+                <field name="name">IMMOBILISATIONS CORPORELLES</field>
+                <field name="code">IMMOB_CORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10082</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10083</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10084</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10085</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10086</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10087</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10088</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_10089</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_terrains" model="account.report.line">
+                <field name="name">Terrains</field>
+                <field name="code">IMMOB_CORPORELLES_TERRAINS</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">31</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_973</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_987</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1001</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1015</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1029</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1043</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1057</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1071</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_terrains_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1071</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_constructions" model="account.report.line">
+                <field name="name">Constructions</field>
+                <field name="code">IMMOB_CORPORELLES_CONSTRUCTIONS</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">32</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_974</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_988</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1002</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1016</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1030</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1044</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1058</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1072</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_constructions_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1072</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_installations" model="account.report.line">
+                <field name="name">Installations techniques, matériel et outillage</field>
+                <field name="code">IMMOB_CORPORELLES_INSTALLATIONS</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">33</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_installations_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_975</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_989</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1003</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1017</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1031</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1045</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1059</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1073</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_installations_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1073</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_materiel_transport" model="account.report.line">
+                <field name="name">Matériel de transport</field>
+                <field name="code">IMMOB_CORPORELLES_MATERIEL_TRANSPORT</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">34</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_976</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_990</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1004</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1018</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1032</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1046</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1060</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1074</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_materiel_transport_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1074</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_mobilier" model="account.report.line">
+                <field name="name">Mobilier, matériel de bureau e - amenagement</field>
+                <field name="code">IMMOB_CORPORELLES_MOBILIER</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">35</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_978</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_992</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1006</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1020</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1034</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1048</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1062</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1076</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_mobilier_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1076</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_autres_corporelles" model="account.report.line">
+                <field name="name">Autres immobilisations corporelles</field>
+                <field name="code">IMMOB_CORPORELLES_AUTRES_CORPORELLES</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">36</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_979</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_993</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1007</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1021</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1035</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1049</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1063</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1077</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_autres_corporelles_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1077</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_corporelles_en_cours" model="account.report.line">
+                <field name="name">Immobilisations corporelles en cours</field>
+                <field name="code">IMMOB_CORPORELLES_EN_COURS</field>
+                <field name="hierarchy_level">3</field>
+                <field name="sequence">37</field>
+                <field name="parent_id" ref="bilan_immob_line_corporelles"/>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_977</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_991</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1005</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1019</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1033</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1047</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1061</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1075</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_corporelles_en_cours_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E1075</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_immob_line_total" model="account.report.line">
+                <field name="name">TOTAL GENERAL</field>
+                <field name="code">IMMOB_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_immob_expr_immob_total_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14045</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_acquisition" model="account.report.expression">
+                        <field name="label">acquisition</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14046</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_production" model="account.report.expression">
+                        <field name="label">production</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14047</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_virement_aug" model="account.report.expression">
+                        <field name="label">virement_aug</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14048</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_cession" model="account.report.expression">
+                        <field name="label">cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14049</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_retrait" model="account.report.expression">
+                        <field name="label">retrait</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14050</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_virement_dim" model="account.report.expression">
+                        <field name="label">virement_dim</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14051</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_immob_expr_immob_total_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14052</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+    <record id="action_ma_bilan_immob_report" model="ir.actions.client">
+        <field name="name">Immobilisations Autres que Financières</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-immob</field>
+        <field name="context" eval="{'report_id': ref('bilan_immob_report')}"/>
+    </record>
+    <menuitem id="menu_ma_bilan_immob_report" name="Immobilisations Autres que Financières" action="action_ma_bilan_immob_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

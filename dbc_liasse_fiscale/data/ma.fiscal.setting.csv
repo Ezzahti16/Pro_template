@@ -1,0 +1,2517 @@
+id,edi,table_,formule,modele,code_comptable,libelle
+ma_fs_834,834,5,EDI('818')+EDI('820')+EDI('18010')+EDI('18013'),0,,
+ma_fs_2056,2056,14,EDIST('2046'),0,,
+ma_fs_2057,2057,14,EDIST('2047'),0,,
+ma_fs_2058,2058,14,EDIST('2048'),0,,
+ma_fs_2059,2059,14,EDIST('2049'),0,,
+ma_fs_2060,2060,14,0,0,,
+ma_fs_2061,2061,14,EDIST('2051'),0,,
+ma_fs_2062,2062,14,EDIST('2052'),0,,
+ma_fs_2063,2063,14,EDIST('2053'),0,,
+ma_fs_1374,1374,7,"CMP((EDI(""1332"")*-1))",0,,
+ma_fs_55,55,21,"""Saisie""",0,,
+ma_fs_5427,5427,33,EDI('5345')+EDI('5426'),0,,Total Stocks Produits et Biens finis(Montant Brut 1)
+ma_fs_497,497,1,EDI ('238')+EDI ('239')+EDI ('240'),1,,IMMOBILISATIONS EN NON VALEUR (A)(Brut)
+ma_fs_498,498,1,EDI('241')+EDI('242')+EDI('243'),1,,IMMOBILISATIONS EN NON VALEUR (A)(Amortissements et Provisions)
+ma_fs_241,241,1,-SE('2811'),1,,
+ma_fs_242,242,1,-SE('2812'),1,,
+ma_fs_243,243,1,-SE('2813'),1,,
+ma_fs_499,499,1,EDI('497')-EDI('498'),1,,IMMOBILISATIONS EN NON VALEUR (A)(Net N)
+ma_fs_244,244,1,EDI('238')-EDI('241'),1,,Immobilisations corporelles en cours(Net N)
+ma_fs_245,245,1,EDI('239')-EDI('242'),1,,Frais Préliminaires(Net N)
+ma_fs_246,246,1,EDI('240')-EDI('243'),1,,Chages à répartir sur plusieurs exercices(Net N)
+ma_fs_507,507,1,EDI('207')+EDI('208')+EDI('209')+EDI('210')+EDI('211')+EDI('212')+EDI('213'),1,,IMMOBILISATIONS CORPORELLES (C)(Brut)
+ma_fs_207,207,1,SE('231'),1,,
+ma_fs_208,208,1,SE('232'),1,,
+ma_fs_209,209,1,SE('233'),1,,
+ma_fs_210,210,1,SE('234'),1,,
+ma_fs_211,211,1,SE('235'),1,,
+ma_fs_213,213,1,SE('239'),1,,
+ma_fs_238,238,1,SE('211'),1,,
+ma_fs_239,239,1,SE('212'),1,,
+ma_fs_240,240,1,SE('213'),1,,
+ma_fs_212,212,1,SE('238'),1,,
+ma_fs_214,214,1,-SE('2831')-SE('2931'),1,,
+ma_fs_215,215,1,-SE('2832')-SE('2932'),1,,
+ma_fs_216,216,1,-SE('2833')-SE('2933'),1,,
+ma_fs_217,217,1,-SE('2834')-SE('2934'),1,,
+ma_fs_218,218,1,-SE('2835')-SE('2935'),1,,
+ma_fs_219,219,1,-SE('2838')-SE('2938'),1,,
+ma_fs_220,220,1,-SE('2839')-SE('2939'),1,,
+ma_fs_508,508,1,EDI('214')+EDI('215')+EDI('216')+EDI('217')+EDI('218')+EDI('219')+EDI('220'),1,,IMMOBILISATIONS CORPORELLES (C)(Amortissements et Provisions)
+ma_fs_509,509,1,EDI('507')-EDI('508'),1,,IMMOBILISATIONS CORPORELLES (C)(Net N)
+ma_fs_221,221,1,EDI('207')-EDI('214'),1,,Terrains(Net N)
+ma_fs_222,222,1,EDI('208')-EDI('215'),1,,Constructions(Net N)
+ma_fs_223,223,1,EDI('209')-EDI('216'),1,,"Installations, techniques, matériel et outillage(Net N)"
+ma_fs_224,224,1,EDI('210')-EDI('217'),1,,"Installations, techniques, matériel et outillage(Net N)"
+ma_fs_225,225,1,EDI('211')-EDI('218'),1,,Matériel transport(Net N)
+ma_fs_226,226,1,EDI('212')-EDI('219'),1,,"Mobilier, matériel de bureau et aménagements divers(Net N)"
+ma_fs_227,227,1,EDI('213')-EDI('220'),1,,Autres immobilisations corporelles(Net N)
+ma_fs_160,160,1,SE('311'),1,,
+ma_fs_161,161,1,SE('312'),1,,
+ma_fs_162,162,1,SE('313'),1,,
+ma_fs_163,163,1,SE('314'),1,,
+ma_fs_164,164,1,SE('315'),1,,
+ma_fs_522,522,1,EDI('160')+EDI('161')+EDI('162')+EDI('163')+EDI('164'),1,,STOCKS (F)(Brut)
+ma_fs_165,165,1,-SE('3911'),1,,
+ma_fs_166,166,1,-SE('3912'),1,,
+ma_fs_167,167,1,-SE('3913'),1,,
+ma_fs_168,168,1,-SE('3914'),1,,
+ma_fs_169,169,1,-SE('3915'),1,,
+ma_fs_524,524,1,EDI('522')-EDI('523'),1,,STOCKS (F)(Net N)
+ma_fs_170,170,1,EDI('160')-EDI('165'),1,,Marchandises(Net N)
+ma_fs_171,171,1,EDI('161')-EDI('166'),1,,Matière et fournitures consommables(Net N)
+ma_fs_172,172,1,EDI('162')-EDI('167'),1,,Produits en cours(Net N)
+ma_fs_173,173,1,EDI('163')-EDI('168'),1,,Produits intermédiaires et produits résiduels(Net N)
+ma_fs_174,174,1,EDI('164')-EDI('169'),1,,Produits finis(Net N)
+ma_fs_291,291,1,EDI('497')+EDI('502')+EDI('507')+EDI('512')+EDI('517'),1,,TOTAL I (A+B+C+D+E)(Brut)
+ma_fs_292,292,1,EDI('498')+EDI('503')+EDI('508')+EDI('513')+EDI('518'),1,,TOTAL I (A+B+C+D+E)(Amortissements et Provisions)
+ma_fs_293,293,1,EDI('291')-EDI('292'),1,,TOTAL I (A+B+C+D+E)(Net N)
+ma_fs_527,527,1,EDI('122')+EDI('123')+EDI('124')+EDI('125')+EDI('126')+EDI('127')+EDI('128'),1,,CREANCES DE L'ACTIF CIRCULANT (G)(Brut)
+ma_fs_122,122,1,SE('341'),1,,
+ma_fs_123,123,1,SE('342'),1,,
+ma_fs_124,124,1,SE('343'),1,,
+ma_fs_125,125,1,SE('345'),1,,
+ma_fs_126,126,1,SE('346'),1,,
+ma_fs_127,127,1,SE('348'),1,,
+ma_fs_128,128,1,SE('349'),1,,
+ma_fs_296,296,1,EDI('522')+EDI('527')+EDI('181')+EDI('151'),1,,TOTAL II (F+G+H+I+)(Brut)
+ma_fs_297,297,1,EDI('523')+EDI('528')+EDI('182')+EDI('152'),1,,TOTAL II (F+G+H+I+)(Amortissements et Provisions)
+ma_fs_303,303,1,SE('511'),1,,
+ma_fs_304,304,1,SE('514'),1,,
+ma_fs_305,305,1,SE('516'),1,,
+ma_fs_306,306,1,-SE('5911'),1,,
+ma_fs_307,307,1,-SE('5914'),1,,
+ma_fs_308,308,1,SE('5916'),1,,
+ma_fs_533,533,1,EDI('306')+EDI('307')+EDI('308'),1,,TRESORERIE - ACTIF(Amortissements et Provisions)
+ma_fs_298,298,1,EDI('296')-EDI('297'),1,,TOTAL II (F+G+H+I+)(Net N)
+ma_fs_310,310,1,EDI('304')-EDI('307'),1,,"Banque, T.G. et C.C.P.(Net N)"
+ma_fs_309,309,1,EDI('303')-EDI('306'),1,,Chèques et valeurs à encaisser(Net N)
+ma_fs_534,534,1,EDI('532')-EDI('533'),1,,TRESORERIE - ACTIF(Net N)
+ma_fs_532,532,1,EDI('303')+EDI('304')+EDI('305'),1,,TRESORERIE - ACTIF(Brut)
+ma_fs_316,316,1,EDI('303')+EDI('304')+EDI('305'),1,,TOTAL III(Brut)
+ma_fs_317,317,1,EDI('533'),1,,
+ma_fs_318,318,1,EDI('316')-EDI('317'),1,,TOTAL III(Net N)
+ma_fs_186,186,1,EDI('291')+EDI('296')+EDI('316'),1,,TOTAL GENERAL I + II + III(Brut)
+ma_fs_187,187,1,EDI('292')+EDI('297')+EDI('317'),1,,TOTAL GENERAL I + II + III(Amortissements et Provisions)
+ma_fs_188,188,1,EDI('186')-EDI('187'),1,,TOTAL GENERAL I + II + III(Net N)
+ma_fs_502,502,1,EDI('274')+EDI('275')+EDI('276')+EDI('277'),1,,IMMOBILISATIONS INCORPORELLES (B)(Brut)
+ma_fs_274,274,1,SE('221'),1,,
+ma_fs_275,275,1,SE('222'),1,,
+ma_fs_276,276,1,SE('223'),1,,
+ma_fs_277,277,1,SE('228'),1,,
+ma_fs_503,503,1,EDI('278')+EDI('279')+EDI('280')+EDI('281'),1,,IMMOBILISATIONS INCORPORELLES (B)(Amortissements et Provisions)
+ma_fs_278,278,1,-SE('2821')-SE('2921'),1,,
+ma_fs_279,279,1,-SE('2822')-SE('2922'),1,,
+ma_fs_280,280,1,-SE('2823')-SE('2923'),1,,
+ma_fs_281,281,1,-SE('2828')-SE('2928'),1,,
+ma_fs_504,504,1,EDI('502')-EDI('503'),1,,IMMOBILISATIONS INCORPORELLES (B)(Net N)
+ma_fs_282,282,1,EDI('274')-EDI('278'),1,,Immobilisations en recherche et développement(Net N)
+ma_fs_283,283,1,EDI('275')-EDI('279'),1,,"Brevets, marques, droits, et valeurs similaires(Net N)"
+ma_fs_284,284,1,EDI('276')-EDI('280'),1,,Fonds commercial(Net N)
+ma_fs_285,285,1,EDI('277')-EDI('281'),1,,Autres immobilisations incorporelles(Net N)
+ma_fs_512,512,1,EDI('254')+EDI('255')+EDI('256')+EDI('257'),1,,IMMOBILISATIONS FINANCIERES (D)(Brut)
+ma_fs_513,513,1,EDI('258')+EDI('259')+EDI('260')+EDI('261'),1,,IMMOBILISATIONS FINANCIERES (D)(Amortissements et Provisions)
+ma_fs_254,254,1,SE('241'),1,,
+ma_fs_255,255,1,SE('248'),1,,
+ma_fs_256,256,1,SE('251'),1,,
+ma_fs_257,257,1,SE('258'),1,,
+ma_fs_258,258,1,-SE('2941'),1,,
+ma_fs_259,259,1,-SE('2948'),1,,
+ma_fs_260,260,1,-SE('2951'),1,,
+ma_fs_261,261,1,-SE('2958'),1,,
+ma_fs_514,514,1,EDI('512')-EDI('513'),1,,IMMOBILISATIONS FINANCIERES (D)(Net N)
+ma_fs_262,262,1,EDI('254')-EDI('258'),1,,Prêts immobilisés(Net N)
+ma_fs_263,263,1,EDI('255')-EDI('259'),1,,Autres créances financières(Net N)
+ma_fs_264,264,1,EDI('256')-EDI('260'),1,,Titres de participation(Net N)
+ma_fs_265,265,1,EDI('257')-EDI('261'),1,,Autres titres immobilisés(Net N)
+ma_fs_517,517,1,EDI('192')+EDI('193'),1,,ECARTS DE CONVERSION - ACTIF (E)(Brut)
+ma_fs_518,518,1,EDI('194')+EDI('195'),1,,ECARTS DE CONVERSION - ACTIF (E)(Amortissements et Provisions)
+ma_fs_519,519,1,EDI('517')-EDI('518'),1,,ECARTS DE CONVERSION - ACTIF (E)(Net N)
+ma_fs_196,196,1,EDI('192')-EDI('194'),1,,Diminution des créances immobilisées(Net N)
+ma_fs_197,197,1,EDI('193')-EDI('195'),1,,Augmentations des dettes de financement (Net N)
+ma_fs_192,192,1,SE('271'),1,,
+ma_fs_193,193,1,SE('272'),1,,
+ma_fs_194,194,1,0,1,,
+ma_fs_195,195,1,0,1,,
+ma_fs_13410,13410,2,EDI('13400')+EDI('14001')+EDI('13404')+EDI('13405')+EDI('13406')+EDI('13407')+EDI('13408')+EDI('13409'),1,,TOTAL CAPITAUX PROPRES (A)(EXERCICE N)
+ma_fs_13400,13400,2,-SE('111')+SE('1119'),1,,
+ma_fs_13401,13401,2,-SE('1119'),1,,
+ma_fs_13402,13402,2,-SE('1111')-SE('1119')-SE('1112'),1,,
+ma_fs_13403,13403,2,-SE('1111')-SE('1119')-SE('3462')-SE('1112'),1,,
+ma_fs_13404,13404,2,-SE('112'),1,,
+ma_fs_13405,13405,2,-SE('113'),1,,
+ma_fs_13406,13406,2,-SE('114'),1,,
+ma_fs_13407,13407,2,-SE('115'),1,,
+ma_fs_13408,13408,2,-SE('116'),1,,
+ma_fs_13409,13409,2,-SE('7')-SE('6'),1,,
+ma_fs_13397,13397,2,EDI('13398')+EDI('13399')+EDIST('13396'),1,,CAPITAUX PROPRES ASSIMILES (B)(EXERCICE N)
+ma_fs_13398,13398,2,-SE('131'),1,,
+ma_fs_13399,13399,2,-SE('135'),1,,
+ma_fs_13393,13393,2,EDI('13394')+EDI('13395')+EDIST('13392'),1,,DETTES DE FINANCEMENT (C)(EXERCICE N)
+ma_fs_13394,13394,2,-SE('141'),1,,
+ma_fs_13395,13395,2,-SE('148'),1,,
+ma_fs_13389,13389,2,EDI('13390')+EDI('13391'),1,,PROVISIONS DURABLES POUR RISQUES ET CHARGES (D)(EXERCICE N)
+ma_fs_13390,13390,2,-SE('151'),1,,
+ma_fs_13391,13391,2,-SE('155'),1,,
+ma_fs_13386,13386,2,EDI('13387')+EDI('13388'),1,,ECARTS DE CONVERSION - PASSIF (E)(EXERCICE N)
+ma_fs_13387,13387,2,-SE('171'),1,,
+ma_fs_13388,13388,2,-SE('172'),1,,
+ma_fs_13385,13385,2,EDI('13410')+EDI('13397')+EDI('13393')+EDI('13386')+EDI('13389'),1,,TOTAL I (A+B+C+D+E)(EXERCICE N)
+ma_fs_13376,13376,2,EDI('13377')+EDI('13378')+EDI('13379')+EDI('13380')+EDI('13381')+EDI('13382')+EDI('13383')+EDI('13384'),1,,DETTES DU PASSIF CIRCULANT (F)(EXERCICE N)
+ma_fs_13377,13377,2,-SE('441'),1,,
+ma_fs_13378,13378,2,-SE('442'),1,,
+ma_fs_13379,13379,2,-SE('443'),1,,
+ma_fs_13380,13380,2,-SE('444'),1,,
+ma_fs_13381,13381,2,-SE('445'),1,,
+ma_fs_13382,13382,2,-SE('446'),1,,
+ma_fs_13383,13383,2,-SE('448'),1,,
+ma_fs_13384,13384,2,-SE('449'),1,,
+ma_fs_13375,13375,2,-SE('45'),1,,
+ma_fs_13374,13374,2,-SE('47'),1,,
+ma_fs_13373,13373,2,EDI('13376')+EDI('13375')+EDI('13374'),1,,TOTAL II (F+G+H)(EXERCICE N)
+ma_fs_13370,13370,2,-SE('552'),1,,
+ma_fs_13371,13371,2,-SE('553'),1,,
+ma_fs_13372,13372,2,-SE('554'),1,,
+ma_fs_13369,13369,2,EDI('13370')+EDI('13371')+EDI('13372'),1,,TOTAL III(EXERCICE N)
+ma_fs_13368,13368,2,EDI('13385')+EDI('13373')+EDI('13369'),1,,TOTAL GENERAL I + II + III(EXERCICE N)
+ma_fs_11176,11176,3,EDI('11216'),1,,
+ma_fs_11181,11181,3,EDI('11183')-EDI('11182'),1,,
+ma_fs_11216,11216,3,EDI('11181')+EDI('11186')+EDI('11191')+EDI('11196')+EDI('11201')+EDI('11206')+EDI('11211'),1,,TOTAL I(Propres à L'exercice 1)
+ma_fs_11191,11191,3,EDI('11193')-EDI('11192'),1,,
+ma_fs_11196,11196,3,EDI('11198')-EDI('11197'),1,,
+ma_fs_11201,11201,3,EDI('11203')-EDI('11202'),1,,
+ma_fs_11206,11206,3,EDI('11208')-EDI('11207'),1,,
+ma_fs_11211,11211,3,EDI('11213')-EDI('11212'),1,,
+ma_fs_11178,11178,3,EDI('11218'),1,,PRODUITS D'EXPLOITATION(Totaux de L'exercice N 3=1+2)
+ma_fs_11183,11183,3,-SE('711'),1,,Ventes de marchandises (en l'état)(Totaux de L'exercice N 3=1+2)
+ma_fs_11188,11188,3,-SE('712'),1,,Ventes de biens et services produits(Totaux de L'exercice N 3=1+2)
+ma_fs_11193,11193,3,-SE('713'),1,,Variation de stocks de produits (+/-) (1)(Totaux de L'exercice N 3=1+2)
+ma_fs_11198,11198,3,-SE('714'),1,,Immobilisations produites par l'entreprise pour elle-même(Totaux de L'exercice N 3=1+2)
+ma_fs_11203,11203,3,-SE('716'),1,,Subvention d'éxploitation(Totaux de L'exercice N 3=1+2)
+ma_fs_11208,11208,3,-SE('718'),1,,Autres produits d'exploitation(Totaux de L'exercice N 3=1+2)
+ma_fs_11213,11213,3,-SE('719'),1,,Reprises d'exploitations: transfert de charges(Totaux de L'exercice N 3=1+2)
+ma_fs_11218,11218,3,EDI('14023')+EDI('11193')+EDI('11198')+EDI('11203')+EDI('11208')+EDI('11213'),1,,TOTAL I(Totaux de L'exercice N 3=1+2)
+ma_fs_11226,11226,3,EDI('11236'),1,,
+ma_fs_11236,11236,3,EDI('11221')+EDI('11256')+EDI('11261')+EDI('11251')+EDI('11266')+EDI('11246')+EDI('11241'),1,,TOTAL II(Propres à L'exercice 1)
+ma_fs_11221,11221,3,EDI('11223')-EDI('11222'),1,,
+ma_fs_11256,11256,3,EDI('11258')-EDI('11257'),1,,
+ma_fs_11261,11261,3,EDI('11263')-EDI('11262'),1,,
+ma_fs_11251,11251,3,EDI('11253')-EDI('11252'),1,,
+ma_fs_11266,11266,3,EDI('11268')-EDI('11267'),1,,
+ma_fs_11246,11246,3,EDI('11248')-EDI('11247'),1,,
+ma_fs_11241,11241,3,EDI('11243')-EDI('11242'),1,,
+ma_fs_11231,11231,3,EDI('11216')-EDI('11236'),1,,RESULTAT D'EXPLOITATIONS (I-II)(Propres à L'exercice 1)
+ma_fs_11228,11228,3,EDI('11226')+EDI('11227'),1,,CHARGES D'EXPLOITATION(Totaux de L'exercice N 3=1+2)
+ma_fs_11223,11223,3,SE('611'),1,,Achats revendus (2) de marchandises(Totaux de L'exercice N 3=1+2)
+ma_fs_11258,11258,3,SE('612'),1,,Achats cosommés (2) de matière et de Fournitures(Totaux de L'exercice N 3=1+2)
+ma_fs_11263,11263,3,SE('613')+SE('614'),1,,Autres charges externes(Totaux de L'exercice N 3=1+2)
+ma_fs_11253,11253,3,SE('616'),1,,Impôts et taxes(Totaux de L'exercice N 3=1+2)
+ma_fs_11268,11268,3,SE('617'),1,,Charges de personnel(Totaux de L'exercice N 3=1+2)
+ma_fs_11248,11248,3,SE('618'),1,,Autres charges d'exploitaion(Totaux de L'exercice N 3=1+2)
+ma_fs_11243,11243,3,SE('619'),1,,Dotations d'exploitation(Totaux de L'exercice N 3=1+2)
+ma_fs_11238,11238,3,EDI('11236')+EDI('11237'),1,,TOTAL II(Totaux de L'exercice N 3=1+2)
+ma_fs_11291,11291,3,EDI('11271')+EDI('11276')+EDI('11281')+EDI('11286'),1,,TOTAL IV(Propres à L'exercice 1)
+ma_fs_11326,11326,3,EDI('11291'),1,,
+ma_fs_11271,11271,3,EDI('11273')-EDI('11272'),1,,
+ma_fs_11276,11276,3,EDI('11278')-EDI('11277'),1,,
+ma_fs_11281,11281,3,EDI('11283')-EDI('11282'),1,,
+ma_fs_11286,11286,3,EDI('11288')-EDI('11287'),1,,
+ma_fs_11328,11328,3,EDI('11326')+EDI('11327'),1,,PRODUITS FINANCIERS(Totaux de L'exercice N 3=1+2)
+ma_fs_11273,11273,3,-SE('732'),1,,Produits des titres de participation et autres titres immobilisés(Totaux de L'exercice N 3=1+2)
+ma_fs_11278,11278,3,-SE('733'),1,,Gains de change(Totaux de L'exercice N 3=1+2)
+ma_fs_11283,11283,3,-SE('738'),1,,Intérêts et autres produits financiers(Totaux de L'exercice N 3=1+2)
+ma_fs_11288,11288,3,-SE('739'),1,,Reprise financières; transferts de charges(Totaux de L'exercice N 3=1+2)
+ma_fs_11293,11293,3,EDI('11291')+EDI('11292'),1,,TOTAL IV(Totaux de L'exercice N 3=1+2)
+ma_fs_11321,11321,3,EDI('11316'),1,,
+ma_fs_11296,11296,3,EDI('11298')-EDI('11297'),1,,
+ma_fs_11301,11301,3,EDI('11303')-EDI('11302'),1,,
+ma_fs_11306,11306,3,EDI('11308')-EDI('11307'),1,,
+ma_fs_11311,11311,3,EDI('11313')-EDI('11312'),1,,
+ma_fs_11316,11316,3,EDI('11296')+EDI('11301')+EDI('11306')+EDI('11311'),1,,TOTAL V(Propres à L'exercice 1)
+ma_fs_11323,11323,3,EDI('11321')+EDI('11322'),1,,CHARGES FINANCIERES(Totaux de L'exercice N 3=1+2)
+ma_fs_11298,11298,3,SE('631'),1,,Charges d'intérêts(Totaux de L'exercice N 3=1+2)
+ma_fs_11303,11303,3,SE('633'),1,,Pertes de changes(Totaux de L'exercice N 3=1+2)
+ma_fs_11308,11308,3,SE('638'),1,,Autres charges financières(Totaux de L'exercice N 3=1+2)
+ma_fs_11313,11313,3,SE('639'),1,,Dotations financières(Totaux de L'exercice N 3=1+2)
+ma_fs_11318,11318,3,EDI('11298')+EDI('11303')+EDI('11308')+EDI('11313'),1,,TOTAL V(Totaux de L'exercice N 3=1+2)
+ma_fs_11338,11338,3,EDI('11233')+EDI('11333'),1,,RESULTAT COURANT (III + VI)(Totaux de L'exercice N 3=1+2)
+ma_fs_11336,11336,3,EDI('11231')+EDI('11331'),1,,RESULTAT COURANT (III + VI)(Propres à L'exercice 1)
+ma_fs_11331,11331,3,EDI('11291')-EDI('11316'),1,,RESULTAT FINANCIER (IV - V)(Propres à L'exercice 1)
+ma_fs_11333,11333,3,EDI('11293')-EDI('11318'),1,,RESULTAT FINANCIER (IV - V)(Totaux de L'exercice N 3=1+2)
+ma_fs_11391,11391,3,EDI('11366'),1,,
+ma_fs_11366,11366,3,EDI('11341')+EDI('11346')+EDI('11351')+EDI('11356')+EDI('11361'),1,,
+ma_fs_11341,11341,3,EDI('11343')-EDI('11342'),1,,
+ma_fs_11346,11346,3,EDI('11349')-EDI('11347'),1,,
+ma_fs_11351,11351,3,EDI('11353')-EDI('11352'),1,,
+ma_fs_11356,11356,3,EDI('11358')-EDI('11357'),1,,
+ma_fs_11361,11361,3,EDI('11363')-EDI('11362'),1,,
+ma_fs_11393,11393,3,EDI('11391')+EDI('11392'),1,,PRODUITS NON COURANTS(Totaux de L'exercice N 3=1+2)
+ma_fs_11343,11343,3,-SE('751'),1,,Produits des cessions d'immobilisation(Totaux de L'exercice N 3=1+2)
+ma_fs_11348,11348,3,-SE('756'),1,,Subvention d'equilibre(Totaux de L'exercice N 3=1+2)
+ma_fs_11353,11353,3,-SE('757'),1,,Reprise sur subventions d'investissement(Totaux de L'exercice N 3=1+2)
+ma_fs_11358,11358,3,-SE('758'),1,,Autres produits non courants(Totaux de L'exercice N 3=1+2)
+ma_fs_11363,11363,3,-SE('759'),1,,Reprises non courantes; transferts de charges(Totaux de L'exercice N 3=1+2)
+ma_fs_11368,11368,3,EDI('11366')+EDI('11367'),1,,TOTAL VIII(Totaux de L'exercice N 3=1+2)
+ma_fs_11396,11396,3,EDI('11406'),1,,
+ma_fs_11406,11406,3,EDI('11371')+EDI('11376')+EDI('11381')+EDI('11386'),1,,TOTAL IX(Propres à L'exercice 1)
+ma_fs_11371,11371,3,EDI('11373')-EDI('11372'),1,,
+ma_fs_11376,11376,3,EDI('11378')-EDI('11377'),1,,
+ma_fs_11381,11381,3,EDI('11383')-EDI('11382'),1,,
+ma_fs_11386,11386,3,EDI('11388')-EDI('11387'),1,,
+ma_fs_11398,11398,3,EDI('11396')+EDI('11397'),1,,CHARGES NON COURANTES(Totaux de L'exercice N 3=1+2)
+ma_fs_11373,11373,3,SE('651'),1,,Valeurs nettes d'amortissements des Immobilisations cédées(Totaux de L'exercice N 3=1+2)
+ma_fs_11378,11378,3,SE('656'),1,,Subventions accordées(Totaux de L'exercice N 3=1+2)
+ma_fs_11383,11383,3,SE('658'),1,,Autres charges non courantes(Totaux de L'exercice N 3=1+2)
+ma_fs_11388,11388,3,SE('659'),1,,Dotations non courantes aux amortissements et aux provisions(Totaux de L'exercice N 3=1+2)
+ma_fs_11408,11408,3,EDI('11406')+EDI('11407'),1,,TOTAL IX(Totaux de L'exercice N 3=1+2)
+ma_fs_11401,11401,3,EDI('11366')-EDI('11396'),1,,RESULTAT NON COURANT (VIII-IX)(Propres à L'exercice 1)
+ma_fs_11411,11411,3,EDI('11336')+EDI('11401'),1,,RESULTAT AVANT IMPOTS (VII+/-X)(Propres à L'exercice 1)
+ma_fs_11416,11416,3,SE('67')-SE('6708'),1,,
+ma_fs_11421,11421,3,EDI('11411')-EDI('11416'),1,,RESULTAT NET (XI-XII)(Propres à L'exercice 1)
+ma_fs_11426,11426,3,EDI('11216')+EDI('11291')+EDI('11366'),1,,TOTAL DES PRODUITS (I+VI+VIII)(Propres à L'exercice 1)
+ma_fs_11431,11431,3,EDI('11226')+EDI('11321')+EDI('11396')+EDI('11416'),1,,TOTAL DES CHARGES (II+V+IX+XII)(Propres à L'exercice 1)
+ma_fs_11436,11436,3,EDI('11426')-EDI('11431'),1,,RESULTAT NET (total des produits - total des charges(Propres à L'exercice 1)
+ma_fs_1308,1308,7,-SE('711'),0,,
+ma_fs_1309,1309,7,SE('611'),0,,
+ma_fs_1310,1310,7,EDI('1308')-EDI('1309'),0,,MARGE BRUTE SUR VENTES EN L'ETAT(EXERCICE)
+ma_fs_1311,1311,7,EDI('1312')+EDI('1313')+EDI('1314'),0,,PRODUCTION DE L'EXERCICE : (3+4+5)(EXERCICE)
+ma_fs_1312,1312,7,-SE('712'),0,,
+ma_fs_1313,1313,7,-SE('713'),0,,
+ma_fs_1314,1314,7,-SE('714'),0,,
+ma_fs_1315,1315,7,EDI('1316')+EDI('1317'),0,,CONSOMMATION DE L'EXERCICE : (6+7)(EXERCICE)
+ma_fs_1316,1316,7,SE('612'),0,,
+ma_fs_1317,1317,7,SE('613')+SE('614'),0,,
+ma_fs_1318,1318,7,EDI('1310')+EDI('1311')-EDI('1315'),0,,VALEUR AJOUTEE (I+II-III)(EXERCICE)
+ma_fs_1319,1319,7,-SE('716'),0,,
+ma_fs_1320,1320,7,SE('616'),0,,
+ma_fs_1321,1321,7,SE('617'),0,,
+ma_fs_4063,4063,7,EDI('1318')+ EDI('1319')-EDI('1320')-EDI('1321'),0,,EXEDENT BRUT D'EXPLOITATION (EBE) OU INSUFFISANCE BRUTE D'EXPLOITATION (IBE)(EXERCICE)
+ma_fs_4066,4066,7,-SE('718'),0,,
+ma_fs_1324,1324,7,SE('618'),0,,
+ma_fs_1325,1325,7,-SE('719'),0,,
+ma_fs_1326,1326,7,SE('619'),0,,
+ma_fs_1327,1327,7,EDI('4066')+EDI('4063')-EDI('1324')+EDI('1325')-EDI('1326'),0,,RESULTAT D'EXPLOITATION (+ ou -)(EXERCICE)
+ma_fs_1328,1328,7,-SE('73')-SE('63'),0,,
+ma_fs_1329,1329,7,EDI('1327')+EDI('1328'),0,,RESULTAT COURANT(EXERCICE)
+ma_fs_1330,1330,7,-SE('65')+(-SE('75')),0,,
+ma_fs_1331,1331,7,SE('67'),0,,
+ma_fs_1332,1332,7,EDI('1329')+EDI('1330')-EDI('1331'),0,,RESULTAT NET DE L'EXERCICE (+ ou -)(EXERCICE)
+ma_fs_1373,1373,7,"CMP(EDI(""1332""))",0,,
+ma_fs_1375,1375,7,SE('619')-SE('6196'),0,,
+ma_fs_1376,1376,7,SE('639')-SE('6396')-SE('6393'),0,,
+ma_fs_1377,1377,7,SE('6591')+SE('6594')+SE('65962')+SE('65955')+SE('6598'),0,,
+ma_fs_1378,1378,7,-SE('719')+SE('7196')+SE('7197')+SE('7198'),0,,
+ma_fs_1379,1379,7,-SE('739')+SE('7396')+SE('7397')+SE('7393'),0,,
+ma_fs_1380,1380,7,-SE('759')+SE('75963')+SE('7597') +SE('7598')+SE('7595'),0,,
+ma_fs_1381,1381,7,-SE('751'),0,,
+ma_fs_1382,1382,7,SE('651'),0,,
+ma_fs_1383,1383,7,EDI('1373')-EDI('1374')+EDI('1375')+EDI('1376')+EDI('1377')-EDI('1378')-EDI('1379')-EDI('1380')-EDI('1381')+EDI('1382'),0,,CAPACITE D'AUTOFINANCEMENT (C.A.F.)(EXERCICE)
+ma_fs_1385,1385,7,EDI('1383')-EDI('1384'),0,,AUTOFINANCEMENT(EXERCICE)
+ma_fs_1521,1521,8,SE('611'),0,,
+ma_fs_1522,1522,8,SE('611')-SE('6114'),0,,
+ma_fs_1523,1523,8,SE('6114'),0,,
+ma_fs_1524,1524,8,EDI('1522')+EDI('1523'),0,,TOTAL(EXERCICE)
+ma_fs_1525,1525,8,SE('612'),0,,
+ma_fs_1526,1526,8,SE('6121')+SE('61281')+SE('61291')+SE('61298'),0,,
+ma_fs_1527,1527,8,SE('6124')-SE('61242')-SE('61243')+SE('6128'),0,,
+ma_fs_1528,1528,8,SE('6122')+SE('6123'),0,,
+ma_fs_1529,1529,8,SE('61242')+SE('61243'),0,,
+ma_fs_1530,1530,8,SE('6125'),0,,
+ma_fs_1531,1531,8,SE('6126'),0,,
+ma_fs_1533,1533,8,SE('613')+SE('614'),0,,
+ma_fs_1534,1534,8,SE('6131'),0,,
+ma_fs_1535,1535,8,SE('6132'),0,,
+ma_fs_1536,1536,8,SE('6133'),0,,
+ma_fs_1537,1537,8,SE('6134'),0,,
+ma_fs_1538,1538,8,SE('6135'),0,,
+ma_fs_1539,1539,8,SE('6136'),0,,
+ma_fs_1540,1540,8,SE('6137'),0,,
+ma_fs_1541,1541,8,SE('6142'),0,,
+ma_fs_1542,1542,8,SE('6143'),0,,
+ma_fs_1543,1543,8,EDI('1533')-(EDI('1534')+EDI('1535')+EDI('1536')+EDI('1537')+EDI('1538')+EDI('1539')+EDI('1540')+EDI('1541')+EDI('1542')),0,,
+ma_fs_1544,1544,8,EDI('1533'),0,,
+ma_fs_1545,1545,8,SE('617'),0,,
+ma_fs_1549,1549,8,EDI('1546')+EDI('1547')+EDI('1548'),0,,TOTAL(EXERCICE)
+ma_fs_1546,1546,8,SE('6171'),0,,
+ma_fs_1547,1547,8,SE('6174'),0,,
+ma_fs_1550,1550,8,SE('618'),0,,
+ma_fs_1733,1733,8,EDI('1551')+EDI('1552')+EDI('1553'),0,,TOTAL(EXERCICE)
+ma_fs_1551,1551,8,SE('6181'),0,,
+ma_fs_1552,1552,8,SE('6182'),0,,
+ma_fs_1553,1553,8,EDI('1550')-(EDI('1551')+EDI('1552')),0,,
+ma_fs_1548,1548,8,SE('617')-(SE('6171')+SE('6174')),0,,
+ma_fs_1764,1764,8,SE('638'),0,,
+ma_fs_1767,1767,8,EDI('1765')+EDI('1766'),0,,TOTAL(EXERCICE)
+ma_fs_1765,1765,8,SE('6385'),0,,
+ma_fs_1766,1766,8,EDI('1764')-EDI('1765'),0,,
+ma_fs_1792,1792,8,SE('658'),0,,
+ma_fs_1798,1798,8,SE('658'),0,,TOTAL(EXERCICE)
+ma_fs_1797,1797,8,EDI('1792')-(EDI('1793')+EDI('1794')+EDI('1795')+EDI('1796')),0,,
+ma_fs_1794,1794,8,SE('6582'),0,,
+ma_fs_1795,1795,8,SE('6583'),0,,
+ma_fs_1796,1796,8,SE('6585'),0,,
+ma_fs_1593,1593,8,ASE('6182'),0,,
+ma_fs_1964,1964,8,-SE('7111'),0,,
+ma_fs_1965,1965,8,-SE('7113'),0,,
+ma_fs_1966,1966,8,EDI('1963')-(EDI('1964')+EDI('1965')),0,,
+ma_fs_1967,1967,8,EDI('1963'),0,,TOTAL(EXERCICE)
+ma_fs_1969,1969,8,-SE('7121')-SE('7129'),0,,
+ma_fs_1970,1970,8,-SE('7122'),0,,
+ma_fs_1971,1971,8,-SE('7124'),0,,
+ma_fs_1972,1972,8,-SE('7125'),0,,
+ma_fs_1973,1973,8,-SE('7126'),0,,
+ma_fs_1968,1968,8,-SE('712'),0,,
+ma_fs_1975,1975,8,EDI('1968'),0,,TOTAL(EXERCICE)
+ma_fs_1974,1974,8,EDI('1968')-(EDI('1969')+EDI('1970')+EDI('1971')+EDI('1972')+EDI('1973')),0,,
+ma_fs_1976,1976,8,-SE('713'),0,,
+ma_fs_1977,1977,8,-SE('7132'),0,,
+ma_fs_1978,1978,8,-SE('7134'),0,,
+ma_fs_1979,1979,8,-SE('7131'),0,,
+ma_fs_1980,1980,8,EDI('1977')+EDI('1978')+EDI('1979'),0,,TOTAL(EXERCICE)
+ma_fs_1981,1981,8,-SE('718'),0,,
+ma_fs_1984,1984,8,EDI('1982')+EDI('1983'),0,,TOTAL(EXERCICE)
+ma_fs_1982,1982,8,-SE('7181'),0,,
+ma_fs_1983,1983,8,EDI('1981')-EDI('1982'),0,,
+ma_fs_1985,1985,8,-SE('719'),0,,
+ma_fs_1988,1988,8,EDI('1986')+EDI('1987'),0,,TOTAL(EXERCICE)
+ma_fs_2022,2022,8,-SE('738'),0,,
+ma_fs_2028,2028,8,-SE('738'),0,,TOTAL(EXERCICE)
+ma_fs_2024,2024,8,-SE('7381'),0,,
+ma_fs_2025,2025,8,-SE('7383'),0,,
+ma_fs_2026,2026,8,-SE('7385'),0,,
+ma_fs_2027,2027,8,EDI('2022')-(EDI('2024')+EDI('2025')+EDI('2026')),0,,
+ma_fs_1232,1232,11,EDI('1237')+EDI('1242')+EDI('1247'),1,,
+ma_fs_1231,1231,11,EDI('1236')+EDI('1241')+EDI('1246'),1,,
+ma_fs_1234,1234,11,EDI('1239')+EDI('1244')+EDI('1249'),1,,IMMOBILISATIONS EN NON-VALEURS(Cumul d'amortissement fin Exercice 4 = 1 + 2 - 3)
+ma_fs_1239,1239,11,-SE('2811'),1,,
+ma_fs_1244,1244,11,-SE('2812'),1,,
+ma_fs_1249,1249,11,-SE('2813'),1,,
+ma_fs_1237,1237,11,"""Saisie""",1,,
+ma_fs_1242,1242,11,"""Saisie""",1,,
+ma_fs_1247,1247,11,"""Saisie""",1,,
+ma_fs_1243,1243,11,"""Saisie""",1,,
+ma_fs_1248,1248,11,"""Saisie""",1,,
+ma_fs_1629,1629,11,EDI('1630')+EDI('1631')+EDI('1632')+EDI('1633'),1,,
+ma_fs_1630,1630,11,"""Saisie""",1,,
+ma_fs_1631,1631,11,"""Saisie""",1,,
+ma_fs_1632,1632,11,"""Saisie""",1,,
+ma_fs_1633,1633,11,"""Saisie""",1,,
+ma_fs_1650,1650,11,EDI('1651')+EDI('1652')+EDI('1653')+EDI('1654'),1,,
+ma_fs_1679,1679,11,EDI('1680')+EDI('1681')+EDI('1682')+EDI('1683'),1,,IMMOBILISATIONS INCORPORELLES(Cumul d'amortissement fin Exercice 4 = 1 + 2 - 3)
+ma_fs_1680,1680,11,-SE('2821'),1,,
+ma_fs_1681,1681,11,-SE('2822'),1,,
+ma_fs_1682,1682,11,-SE('2823'),1,,
+ma_fs_1683,1683,11,-SE('2828'),1,,
+ma_fs_1624,1624,11,EDI('1625')+EDI('1626')+EDI('1627')+EDI('1628'),1,,
+ma_fs_1700,1700,11,EDI('1701')+EDI('1702')+EDI('1703')+EDI('1704')+EDI('1705')+EDI('1706')+EDI('1707'),1,,
+ma_fs_1708,1708,11,EDI('1709')+EDI('1710')+EDI('1711')+EDI('1712')+EDI('1713')+EDI('1714')+EDI('1715'),1,,
+ma_fs_1724,1724,11,EDI('1725')+EDI('1726')+EDI('1727')+EDI('1728')+EDI('1729')+EDI('1730')+EDI('1731'),1,,IMMOBILISATIONS CORPORELLES(Cumul d'amortissement fin Exercice 4 = 1 + 2 - 3)
+ma_fs_1725,1725,11,-SE('2831'),1,,
+ma_fs_1726,1726,11,-SE('2832'),1,,
+ma_fs_1727,1727,11,-SE('2833'),1,,
+ma_fs_1728,1728,11,-SE('2834'),1,,
+ma_fs_1729,1729,11,-SE('2835'),1,,
+ma_fs_1730,1730,11,-SE('2838'),1,,
+ma_fs_1731,1731,11,-SE('2839'),1,,
+ma_fs_1709,1709,11,"""Saisie""",1,,
+ma_fs_1710,1710,11,"""Saisie""",1,,
+ma_fs_1711,1711,11,"""Saisie""",1,,
+ma_fs_1712,1712,11,"""Saisie""",1,,
+ma_fs_1713,1713,11,"""Saisie""",1,,
+ma_fs_1714,1714,11,"""Saisie""",1,,
+ma_fs_1715,1715,11,"""Saisie""",1,,
+ma_fs_1717,1717,11,"""Saisie""",1,,
+ma_fs_1719,1719,11,"""Saisie""",1,,
+ma_fs_1720,1720,11,"""Saisie""",1,,
+ma_fs_1721,1721,11,"""Saisie""",1,,
+ma_fs_1722,1722,11,"""Saisie""",1,,
+ma_fs_1236,1236,11,-ASE('2811'),1,,
+ma_fs_1241,1241,11,-ASE('2812'),1,,
+ma_fs_1246,1246,11,-ASE('2813'),1,,
+ma_fs_1625,1625,11,-ASE('2821'),1,,
+ma_fs_1626,1626,11,-ASE('2822'),1,,
+ma_fs_1627,1627,11,-ASE('2823'),1,,
+ma_fs_1628,1628,11,-ASE('2828'),1,,
+ma_fs_1701,1701,11,-ASE('2831'),1,,
+ma_fs_1702,1702,11,-ASE('2832'),1,,
+ma_fs_1703,1703,11,-ASE('2833'),1,,
+ma_fs_1704,1704,11,-ASE('2834'),1,,
+ma_fs_1705,1705,11,-ASE('2835'),1,,
+ma_fs_1706,1706,11,-ASE('2838'),1,,
+ma_fs_1707,1707,11,-ASE('2839'),1,,
+ma_fs_1749,1749,12,SE('6194')+SE('61984'),0,,
+ma_fs_1785,1785,12,"""Saisie""",0,,
+ma_fs_1828,1828,12,SE('61955'),0,,
+ma_fs_1845,1845,12,EDI('1749')+EDI('1785')+EDI('1828'),0,,SOUS TOTAL (A)(DOTATIONS D'exploitation)
+ma_fs_1878,1878,12,SE('6196'),0,,
+ma_fs_1895,1895,12,SE('61957'),0,,
+ma_fs_1904,1904,12,"""Saisie""",0,,
+ma_fs_1913,1913,12,EDI('1878')+EDI('1895')+EDI('1904'),0,,SOUS TOTAL (B)(DOTATIONS D'exploitation)
+ma_fs_1922,1922,12,EDI('1845')+EDI('1913'),0,,TOTAL (A+B)(DOTATIONS D'exploitation)
+ma_fs_1750,1750,12,SE('6392'),0,,
+ma_fs_1786,1786,12,"""Saisie""",0,,
+ma_fs_1829,1829,12,"""Saisie""",0,,
+ma_fs_1846,1846,12,EDI('1750')+EDI('1786')+EDI('1829'),0,,SOUS TOTAL (A)(DOTATIONS Financières)
+ma_fs_1879,1879,12,SE('6393'),0,,
+ma_fs_1896,1896,12,"""Saisie""",0,,
+ma_fs_1905,1905,12,SE('6394')+SE('6396'),0,,
+ma_fs_1914,1914,12,EDI('1879')+EDI('1896')+EDI('1905'),0,,SOUS TOTAL (B)(DOTATIONS Financières)
+ma_fs_1923,1923,12,EDI('1846')+EDI('1914'),0,,TOTAL (A+B)(DOTATIONS Financières)
+ma_fs_1751,1751,12,SE('6591')+SE('65962'),0,,
+ma_fs_1787,1787,12,SE('6594'),0,,
+ma_fs_1830,1830,12,SE('65955'),0,,
+ma_fs_1847,1847,12,EDI('1751')+EDI('1787')+EDI('1830'),0,,SOUS TOTAL (A)(DOTATIONS Non courantes)
+ma_fs_1880,1880,12,SE('65963'),0,,
+ma_fs_1897,1897,12,SE('65957'),0,,
+ma_fs_1906,1906,12,"""Saisie""",0,,
+ma_fs_1915,1915,12,EDI('1880')+EDI('1897')+EDI('1906'),0,,SOUS TOTAL (B)(DOTATIONS Non courantes)
+ma_fs_1752,1752,12,-SE('7194'),0,,
+ma_fs_1788,1788,12,-SE('71984'),0,,
+ma_fs_1831,1831,12,-SE('71955'),0,,
+ma_fs_1848,1848,12,EDI('1752')+EDI('1788')+EDI('1831'),0,,SOUS TOTAL (A)(REPRISES  D'exploitation)
+ma_fs_1881,1881,12,-SE('7196'),0,,
+ma_fs_1898,1898,12,-SE('71957'),0,,
+ma_fs_1907,1907,12,"""Saisie""",0,,
+ma_fs_1916,1916,12,EDI('1881')+EDI('1898')+EDI('1907'),0,,SOUS TOTAL (B)(REPRISES  D'exploitation)
+ma_fs_1925,1925,12,EDI('1848')+EDI('1916'),0,,TOTAL (A+B)(REPRISES  D'exploitation)
+ma_fs_1753,1753,12,-SE('7392'),0,,
+ma_fs_1789,1789,12,"""Saisie""",0,,
+ma_fs_1832,1832,12,"""Saisie""",0,,
+ma_fs_1849,1849,12,EDI('1753')+EDI('1789')+EDI('1832'),0,,SOUS TOTAL (A)(REPRISES Financières)
+ma_fs_1882,1882,12,"""Saisie""",0,,
+ma_fs_1899,1899,12,-SE('7393'),0,,
+ma_fs_1908,1908,12,-SE('7394')-SE('7396'),0,,
+ma_fs_1917,1917,12,EDI('1882')+EDI('1899')+EDI('1908'),0,,SOUS TOTAL (B)(REPRISES Financières)
+ma_fs_1926,1926,12,EDI('1849')+EDI('1917'),0,,TOTAL (A+B)(REPRISES Financières)
+ma_fs_1754,1754,12,-SE('7591')-SE('75962'),0,,
+ma_fs_1790,1790,12,-SE('7594'),0,,
+ma_fs_1833,1833,12,"""Saisie""",0,,
+ma_fs_1850,1850,12,EDI('1754')+EDI('1790')+EDI('1833'),0,,SOUS TOTAL (A)(REPRISES  Non courantes)
+ma_fs_1883,1883,12,-SE('75963'),0,,
+ma_fs_1900,1900,12,-SE('75957'),0,,
+ma_fs_1909,1909,12,"""Saisie""",0,,
+ma_fs_1918,1918,12,EDI('1883')+EDI('1900')+EDI('1909'),0,,SOUS TOTAL (B)(REPRISES  Non courantes)
+ma_fs_1927,1927,12,EDI('1850')+EDI('1918'),0,,TOTAL (A+B)(REPRISES  Non courantes)
+ma_fs_1755,1755,12,-SE('29'),0,,
+ma_fs_1791,1791,12,-SE('135'),0,,
+ma_fs_1834,1834,12,-SE('15'),0,,
+ma_fs_1851,1851,12,EDI('1755')+EDI('1791')+EDI('1834'),0,,SOUS TOTAL (A)(Montant fin exercice)
+ma_fs_1884,1884,12,-SE('391')-SE('394'),0,,
+ma_fs_1901,1901,12,-SE('45'),0,,
+ma_fs_1910,1910,12,-SE('395')-SE('59'),0,,
+ma_fs_1919,1919,12,EDI('1884')+EDI('1901')+EDI('1910'),0,,SOUS TOTAL (B)(Montant fin exercice)
+ma_fs_1928,1928,12,EDI('1851')+EDI('1919'),0,,TOTAL (A+B)(Montant fin exercice)
+ma_fs_817,817,5,CMP(EDI('11438')),0,,
+ma_fs_837,837,5,CMP(EDI('833')-EDI('834')),0,,
+ma_fs_2068,2068,15,-SE('4455')-SE('44755'),0,,
+ma_fs_2073,2073,15,SE('3455'),0,,B. TVA Récupérable(Solde fin d'exercice (1+2-3=4))
+ma_fs_2078,2078,15,SE('3455')+SE('34755')-SE('34551'),0,,
+ma_fs_2083,2083,15,SE('34551'),0,,
+ma_fs_2088,2088,15,EDI('2068')-EDI('2073'),0,,C. T.V.A. dûe ou crédit de T.V.A. = (A-B)(Solde fin d'exercice (1+2-3=4))
+ma_fs_2070,2070,15,ASE('3455'),0,,
+ma_fs_2071,2071,15,EDI('2076')+EDI('2081'),0,,B. TVA Récupérable(Opérations Comptables de l'exercice 2)
+ma_fs_2072,2072,15,EDI('2077')+EDI('2082'),0,,B. TVA Récupérable(Déclarations TVA de l'exercice 3)
+ma_fs_2085,2085,15,EDI('2065')-EDI('2070'),0,,C. T.V.A. dûe ou crédit de T.V.A. = (A-B)(Solde au début de l'exercice 1)
+ma_fs_2086,2086,15,EDI('2066')-EDI('2071'),0,,C. T.V.A. dûe ou crédit de T.V.A. = (A-B)(Opérations Comptables de l'exercice 2)
+ma_fs_2087,2087,15,EDI('2067')-EDI('2072'),0,,C. T.V.A. dûe ou crédit de T.V.A. = (A-B)(Déclarations TVA de l'exercice 3)
+ma_fs_2065,2065,15,-ASE('4455')-ASE('44755'),0,,
+ma_fs_2075,2075,15,ASE('3455')+ASE('34755')-ASE('34551'),0,,
+ma_fs_2080,2080,15,ASE('34551'),0,,
+ma_fs_2067,2067,15,"""Saisie""",0,,
+ma_fs_2077,2077,15,"""Saisie""",0,,
+ma_fs_2081,2081,15,"""Saisie""",0,,
+ma_fs_2082,2082,15,"""Saisie""",0,,
+ma_fs_471,471,17,-ASE('116'),0,,
+ma_fs_473,473,17,SE('118'),0,,
+ma_fs_475,475,17,EDI('1357'),0,,
+ma_fs_481,481,17,EDI('471')+EDI('473')+EDI('475')+EDI('477')+EDI('479'),0,,TOTAL      A(MONTANT)
+ma_fs_483,483,17,"""Saisie""",0,,
+ma_fs_485,485,17,-SE('115')-SE('1172')-SE('1173')-SE('1175')-SE('1178'),0,,
+ma_fs_493,493,17,-SE('116'),0,,
+ma_fs_495,495,17,EDI('483')+EDI('485')+EDI('487')+EDI('489')+EDI('491')+EDI('493'),0,,TOTAL      B(MONTANT)
+ma_fs_10064,10064,6,EDI('966')+EDI('967')+EDI('968'),1,,
+ma_fs_10065,10065,6,EDI('980')+EDI('981')+EDI('982'),1,,
+ma_fs_10066,10066,6,EDI('994')+EDI('995')+EDI('996'),1,,
+ma_fs_10067,10067,6,EDI('1008')+EDI('1009')+EDI('1010'),1,,
+ma_fs_10068,10068,6,EDI('1022')+EDI('1023')+EDI('1024'),1,,
+ma_fs_10069,10069,6,EDI('1036')+EDI('1037')+EDI('1038'),1,,
+ma_fs_10070,10070,6,EDI('1050')+EDI('1051')+EDI('1052'),1,,
+ma_fs_10071,10071,6,EDI('1064')+EDI('1065')+EDI('1066'),1,,IMMOBILISATION EN NON-VALEURS(MONTANT BRUT FIN EXERC)
+ma_fs_980,980,6,"""Saisie""",1,,
+ma_fs_981,981,6,"""Saisie""",1,,
+ma_fs_982,982,6,"""Saisie""",1,,
+ma_fs_1064,1064,6,SE('211'),1,,
+ma_fs_1065,1065,6,SE('212'),1,,
+ma_fs_1066,1066,6,SE('213'),1,,
+ma_fs_10073,10073,6,EDI('969')+EDI('970')+EDI('971')+EDI('972'),1,,
+ma_fs_10074,10074,6,EDI('983')+EDI('984')+EDI('985')+EDI('986'),1,,
+ma_fs_10075,10075,6,EDI('997')+EDI('998')+EDI('999')+EDI('1000'),1,,
+ma_fs_10076,10076,6,EDI('1011')+EDI('1012')+EDI('1013')+EDI('1014'),1,,
+ma_fs_10077,10077,6,EDI('1025')+EDI('1026')+EDI('1027')+EDI('1028'),1,,
+ma_fs_10078,10078,6,EDI('1039')+EDI('1040')+EDI('1041')+EDI('1042'),1,,
+ma_fs_10079,10079,6,EDI('1053')+EDI('1054')+EDI('1055')+EDI('1056'),1,,
+ma_fs_10080,10080,6,EDI('1067')+EDI('1068')+EDI('1069')+EDI('1070'),1,,IMMOBILISATION INCORPORELLES(MONTANT BRUT FIN EXERC)
+ma_fs_970,970,6,ASE('222'),1,,
+ma_fs_971,971,6,ASE('223'),1,,
+ma_fs_972,972,6,ASE('228'),1,,
+ma_fs_1067,1067,6,SE('221'),1,,
+ma_fs_1068,1068,6,SE('222'),1,,
+ma_fs_1069,1069,6,SE('223'),1,,
+ma_fs_1070,1070,6,SE('228'),1,,
+ma_fs_10082,10082,6,EDI('973')+EDI('974')+EDI('975')+EDI('976')+EDI('977')+EDI('978')+EDI('979'),1,,
+ma_fs_10083,10083,6,EDI('987')+EDI('988')+EDI('989')+EDI('990')+EDI('992')+EDI('993')+EDI('991'),1,,
+ma_fs_987,987,6,"""Saisie""",1,,
+ma_fs_988,988,6,"""Saisie""",1,,
+ma_fs_989,989,6,"""Saisie""",1,,
+ma_fs_990,990,6,"""Saisie""",1,,
+ma_fs_992,992,6,"""Saisie""",1,,
+ma_fs_991,991,6,"""Saisie""",1,,
+ma_fs_1071,1071,6,SE('231'),1,,
+ma_fs_1072,1072,6,SE('232'),1,,
+ma_fs_1073,1073,6,SE('233'),1,,
+ma_fs_1074,1074,6,SE('234'),1,,
+ma_fs_1076,1076,6,SE('235'),1,,
+ma_fs_1077,1077,6,SE('238'),1,,
+ma_fs_1075,1075,6,SE('239'),1,,
+ma_fs_489,489,17,"""Saisie""",0,,
+ma_fs_487,487,17,"""Saisie""",0,,
+ma_fs_1409,1409,23,EDI('1417')+EDI('1425'),0,,Biens et produits destinés à la revente en l'etat : Biens immeubles; Bien meubles(Montant Brut 1)
+ma_fs_1417,1417,23,-SE('3118'),0,,
+ma_fs_1425,1425,23,SE('311'),0,,
+ma_fs_1433,1433,23,EDI('1449')+EDI('1457')+EDI('1465'),0,,Biens et Matériels Premières destinés aux   activités de production et transformation :(STOCK  FINAL Montant Brut 1)
+ma_fs_1449,1449,23,SE('3121'),0,,
+ma_fs_1457,1457,23,SE('3122')+SE('3126')+SE('3128'),0,,
+ma_fs_1465,1465,23,SE('31225')+SE('31226')+SE('31227'),0,,
+ma_fs_1481,1481,23,EDI('1555')+EDI('1596')+EDI('1604'),0,,Emballage (Montant Brut 1)
+ma_fs_1555,1555,23,SE('31232'),0,,
+ma_fs_1596,1596,23,SE('31233'),0,,
+ma_fs_1604,1604,23,SE('3123')-SE('31232')-SE('31233'),0,,
+ma_fs_1612,1612,23,EDI('1409')+EDI('1433')+EDI('1481'),0,,Total Stocks Approvisionnements(Montant Brut 1)
+ma_fs_1685,1685,23,EDI('1643')+EDI('1656')+EDI('1664')+EDI('1672'),0,,Total Stocks des Encours(Montant Brut 1)
+ma_fs_1635,1635,23,EDI('1643')+EDI('1656')+EDI('1664')+EDI('1672'),0,,Stock en cours Production de biens et service(Montant Brut 1)
+ma_fs_1643,1643,23,SE('3131'),0,,
+ma_fs_1656,1656,23,SE('31342'),0,,
+ma_fs_1664,1664,23,SE('31341'),0,,
+ma_fs_1672,1672,23,SE('31343'),0,,
+ma_fs_1736,1736,23,EDI('1757')+EDI('1769'),0,,
+ma_fs_1757,1757,23,SE('315')-SE('3158'),0,,
+ma_fs_1769,1769,23,SE('3158'),0,,
+ma_fs_1800,1800,23,EDI('1757')+EDI('1769'),0,,Total Stocks Produits et Biens finis(Montant Brut 1)
+ma_fs_1869,1869,23,EDI('1836')+EDI('1853')+EDI('1861'),0,,Total Stocks Produits résiduels(Montant Brut 1)
+ma_fs_1819,1819,23,EDI('1836')+EDI('1853')+EDI('1861'),0,,
+ma_fs_1836,1836,23,SE('31451'),0,,
+ma_fs_1853,1853,23,SE('31452'),0,,
+ma_fs_1861,1861,23,SE('31453'),0,,
+ma_fs_1886,1886,23,EDI('1401')+EDI('1685')+EDI('1800')+EDI('1869'),0,,TOTAL GENERAL (ligne 10 + 15 + 18 + 22 )(Montant Brut 1)
+ma_fs_1402,1402,23,EDI('1613'),0,,
+ma_fs_1410,1410,23,EDI('1418')+EDI('1426'),0,,Biens et produits destinés à la revente en l'etat : Biens immeubles; Bien meubles(Provision pour dépréciation 2)
+ma_fs_1418,1418,23,-SE('39118'),0,,
+ma_fs_1426,1426,23,-SE('3911'),0,,
+ma_fs_1434,1434,23,EDI('1450')+EDI('1458')+EDI('1466'),0,,Biens et Matériels Premières destinés aux   activités de production et transformation(Provision pour dépréciation 2 )
+ma_fs_1450,1450,23,SE('39121')+SE('3914'),0,,
+ma_fs_1482,1482,23,EDI('1556')+EDI('1597')+EDI('1605'),0,,Emballage(Provision pour dépréciation 2 )
+ma_fs_1556,1556,23,SE('391232'),0,,
+ma_fs_1597,1597,23,SE('391233'),0,,
+ma_fs_1605,1605,23,SE('39123')-SE('391232')-DE('391233'),0,,
+ma_fs_1458,1458,23,SE('39122')+SE('39126')+SE('39128')-SE('391223')-SE('391224')-SE('391225')-SE('391226')-SE('391227'),0,,
+ma_fs_1466,1466,23,SE('391224')+SE('391225')+SE('391226')+SE('391227'),0,,
+ma_fs_1636,1636,23,EDI('1644')+EDI('1657')+EDI('1665')+EDI('1673'),0,,
+ma_fs_1686,1686,23,EDI('1644')+EDI('1657')+EDI('1665')+EDI('1673'),0,,Total Stocks des Encours(Provision pour dépréciation 2 )
+ma_fs_1644,1644,23,SE('39131'),0,,
+ma_fs_1657,1657,23,SE('391342'),0,,
+ma_fs_1665,1665,23,SE('391341'),0,,
+ma_fs_1673,1673,23,SE('391343'),0,,
+ma_fs_1801,1801,23,EDI('1758')+EDI('1770'),0,,
+ma_fs_1737,1737,23,EDI('1758')+EDI('1770'),0,,Stock Produits finis(Provision pour dépréciation 2 )
+ma_fs_1758,1758,23,SE('3915')-SE('39158'),0,,
+ma_fs_1770,1770,23,SE('39158'),0,,
+ma_fs_1870,1870,23,EDI('1837')+EDI('1854')+EDI('1862'),0,,Total Stocks Produits résiduels(Provision pour dépréciation 2 )
+ma_fs_1820,1820,23,EDI('1837')+EDI('1854')+EDI('1862'),0,,
+ma_fs_1837,1837,23,SE('391451'),0,,
+ma_fs_1854,1854,23,SE('391452'),0,,
+ma_fs_1862,1862,23,SE('391453'),0,,
+ma_fs_1887,1887,23,EDI('1613')+EDI('1686')+EDI('1801')+EDI('1870'),0,,TOTAL GENERAL (ligne 10 + 15 + 18 + 22 )(Provision pour dépréciation 2 )
+ma_fs_1403,1403,23,EDI('1401')-EDI('1402'),0,,Stocks Approvisionnement(Montant net 3)
+ma_fs_1411,1411,23,EDI('1409')-EDI('1410'),0,,Biens et produits destinés à la revente en l'etat : Biens immeubles; Bien meubles(Montant net 3)
+ma_fs_1419,1419,23,EDI('1417')-EDI('1418'),0,,Biens immeubles(Montant net 3)
+ma_fs_1427,1427,23,EDI('1425')-EDI('1426'),0,,* Bien meubles(Montant net 3)
+ma_fs_1435,1435,23,EDI('1433')-EDI('1434'),0,,Biens et Matériels Premières destinés aux   activités de production et transformation(Montant net 3)
+ma_fs_1451,1451,23,EDI('1449')-EDI('1450'),0,,Matières premières(Montant net 3)
+ma_fs_1459,1459,23,EDI('1457')-EDI('1458'),0,,Matières consommables(Montant net 3)
+ma_fs_1467,1467,23,EDI('1465')-EDI('1466'),0,,Pièce détachées(Montant net 3)
+ma_fs_1483,1483,23,EDI('1481')-EDI('1482'),0,,Emballage (Montant net 3)
+ma_fs_1557,1557,23,EDI('1555')-EDI('1556'),0,,Récupérables (Montant net 3)
+ma_fs_1598,1598,23,EDI('1596')-EDI('1597'),0,,Vendus(Montant net 3)
+ma_fs_1606,1606,23,EDI('1604')-EDI('1605'),0,,Perdus(Montant net 3)
+ma_fs_1637,1637,23,EDI('1635')-EDI('1636'),0,,Stock en cours Production de biens et service(Montant net 3)
+ma_fs_1645,1645,23,EDI('1643')-EDI('1644'),0,,Produits en cours(Montant net 3)
+ma_fs_1658,1658,23,EDI('1656')-EDI('1657'),0,,Etudes en cours(Montant net 3)
+ma_fs_1666,1666,23,EDI('1664')-EDI('1665'),0,,Travaux en cours(Montant net 3)
+ma_fs_1674,1674,23,EDI('1672')-EDI('1673'),0,,Services en cours(Montant net 3)
+ma_fs_1687,1687,23,EDI('1685')-EDI('1686'),0,,
+ma_fs_1738,1738,23,EDI('1736')-EDI('1737'),0,,Stock Produits finis(Montant net 3)
+ma_fs_1759,1759,23,EDI('1757')-EDI('1758'),0,,Produits finis(Montant net 3)
+ma_fs_1771,1771,23,EDI('1769')-EDI('1770'),0,,Biens finis(Montant net 3)
+ma_fs_1802,1802,23,EDI('1800')-EDI('1801'),0,,Total Stocks Produits et Biens finis(Montant net 3)
+ma_fs_1821,1821,23,EDI('1819')-EDI('1820'),0,,Stock Produits résiduels(Montant net 3)
+ma_fs_1838,1838,23,EDI('1836')-EDI('1837'),0,,Déchets(Montant net 3)
+ma_fs_1855,1855,23,EDI('1853')-EDI('1854'),0,,Rebuts(Montant net 3)
+ma_fs_1863,1863,23,EDI('1861')-EDI('1862'),0,,Matières de récupération(Montant net 3)
+ma_fs_1871,1871,23,EDI('1869')-EDI('1870'),0,,Total Stocks Produits résiduels(Montant net 3)
+ma_fs_1888,1888,23,EDI('1886')-EDI('1887'),0,,TOTAL GENERAL (ligne 10 + 15 + 18 + 22 )(Montant net 3)
+ma_fs_1407,1407,23,EDI('1406')-EDI('1403'),0,,Stocks Approvisionnement(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1415,1415,23,EDI('1414')-EDI('1411'),0,,Biens et produits destinés à la revente en l'etat : Biens immeubles; Bien meubles(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1423,1423,23,EDI('1422')-EDI('1419'),0,,Biens immeubles(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1431,1431,23,EDI('1430')-EDI('1427'),0,,* Bien meubles(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1439,1439,23,EDI('1438')-EDI('1435'),0,,Biens et Matériels Premières destinés aux   activités de production et transformation(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1455,1455,23,EDI('1454')-EDI('1451'),0,,Matières premières(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1463,1463,23,EDI('1462')-EDI('1459'),0,,Matières consommables(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1471,1471,23,EDI('1470')-EDI('1467'),0,,Pièce détachées(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1487,1487,23,EDI('1486')-EDI('1483'),0,,Emballage (Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1561,1561,23,EDI('1560')-EDI('1557'),0,,Vendus(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1602,1602,23,EDI('1601')-EDI('1598'),0,,Vendus(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1610,1610,23,EDI('1609')+EDI('1606'),0,,Perdus(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1641,1641,23,EDI('1640')-EDI('1637'),0,,Stock en cours Production de biens et service(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1649,1649,23,EDI('1648')-EDI('1645'),0,,Produits en cours(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1662,1662,23,EDI('1661')-EDI('1658'),0,,Etudes en cours(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1670,1670,23,EDI('1669')-EDI('1658'),0,,Travaux en cours(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1678,1678,23,EDI('1677')-EDI('1674'),0,,Services en cours(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1691,1691,23,EDI('1690')-EDI('1687'),0,,Total Stocks des Encours(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1742,1742,23,EDI('1741')-EDI('1738'),0,,Stock Produits finis(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1763,1763,23,EDI('1762')-EDI('1759'),0,,Produits finis(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1775,1775,23,EDI('1774')-EDI('1771'),0,,Biens finis(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1806,1806,23,EDI('1805')-EDI('1802'),0,,Total Stocks Produits et Biens finis(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1825,1825,23,EDI('1824')-EDI('1821'),0,,Stock Produits résiduels(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1842,1842,23,EDI('1841')-EDI('1838'),0,,Déchets(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1859,1859,23,EDI('1858')-EDI('1855'),0,,Rebuts(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1867,1867,23,EDI('1866')-EDI('1863'),0,,Matières de récupération(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1875,1875,23,EDI('1874')-EDI('1871'),0,,Total Stocks Produits résiduels(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1892,1892,23,EDI('1891')-EDI('1888'),0,,TOTAL GENERAL (ligne 10 + 15 + 18 + 22 )(Variation  de stock en valeur (+ ou -)7=6-3)
+ma_fs_1406,1406,23,EDI('1404')-EDI('1405'),0,,Stocks Approvisionnement(Montant net 6)
+ma_fs_1414,1414,23,EDI('1412')-EDI('1413'),0,,Biens et produits destinés à la revente en l'etat : Biens immeubles; Bien meubles(Montant net 6)
+ma_fs_1422,1422,23,EDI('1420')-EDI('1421'),0,,Biens immeubles(Montant net 6)
+ma_fs_1430,1430,23,EDI('1428')-EDI('1429'),0,,* Bien meubles(Montant net 6)
+ma_fs_1438,1438,23,EDI('1436')-EDI('1437'),0,,Biens et Matériels Premières destinés aux   activités de production et transformation(Montant net 6)
+ma_fs_1454,1454,23,EDI('1452')-EDI('1453'),0,,Matières premières(Montant net 6)
+ma_fs_1462,1462,23,EDI('1460')-EDI('1461'),0,,Matières consommables(Montant net 6)
+ma_fs_1470,1470,23,EDI('1468')-EDI('1469'),0,,Pièce détachées(Montant net 6)
+ma_fs_1486,1486,23,EDI('1484')-EDI('1485'),0,,Emballage (Montant net 6)
+ma_fs_1560,1560,23,EDI('1558')-EDI('1559'),0,,Vendus(Montant net 6)
+ma_fs_1601,1601,23,EDI('1599')-EDI('1600'),0,,Vendus(Montant net 6)
+ma_fs_1609,1609,23,EDI('1607')-EDI('1608'),0,,Perdus(Montant net 6)
+ma_fs_1640,1640,23,EDI('1638')-EDI('1639'),0,,Stock en cours Production de biens et service(Montant net 6)
+ma_fs_1648,1648,23,EDI('1646')-EDI('1647'),0,,Produits en cours(Montant net 6)
+ma_fs_1661,1661,23,EDI('1659')-EDI('1660'),0,,Etudes en cours(Montant net 6)
+ma_fs_1669,1669,23,EDI('1667')-EDI('1668'),0,,Travaux en cours(Montant net 6)
+ma_fs_1677,1677,23,EDI('1675')-EDI('1676'),0,,Services en cours(Montant net 6)
+ma_fs_1690,1690,23,EDI('1688')-EDI('1689'),0,,Total Stocks des Encours(Montant net 6)
+ma_fs_1741,1741,23,EDI('1739')-EDI('1740'),0,,Stock Produits finis(Montant net 6)
+ma_fs_1762,1762,23,EDI('1760')-EDI('1761'),0,,Produits finis(Montant net 6)
+ma_fs_1774,1774,23,EDI('1772')-EDI('1773'),0,,Biens finis(Montant net 6)
+ma_fs_1805,1805,23,EDI('1803')-EDI('1804'),0,,Total Stocks Produits et Biens finis(Montant net 6)
+ma_fs_1824,1824,23,EDI('1822')-EDI('1823'),0,,Stock Produits résiduels(Montant net 6)
+ma_fs_1841,1841,23,EDI('1839')-EDI('1840'),0,,Déchets(Montant net 6)
+ma_fs_1858,1858,23,EDI('1856')-EDI('1857'),0,,Rebuts(Montant net 6)
+ma_fs_1866,1866,23,EDI('1864')-EDI('1865'),0,,Matières de récupération(Montant net 6)
+ma_fs_1874,1874,23,EDI('1872')-EDI('1873'),0,,Total Stocks Produits résiduels(Montant net 6)
+ma_fs_1891,1891,23,EDI('1617')+EDI('1690')+ EDI('1805')+EDI('1874'),0,,TOTAL GENERAL (ligne 10 + 15 + 18 + 22 )(Montant net 6)
+ma_fs_523,523,1,EDI('165')+EDI('166')+EDI('167')+EDI('168')+EDI('169'),1,,STOCKS (F)(Amortissements et Provisions)
+ma_fs_528,528,1,EDI('129')+EDI('130')+EDI('131')+EDI('132')+EDI('133')+EDI('134')+EDI('135'),1,,CREANCES DE L'ACTIF CIRCULANT (G)(Amortissements et Provisions)
+ma_fs_129,129,1,-SE('3941'),1,,
+ma_fs_130,130,1,-SE('3942'),1,,
+ma_fs_131,131,1,-SE('3943'),1,,
+ma_fs_132,132,1,-SE('3945'),1,,
+ma_fs_133,133,1,-SE('3946'),1,,
+ma_fs_134,134,1,-SE('3948'),1,,
+ma_fs_135,135,1,-SE('3949'),1,,
+ma_fs_529,529,1,EDI('527')-EDI('528'),1,,CREANCES DE L'ACTIF CIRCULANT (G)(Net N)
+ma_fs_136,136,1,EDI('122')-EDI('129'),1,,"Founisseurs, débiteurs, avances et accomptes(Net N)"
+ma_fs_137,137,1,EDI('123')-EDI('130'),1,,Clients et comptes rattachés(Net N)
+ma_fs_138,138,1,EDI('124')-EDI('131'),1,,Personnel(Net N)
+ma_fs_139,139,1,EDI('125')-EDI('132'),1,,Etat(Net N)
+ma_fs_140,140,1,EDI('126')-EDI('133'),1,,Comptes d'associés(Net N)
+ma_fs_141,141,1,EDI('127')-EDI('134'),1,,Autres débiteurs(Net N)
+ma_fs_142,142,1,EDI('128')-EDI('135'),1,,Comptes de régularisation Actif(Net N)
+ma_fs_181,181,1,SE('35'),1,,
+ma_fs_182,182,1,-SE('395'),1,,
+ma_fs_183,183,1,EDI('181')-EDI('182'),1,,TITRES ET VALEURS DE PLACEMENT (H)(Net N)
+ma_fs_151,151,1,SE('37'),1,,
+ma_fs_152,152,1,0,1,,
+ma_fs_153,153,1,EDI('151') -EDI('152'),1,,ECARTS DE CONVERSION - ACTIF (I) (Eléments circulants)(Net N)
+ma_fs_11182,11182,3,-SE('7118'),1,,
+ma_fs_11187,11187,3,-SE('7128'),1,,
+ma_fs_11192,11192,3,-SE('7138'),1,,
+ma_fs_11197,11197,3,-SE('7148'),1,,
+ma_fs_11207,11207,3,-SE('7188'),1,,
+ma_fs_11212,11212,3,-SE('7198'),1,,
+ma_fs_11222,11222,3,SE('6118'),1,,
+ma_fs_11257,11257,3,SE('6128'),1,,
+ma_fs_11262,11262,3,SE('6138')+SE('6148'),1,,
+ma_fs_11252,11252,3,SE('6168'),1,,
+ma_fs_11267,11267,3,SE('6178'),1,,
+ma_fs_11247,11247,3,SE('6188'),1,,
+ma_fs_11242,11242,3,SE('6198'),1,,
+ma_fs_11177,11177,3,EDI('11217'),1,,
+ma_fs_11227,11227,3,EDI('11237'),1,,
+ma_fs_11237,11237,3,EDI('11222')+EDI('11257')+EDI('11262')+EDI('11252')+EDI('11267')+EDI('11247')+EDI('11242'),1,,TOTAL II(Concernant  les exercices  précédents 2)
+ma_fs_11232,11232,3,EDI('11217')-EDI('11237'),1,,RESULTAT D'EXPLOITATIONS (I-II)( Concernant  les exercices  précédents 2)
+ma_fs_11272,11272,3,-SE('7328'),1,,
+ma_fs_11277,11277,3,-SE('7338'),1,,
+ma_fs_11282,11282,3,-SE('7388'),1,,
+ma_fs_11287,11287,3,-SE('7398'),1,,
+ma_fs_11292,11292,3,EDI('11272')+EDI('11277')+EDI('11282')+EDI('11287'),1,,TOTAL IV( Concernant  les exercices  précédents 2)
+ma_fs_11297,11297,3,SE('6318'),1,,
+ma_fs_11322,11322,3,EDI('11317'),1,,
+ma_fs_11302,11302,3,SE('6338'),1,,
+ma_fs_11307,11307,3,SE('6388'),1,,
+ma_fs_11312,11312,3,SE('6398'),1,,
+ma_fs_11317,11317,3,EDI('11297')+EDI('11302')+EDI('11307')+EDI('11312'),1,,TOTAL V( Concernant  les exercices  précédents 2)
+ma_fs_11332,11332,3,EDI('11292')-EDI('11317'),1,,RESULTAT FINANCIER (IV - V)( Concernant  les exercices  précédents 2)
+ma_fs_11202,11202,3,-SE('7168'),1,,
+ma_fs_11186,11186,3,EDI('11188')-EDI('11187'),1,,
+ma_fs_267,267,1,ASE('248')+ASE('2948'),1,,
+ma_fs_268,268,1,ASE('251')+ASE('2951'),1,,
+ma_fs_269,269,1,ASE('258')+ASE('2958'),1,,
+ma_fs_198,198,1,ASE('271'),1,,
+ma_fs_199,199,1,ASE('272'),1,,
+ma_fs_294,294,1,EDI('500')+EDI('505')+EDI('510')+EDI('515')+EDI('520'),1,,
+ma_fs_525,525,1,EDI('175')+EDI('176')+EDI('177')+EDI('178')+EDI('179'),1,,
+ma_fs_175,175,1,ASE('311')+ASE('3911'),1,,
+ma_fs_176,176,1,ASE('312')+ASE('3912'),1,,
+ma_fs_177,177,1,ASE('313')+ASE('3913'),1,,
+ma_fs_178,178,1,ASE('314')+ASE('3914'),1,,
+ma_fs_179,179,1,ASE('315')+ASE('3915'),1,,
+ma_fs_530,530,1,EDI('143')+EDI('144')+EDI('145')+EDI('146')+EDI('147')+EDI('148')+EDI('149'),1,,
+ma_fs_143,143,1,ASE('341')+ASE('3941'),1,,
+ma_fs_144,144,1,ASE('342')+ASE('3942'),1,,
+ma_fs_145,145,1,ASE('343')+ASE('3943'),1,,
+ma_fs_146,146,1,ASE('345')+ASE('3945'),1,,
+ma_fs_147,147,1,ASE('346')+ASE('3946'),1,,
+ma_fs_148,148,1,ASE('348')+ASE('3948'),1,,
+ma_fs_149,149,1,ASE('349')+ASE('3949'),1,,
+ma_fs_184,184,1,ASE('35')+ASE('395'),1,,
+ma_fs_154,154,1,ASE('37'),1,,
+ma_fs_299,299,1,EDI('525')+EDI('530')+EDI('184')+EDI('154'),1,,
+ma_fs_535,535,1,EDI('312')+EDI('313')+EDI('314'),1,,
+ma_fs_312,312,1,ASE('511')+ASE('5911'),1,,
+ma_fs_313,313,1,ASE('514')+ASE('5914'),1,,
+ma_fs_314,314,1,ASE('516')+ASE('5916'),1,,
+ma_fs_319,319,1,EDI('535'),1,,
+ma_fs_189,189,1,EDI('294')+EDI('299')+EDI('319'),1,,
+ma_fs_11179,11179,3,EDI('11219'),1,,
+ma_fs_11184,11184,3,-ASE('711'),1,,
+ma_fs_11189,11189,3,-ASE('712'),1,,
+ma_fs_11194,11194,3,-ASE('713'),1,,
+ma_fs_11199,11199,3,-ASE('714'),1,,
+ma_fs_11204,11204,3,-ASE('716'),1,,
+ma_fs_11214,11214,3,-ASE('719'),1,,
+ma_fs_11219,11219,3,EDI('14024')+EDI('11194')+EDI('11199')+EDI('11204')+EDI('11209')+EDI('11214'),1,,
+ma_fs_11229,11229,3,EDI('11224')+EDI('11259')+EDI('11264')+EDI('11254')+EDI('11269')+EDI('11249')+EDI('11244'),1,,
+ma_fs_11264,11264,3,ASE('613')+ASE('614'),1,,
+ma_fs_11254,11254,3,ASE('616'),1,,
+ma_fs_11269,11269,3,ASE('617'),1,,
+ma_fs_11249,11249,3,ASE('618'),1,,
+ma_fs_11244,11244,3,ASE('619'),1,,
+ma_fs_11239,11239,3,EDI('11224')+EDI('11259')+EDI('11264')+EDI('11254')+EDI('11269')+EDI('11249')+EDI('11244'),1,,
+ma_fs_11234,11234,3,EDI('11219')-EDI('11239'),1,,
+ma_fs_11329,11329,3,EDI('11274')+EDI('11279')+EDI('11284')+EDI('11289'),1,,
+ma_fs_11274,11274,3,ASE('732'),1,,
+ma_fs_11279,11279,3,-ASE('733'),1,,
+ma_fs_11284,11284,3,-ASE('738'),1,,
+ma_fs_11289,11289,3,-ASE('739'),1,,
+ma_fs_11294,11294,3,EDI('11274')+EDI('11279')+EDI('11284')+EDI('11289'),1,,
+ma_fs_11324,11324,3,EDI('11299')+EDI('11304')+EDI('11309')+EDI('11314'),1,,
+ma_fs_11299,11299,3,ASE('631'),1,,
+ma_fs_311,311,1,EDI('305')-EDI('308'),1,,"Caisse, Régies d'avances et accréditifs(Net N)"
+ma_fs_500,500,1,EDI('247')+EDI('248')+EDI('249'),1,,
+ma_fs_247,247,1,ASE('211')+ASE('2811'),1,,
+ma_fs_248,248,1,ASE('212')+ASE('2812'),1,,
+ma_fs_249,249,1,ASE('213')+ASE('2813'),1,,
+ma_fs_505,505,1,EDI('286')+EDI('287')+EDI('288')+EDI('289'),1,,
+ma_fs_286,286,1,ASE('221')+ASE('2821')+ASE('2921'),1,,
+ma_fs_287,287,1,ASE('222')+ASE('2822')+ASE('2922'),1,,
+ma_fs_288,288,1,ASE('223')+ASE('2823')+ASE('2923'),1,,
+ma_fs_289,289,1,ASE('228')+ASE('2828')+ASE('2928'),1,,
+ma_fs_510,510,1,EDI('228')+EDI('229')+EDI('230')+EDI('231')+EDI('232')+EDI('233')+EDI('234'),1,,
+ma_fs_228,228,1,ASE('231')+ASE('2831')+ASE('2931'),1,,
+ma_fs_229,229,1,ASE('232')+ASE('2832')+ASE('2932'),1,,
+ma_fs_230,230,1,ASE('233')+ASE('2833')+ASE('2933'),1,,
+ma_fs_231,231,1,ASE('234')+ASE('2834')+ASE('2934'),1,,
+ma_fs_232,232,1,ASE('235')+ASE('2835')+ASE('2935'),1,,
+ma_fs_233,233,1,ASE('238')+ASE('2838')+ASE('2938'),1,,
+ma_fs_234,234,1,ASE('239')+ASE('2839')+ASE('2939'),1,,
+ma_fs_515,515,1,EDI('266')+EDI('267')+EDI('268')+EDI('269'),1,,
+ma_fs_266,266,1,ASE('241')+ASE('2941'),1,,
+ma_fs_1340,1340,7,EDI('1341')+EDI('1342'),0,,
+ma_fs_1372,1372,7,0,0,,
+ma_fs_1562,1562,8,ASE('611'),0,,
+ma_fs_1335,1335,7,EDI('1333')-EDI('1334'),0,,
+ma_fs_1336,1336,7,EDI('1337')+EDI('1338')+EDI('1339'),0,,
+ma_fs_1337,1337,7,-ASE('712'),0,,
+ma_fs_1338,1338,7,-ASE('713'),0,,
+ma_fs_1339,1339,7,-ASE('714'),0,,
+ma_fs_1341,1341,7,ASE('612'),0,,
+ma_fs_1342,1342,7,ASE('613')+ASE('614'),0,,
+ma_fs_1344,1344,7,ASE('716'),0,,
+ma_fs_1345,1345,7,ASE('616'),0,,
+ma_fs_1346,1346,7,ASE('617'),0,,
+ma_fs_4064,4064,7,EDI('1343')+ EDI('1344')-EDI('1345')-EDI('1346'),0,,
+ma_fs_4067,4067,7,-ASE('718'),0,,
+ma_fs_1350,1350,7,-ASE('719'),0,,
+ma_fs_1351,1351,7,ASE('619'),0,,
+ma_fs_1352,1352,7,EDI('4067')+EDI('4064')-EDI('1349')+EDI('1350')-EDI('1351'),0,,
+ma_fs_1353,1353,7,-ASE('73')-ASE('63'),0,,
+ma_fs_1354,1354,7,EDI('1352')+EDI('1353'),0,,
+ma_fs_1355,1355,7,-ASE('75')-ASE('65'),0,,
+ma_fs_1356,1356,7,ASE('67'),0,,
+ma_fs_1357,1357,7,EDI('1354')+EDI('1355')-EDI('1356'),0,,
+ma_fs_1386,1386,7,0,0,,
+ma_fs_1387,1387,7,CMP(EDI('1357')),0,,
+ma_fs_1388,1388,7,CMP((EDI('1357')*-1)),0,,
+ma_fs_1389,1389,7,ASE('619')-ASE('6196'),0,,
+ma_fs_14022,14022,3,EDI('11182')+EDI('11187'),1,,Chiffres d'affaires(Concernant les exercices  précédents 2)
+ma_fs_14023,14023,3,EDI('14021')-EDI('14022'),1,,Chiffres d'affaires(Totaux de L'exercice N 3=1+2)
+ma_fs_11209,11209,3,-ASE('718'),1,,
+ma_fs_11224,11224,3,ASE('611'),1,,
+ma_fs_11259,11259,3,ASE('612'),1,,
+ma_fs_11304,11304,3,ASE('633'),1,,
+ma_fs_11309,11309,3,ASE('638'),1,,
+ma_fs_11314,11314,3,ASE('639'),1,,
+ma_fs_11319,11319,3,EDI('11299')+EDI('11304')+EDI('11309')+EDI('11314'),1,,
+ma_fs_11334,11334,3,EDI('11294') - EDI('11319'),1,,
+ma_fs_11339,11339,3,EDI('11234')+EDI('11334'),1,,
+ma_fs_11394,11394,3,EDI('11344')+EDI('11349')+EDI('11354')+EDI('11364')+EDI('11359'),1,,
+ma_fs_11344,11344,3,-ASE('751'),1,,
+ma_fs_11349,11349,3,-ASE('756'),1,,
+ma_fs_11354,11354,3,-ASE('757'),1,,
+ma_fs_11359,11359,3,-ASE('758'),1,,
+ma_fs_11364,11364,3,-ASE('759'),1,,
+ma_fs_11369,11369,3,EDI('11344')+EDI('11349')+EDI('11354')+EDI('11364')+EDI('11359'),1,,
+ma_fs_11399,11399,3,EDI('11374')+EDI('11379')+EDI('11384')+EDI('11389'),1,,
+ma_fs_11374,11374,3,ASE('651'),1,,
+ma_fs_11379,11379,3,ASE('656'),1,,
+ma_fs_11384,11384,3,ASE('658'),1,,
+ma_fs_11389,11389,3,ASE('659'),1,,
+ma_fs_11409,11409,3,EDI('11374')+EDI('11379')+EDI('11384')+EDI('11389'),1,,
+ma_fs_11404,11404,3,EDI('11369')-EDI('11409'),1,,
+ma_fs_11414,11414,3,EDI('11339')+EDI('11404'),1,,
+ma_fs_11419,11419,3,ASE('67'),1,,
+ma_fs_11424,11424,3,EDI('11414')-EDI('11419'),1,,
+ma_fs_11429,11429,3,EDI('11219')+EDI('11294')+EDI('11369'),1,,
+ma_fs_11434,11434,3,EDI('11229')+EDI('11324')+EDI('11399')+EDI('11419'),1,,
+ma_fs_11439,11439,3,EDI('11429')-EDI('11434'),1,,
+ma_fs_1333,1333,7,-ASE('711'),0,,
+ma_fs_13411,13411,2,-ASE('1111')+ASE('1119'),1,,
+ma_fs_13412,13412,2,-ASE('1119'),1,,
+ma_fs_13413,13413,2,-ASE('1111')-ASE('1119')-ASE('1112'),1,,
+ma_fs_13414,13414,2,-ASE('1111')-ASE('1117')-ASE('3462')-ASE('1112'),1,,
+ma_fs_13415,13415,2,-ASE('112'),1,,
+ma_fs_13416,13416,2,-ASE('113'),1,,
+ma_fs_13417,13417,2,-ASE('114'),1,,
+ma_fs_13418,13418,2,-ASE('115'),1,,
+ma_fs_13419,13419,2,-ASE('116'),1,,
+ma_fs_13420,13420,2,-ASE('7')-ASE('6'),1,,
+ma_fs_13421,13421,2,EDI('13411')+EDI('13412')+EDI('13415')+EDI('13416')+EDI('13417')+EDI('13418')+EDI('13419')+EDI('14002')+EDI('13420'),1,,
+ma_fs_13422,13422,2,EDI('13423')+EDI('13424') +EDIST('13425'),1,,
+ma_fs_13423,13423,2,-ASE('131'),1,,
+ma_fs_13424,13424,2,-ASE('135'),1,,
+ma_fs_13426,13426,2,EDI('13427')+EDI('13428')+EDIST('13429'),1,,
+ma_fs_13427,13427,2,-ASE('141'),1,,
+ma_fs_13428,13428,2,-ASE('148'),1,,
+ma_fs_13431,13431,2,ASE('151'),1,,
+ma_fs_13432,13432,2,ASE('155'),1,,
+ma_fs_13433,13433,2,EDI('13434')+EDI('13435'),1,,
+ma_fs_13434,13434,2,ASE('171'),1,,
+ma_fs_13435,13435,2,ASE('172'),1,,
+ma_fs_13436,13436,2,EDI('13421')+EDI('13422')+EDI('13426')+EDI('13433')+EDI('13430'),1,,
+ma_fs_13437,13437,2,EDI('13438')+EDI('13439')+EDI('13440')+EDI('13441')+EDI('13442')+EDI('13443')+EDI('13444')+EDI('13445'),1,,
+ma_fs_13438,13438,2,-ASE('441'),1,,
+ma_fs_13439,13439,2,-ASE('442'),1,,
+ma_fs_13440,13440,2,-ASE('443'),1,,
+ma_fs_13441,13441,2,-ASE('444'),1,,
+ma_fs_13442,13442,2,-ASE('445'),1,,
+ma_fs_13443,13443,2,-ASE('446'),1,,
+ma_fs_13444,13444,2,-ASE('448'),1,,
+ma_fs_13445,13445,2,-ASE('449'),1,,
+ma_fs_13446,13446,2,-ASE('45'),1,,
+ma_fs_13447,13447,2,ASE('47'),1,,
+ma_fs_13448,13448,2,EDI('13437')+EDI('13446')+EDI('13447'),1,,
+ma_fs_13449,13449,2,-ASE('552'),1,,
+ma_fs_13450,13450,2,-ASE('553'),1,,
+ma_fs_13451,13451,2,-ASE('554'),1,,
+ma_fs_13452,13452,2,EDI('13449')+EDI('13450')+EDI('13451'),1,,
+ma_fs_13453,13453,2,EDI('13436')+EDI('13448')+EDI('13452'),1,,
+ma_fs_G112,G112,3,EDI('11336'),1,,
+ma_fs_G113,G113,3,EDI('11337'),1,,
+ma_fs_G114,G114,3,EDI('11338'),1,,
+ma_fs_11392,11392,3,EDI('11367'),1,,
+ma_fs_11342,11342,3,-SE('7518'),1,,
+ma_fs_11347,11347,3,-SE('7568'),1,,
+ma_fs_11352,11352,3,-SE('7578'),1,,
+ma_fs_11357,11357,3,-SE('7588'),1,,
+ma_fs_11362,11362,3,-SE('7598'),1,,
+ma_fs_11367,11367,3,EDI('11342')+EDI('11347')+EDI('11352')+EDI('11357')+EDI('11362'),1,,TOTAL VIII(Concernant les exercices  précédents 2)
+ma_fs_11397,11397,3,EDI('11407'),1,,
+ma_fs_11372,11372,3,SE('6518'),1,,
+ma_fs_11377,11377,3,SE('6568'),1,,
+ma_fs_11382,11382,3,SE('6588'),1,,
+ma_fs_11387,11387,3,SE('6598'),1,,
+ma_fs_11407,11407,3,EDI(11372)+EDI(11377)+EDI(11382)+EDI(11387),1,,TOTAL IX(Concernant les exercices  précédents 2)
+ma_fs_11402,11402,3,EDI('11367')-EDI('11397'),1,,RESULTAT NON COURANT (VIII-IX)(Concernant les exercices  précédents 2)
+ma_fs_11412,11412,3,EDI('11337')+EDI('11402'),1,,RESULTAT AVANT IMPOTS (VII+/-X)(Concernant les exercices  précédents 2)
+ma_fs_11417,11417,3,SE('6708'),1,,
+ma_fs_11422,11422,3,EDI('11412')-EDI('11417'),1,,RESULTAT NET (XI-XII)(Concernant les exercices  précédents 2)
+ma_fs_11427,11427,3,EDI('11217')+EDI('11292')+EDI('11367'),1,,TOTAL DES PRODUITS (I+VI+VIII)(Concernant les exercices  précédents 2)
+ma_fs_11432,11432,3,EDI('11227')+EDI('11322')+EDI('11397')+EDI('11417'),1,,TOTAL DES CHARGES (II+V+IX+XII)(Concernant les exercices  précédents 2)
+ma_fs_11437,11437,3,EDI('11427')-EDI('11432'),1,,RESULTAT NET (total des produits - total des charges(Concernant les exercices  précédents 2)
+ma_fs_11217,11217,3,EDI('11182')+EDI('11187')+EDI('11192')+EDI('11197')+EDI('11202')+EDI('11207')+EDI('11212'),1,,TOTAL I( Concernant  les exercices  précédents 2)
+ma_fs_11327,11327,3,EDI('11292'),1,,
+ma_fs_11337,11337,3,EDI('11232')+EDI('11332'),1,,RESULTAT COURANT (III + VI)(Concernant les exercices  précédents 2)
+ma_fs_1334,1334,7,ASE('611'),0,,
+ma_fs_1343,1343,7,EDI('1335')+EDI('1336')-EDI('1340'),0,,
+ma_fs_1349,1349,7,ASE('618'),0,,
+ma_fs_1390,1390,7,ASE('639')-ASE('6396')-ASE('6393'),0,,
+ma_fs_1391,1391,7,ASE('659')-ASE('65963'),0,,
+ma_fs_1392,1392,7,-ASE('719')+ASE('7196')+ASE('7197')+ASE('7198'),0,,
+ma_fs_1393,1393,7,-ASE('739')+ASE('7396')+ASE('7397')+ASE('7393'),0,,
+ma_fs_1394,1394,7,-ASE('759')+ASE('75963')+ASE('7597')+ASE('7598')+ASE('7595'),0,,
+ma_fs_1395,1395,7,-ASE('751'),0,,
+ma_fs_1396,1396,7,ASE('651'),0,,
+ma_fs_1397,1397,7,EDI('1389')+EDI('1390')+EDI('1391')-EDI('1392')-EDI('1393')-EDI('1394')-EDI('1395')+EDI('1396')+EDI('1387')-EDI('1388'),0,,
+ma_fs_1398,1398,7,"""Saisie""",1,,
+ma_fs_1399,1399,7,EDI('1397')-EDI('1398'),0,,
+ma_fs_1563,1563,8,ASE('611')-ASE('6114'),0,,
+ma_fs_1564,1564,8,ASE('6114'),0,,
+ma_fs_1565,1565,8,ASE('611'),0,,
+ma_fs_1566,1566,8,ASE('612'),0,,
+ma_fs_1567,1567,8,ASE('6121'),0,,
+ma_fs_1568,1568,8,ASE('6124')-ASE('61242')-ASE('61243')+ASE('6128'),0,,
+ma_fs_1569,1569,8,ASE('6122')+ASE('6123'),0,,
+ma_fs_1570,1570,8,ASE('61242')+ASE('61243'),0,,
+ma_fs_1571,1571,8,ASE('6125'),0,,
+ma_fs_1572,1572,8,ASE('6126'),0,,
+ma_fs_1573,1573,8,EDI('1567')+EDI('1568')+EDI('1569')+EDI('1570')+EDI('1571')+EDI('1572'),0,,
+ma_fs_1574,1574,8,ASE('613')+ASE('614'),0,,
+ma_fs_1575,1575,8,ASE('6131'),0,,
+ma_fs_1576,1576,8,ASE('6132'),0,,
+ma_fs_1577,1577,8,ASE('6133'),0,,
+ma_fs_1578,1578,8,ASE('6134'),0,,
+ma_fs_1579,1579,8,ASE('6135'),0,,
+ma_fs_1582,1582,8,ASE('6142'),0,,
+ma_fs_1583,1583,8,ASE('6143'),0,,
+ma_fs_1584,1584,8,EDI('1574')-(EDI('1575')+EDI('1576')+EDI('1577')+EDI('1578')+EDI('1579')+EDI('10091')+EDI('10420')+EDI('1582')+EDI('1583')),0,,
+ma_fs_1585,1585,8,EDI('1574'),0,,
+ma_fs_1586,1586,8,ASE('617'),0,,
+ma_fs_1587,1587,8,ASE('6171'),0,,
+ma_fs_1588,1588,8,ASE('6174'),0,,
+ma_fs_1589,1589,8,EDI('1586')-(EDI('1587')+EDI('1588')),0,,
+ma_fs_1590,1590,8,ASE('617'),0,,
+ma_fs_1591,1591,8,ASE('618'),0,,
+ma_fs_1592,1592,8,ASE('6181'),0,,
+ma_fs_1594,1594,8,EDI('1591')-(EDI('1592')+EDI('1593')),0,,
+ma_fs_1734,1734,8,EDI('1592')+EDI('1593')+EDI('1594'),0,,
+ma_fs_1814,1814,8,ASE('638'),0,,
+ma_fs_1815,1815,8,ASE('6385'),0,,
+ma_fs_1816,1816,8,EDI('1814')-EDI('1815'),0,,
+ma_fs_1817,1817,8,EDI('1815')+EDI('1816'),0,,
+ma_fs_1807,1807,8,ASE('658'),0,,
+ma_fs_1808,1808,8,ASE('6581'),0,,
+ma_fs_1809,1809,8,ASE('6582'),0,,
+ma_fs_1810,1810,8,ASE('6583'),0,,
+ma_fs_1811,1811,8,ASE('6585'),0,,
+ma_fs_1812,1812,8,EDI('1807')-(EDI('1808')+EDI('1809')+EDI('1810')+EDI('1811')),0,,
+ma_fs_1813,1813,8,ASE('658'),0,,
+ma_fs_1963,1963,8,-SE('711'),0,,
+ma_fs_1989,1989,8,-ASE('711'),0,,
+ma_fs_1990,1990,8,-ASE('7111'),0,,
+ma_fs_1991,1991,8,-ASE('7113'),0,,
+ma_fs_1992,1992,8,EDI('1989')-(EDI('1990')+EDI('1991')),0,,
+ma_fs_1993,1993,8,EDI('1989'),0,,
+ma_fs_1994,1994,8,-ASE('712'),0,,
+ma_fs_1995,1995,8,-ASE('7121'),0,,
+ma_fs_1996,1996,8,-ASE('7122'),0,,
+ma_fs_1997,1997,8,-ASE('7124'),0,,
+ma_fs_1998,1998,8,-ASE('7125'),0,,
+ma_fs_1999,1999,8,-ASE('7126'),0,,
+ma_fs_2000,2000,8,EDI('1994')-(EDI('1995')+EDI('1996')+EDI('1997')+EDI('1998')+EDI('1999')),0,,
+ma_fs_2001,2001,8,EDI('1994'),0,,
+ma_fs_2002,2002,8,-ASE('713'),0,,
+ma_fs_2003,2003,8,-ASE('7131'),0,,
+ma_fs_2004,2004,8,-ASE('7132'),0,,
+ma_fs_2005,2005,8,-ASE('7134'),0,,
+ma_fs_2006,2006,8,EDI('2003')+EDI('2004')+EDI('2005'),0,,
+ma_fs_2007,2007,8,-ASE('718'),0,,
+ma_fs_2008,2008,8,-ASE('7181'),0,,
+ma_fs_2009,2009,8,EDI('2007')-EDI('2008'),0,,
+ma_fs_2010,2010,8,EDI('2008')+EDI('2009'),0,,
+ma_fs_2011,2011,8,-ASE('719'),0,,
+ma_fs_2012,2012,8,EDI('2011')-EDI('2013'),0,,
+ma_fs_2013,2013,8,-ASE('7197'),0,,
+ma_fs_2014,2014,8,EDI('2012')+EDI('2013'),0,,
+ma_fs_2029,2029,8,-ASE('738'),0,,
+ma_fs_2031,2031,8,-ASE('7381'),0,,
+ma_fs_2032,2032,8,-ASE('7383'),0,,
+ma_fs_2033,2033,8,-ASE('7385'),0,,
+ma_fs_2034,2034,8,EDI('2029')-(EDI('2031')+EDI('2032')+EDI('2033')),0,,
+ma_fs_1748,1748,12,-ASE('29'),0,,
+ma_fs_1784,1784,12,-ASE('135'),0,,
+ma_fs_1827,1827,12,-ASE('15'),0,,
+ma_fs_1844,1844,12,EDI('1748')+EDI('1784')+EDI('1827'),0,,
+ma_fs_1877,1877,12,-ASE('391')-ASE('394'),0,,
+ma_fs_1894,1894,12,-ASE('45'),0,,
+ma_fs_1903,1903,12,-ASE('395')-ASE('59'),0,,
+ma_fs_1912,1912,12,EDI('1877')+EDI('1894')+EDI('1903'),0,,
+ma_fs_1921,1921,12,EDI('1844')+EDI('1912'),0,,
+ma_fs_1924,1924,12,EDI('1847')+EDI('1915'),0,,
+ma_fs_2035,2035,8,-ASE('738'),0,,
+ma_fs_1401,1401,23,EDI('1612'),0,,
+ma_fs_1614,1614,23,EDI('1612')-EDI('1613'),0,,
+ma_fs_1613,1613,23,EDI('1410')+EDI('1434')+EDI('1482'),0,,
+ma_fs_1404,1404,23,EDI('1615'),0,,
+ma_fs_1412,1412,23,EDI('1420')+EDI('1428'),0,,
+ma_fs_1420,1420,23,-ASE('3118'),0,,
+ma_fs_1428,1428,23,ASE('311'),0,,
+ma_fs_1436,1436,23,EDI('1452')+EDI('1460')+EDI('1468'),0,,
+ma_fs_1452,1452,23,ASE('3121'),0,,
+ma_fs_1460,1460,23,ASE('3122')+ASE('3126')+ASE('3128'),0,,
+ma_fs_1468,1468,23,ASE('31225')+ASE('31226')+ASE('31227'),0,,
+ma_fs_1484,1484,23,EDI('1558')+EDI('1599')+EDI('1607'),0,,
+ma_fs_1558,1558,23,SE('31232'),0,,
+ma_fs_1599,1599,23,ASE('31233'),0,,
+ma_fs_520,520,1,EDI('198')+EDI('199'),1,,
+ma_fs_1607,1607,23,SE('31231'),0,,
+ma_fs_1615,1615,23,EDI('1412')+EDI('1436')+EDI('1484'),0,,
+ma_fs_1638,1638,23,EDI('1646')+EDI('1659')+EDI('1667')+EDI('1675'),0,,
+ma_fs_1646,1646,23,ASE('3131')+ASE('3138')+ASE('3141')+ASE('3148'),0,,
+ma_fs_1659,1659,23,SE('31342'),0,,
+ma_fs_1667,1667,23,SE('31341'),0,,
+ma_fs_1675,1675,23,SE('31343'),0,,
+ma_fs_1688,1688,23,EDI('1646')+EDI('1659')+EDI('1667')+EDI('1675'),0,,
+ma_fs_1739,1739,23,EDI('1760')+EDI('1772'),0,,
+ma_fs_1772,1772,23,ASE('3158'),0,,
+ma_fs_1803,1803,23,EDI('1760')+EDI('1772'),0,,
+ma_fs_1822,1822,23,EDI('1839')+EDI('1856')+EDI('1864'),0,,
+ma_fs_1839,1839,23,SE('31451'),0,,
+ma_fs_1856,1856,23,SE('31452'),0,,
+ma_fs_1864,1864,23,SE('31453'),0,,
+ma_fs_1872,1872,23,EDI('1839')+EDI('1856')+EDI('1864'),0,,
+ma_fs_1889,1889,23,EDI('1404')+EDI('1688')+EDI('1803')+EDI('1872'),0,,
+ma_fs_1618,1618,23,EDI('1617')-EDI('1614'),0,,
+ma_fs_1405,1405,23,EDI('1616'),0,,
+ma_fs_1413,1413,23,EDI('1421')+EDI('1429'),0,,
+ma_fs_1421,1421,23,-ASE('39118'),0,,
+ma_fs_1429,1429,23,-ASE('3911'),0,,
+ma_fs_1437,1437,23,EDI('1453')+EDI('1461')+EDI('1469'),0,,
+ma_fs_1453,1453,23,ASE('39121'),0,,
+ma_fs_1461,1461,23,ASE('39122')-ASE('39126')-ASE('39128'),0,,
+ma_fs_1469,1469,23,ASE('391232'),0,,
+ma_fs_1485,1485,23,EDI('1559')+EDI('1600')+EDI('1608'),0,,
+ma_fs_1559,1559,23,ASE('391232'),0,,
+ma_fs_1600,1600,23,ASE('391233'),0,,
+ma_fs_1608,1608,23,ASE('391231'),0,,
+ma_fs_1616,1616,23,EDI('1413')+EDI('1437')+EDI('1485'),0,,
+ma_fs_1639,1639,23,EDI('1647')+EDI('1660')+EDI('1668')+EDI('1676'),0,,
+ma_fs_1647,1647,23,ASE('39131')-ASE('39138')-ASE('39141')-ASE('39148'),0,,
+ma_fs_1660,1660,23,ASE('391342'),0,,
+ma_fs_1668,1668,23,ASE('391341'),0,,
+ma_fs_1676,1676,23,ASE('391343'),0,,
+ma_fs_1689,1689,23,EDI('1647')+EDI('1660')+EDI('1668')+EDI('1676'),0,,
+ma_fs_1740,1740,23,EDI('1761')+EDI('1773'),0,,
+ma_fs_1761,1761,23,ASE('3915')-ASE('39158'),0,,
+ma_fs_1773,1773,23,ASE('39158'),0,,
+ma_fs_1804,1804,23,EDI('1761')+EDI('1773'),0,,
+ma_fs_1823,1823,23,EDI('1840')+EDI('1857')+EDI('1865'),0,,
+ma_fs_1840,1840,23,ASE('391451'),0,,
+ma_fs_1857,1857,23,ASE('391452'),0,,
+ma_fs_1865,1865,23,ASE('391453'),0,,
+ma_fs_1873,1873,23,EDI('1840')+EDI('1857')+EDI('1865'),0,,
+ma_fs_1890,1890,23,EDI('1616')+EDI('1689')+EDI('1804')+EDI('1873'),0,,
+ma_fs_10084,10084,6,EDI('1001')+EDI('1002')+EDI('1003')+EDI('1004')+EDI('1005')+EDI('1006')+EDI('1007'),1,,
+ma_fs_10085,10085,6,EDI('1015')+EDI('1016')+EDI('1017')+EDI('1018')+EDI('1019')+EDI('1020')+EDI('1021'),1,,
+ma_fs_10086,10086,6,EDI('1029')+EDI('1030')+EDI('1031')+EDI('1032')+EDI('1034')+EDI('1035')+EDI('1033'),1,,
+ma_fs_10089,10089,6,EDI('1071')+EDI('1072')+EDI('1073')+EDI('1074')+EDI('1076')+EDI('1077')+EDI('1075'),1,,
+ma_fs_10087,10087,6,EDI('1043')+EDI('1044')+EDI('1045')+EDI('1046')+EDI('1047')+EDI('1048')+EDI('1049'),1,,
+ma_fs_10088,10088,6,EDI('1057')+EDI('1058')+EDI('1059')+EDI('1060')+EDI('1061')+EDI('1062')+EDI('1063'),1,,
+ma_fs_984,984,6,"""Saisie""",1,,
+ma_fs_986,986,6,"""Saisie""",1,,
+ma_fs_973,973,6,ASE('231'),1,,
+ma_fs_983,983,6,"""Saisie""",1,,
+ma_fs_985,985,6,"""Saisie""",1,,
+ma_fs_993,993,6,"""Saisie""",1,,
+ma_fs_11403,11403,3,EDI('11368')-EDI('11398'),1,,
+ma_fs_11413,11413,3,EDI('11338')+EDI('11403'),1,,
+ma_fs_11418,11418,3,SE('67'),1,,
+ma_fs_11423,11423,3,EDI('11413')-EDI('11418'),1,,
+ma_fs_11428,11428,3,EDI('11218')+EDI('11293')+EDI('11368'),1,,
+ma_fs_11433,11433,3,EDI('11228')+EDI('11323')+EDI('11398')+EDI('11418'),1,,
+ma_fs_11438,11438,3,EDI('11428')-EDI('11433'),1,,
+ma_fs_1532,1532,8,EDI('1526')+EDI('1527')+EDI('1528')+EDI('1529')+EDI('1530')+EDI('1531'),0,,
+ma_fs_1986,1986,8,EDI('1985')-EDI('1987'),0,,
+ma_fs_1987,1987,8,-SE('7197'),0,,
+ma_fs_994,994,6,"""Saisie""",1,,
+ma_fs_995,995,6,"""Saisie""",1,,
+ma_fs_996,996,6,"""Saisie""",1,,
+ma_fs_1008,1008,6,"""Saisie""",1,,
+ma_fs_1009,1009,6,"""Saisie""",1,,
+ma_fs_1010,1010,6,"""Saisie""",1,,
+ma_fs_1022,1022,6,"""Saisie""",1,,
+ma_fs_1023,1023,6,"""Saisie""",1,,
+ma_fs_1024,1024,6,"""Saisie""",1,,
+ma_fs_1036,1036,6,"""Saisie""",1,,
+ma_fs_1037,1037,6,"""Saisie""",1,,
+ma_fs_1038,1038,6,"""Saisie""",1,,
+ma_fs_1050,1050,6,"""Saisie""",1,,
+ma_fs_1051,1051,6,"""Saisie""",1,,
+ma_fs_1052,1052,6,"""Saisie""",1,,
+ma_fs_966,966,6,ASE('211'),1,,
+ma_fs_967,967,6,ASE('212'),1,,
+ma_fs_968,968,6,ASE('213'),1,,
+ma_fs_969,969,6,ASE('221'),1,,
+ma_fs_997,997,6,"""Saisie""",1,,
+ma_fs_998,998,6,"""Saisie""",1,,
+ma_fs_999,999,6,"""Saisie""",1,,
+ma_fs_1000,1000,6,"""Saisie""",1,,
+ma_fs_1011,1011,6,"""Saisie""",1,,
+ma_fs_1013,1013,6,"""Saisie""",1,,
+ma_fs_1014,1014,6,"""Saisie""",1,,
+ma_fs_1025,1025,6,"""Saisie""",1,,
+ma_fs_1026,1026,6,"""Saisie""",1,,
+ma_fs_1027,1027,6,"""Saisie""",1,,
+ma_fs_1028,1028,6,"""Saisie""",1,,
+ma_fs_1039,1039,6,"""Saisie""",1,,
+ma_fs_1040,1040,6,"""Saisie""",1,,
+ma_fs_1041,1041,6,"""Saisie""",1,,
+ma_fs_1042,1042,6,"""Saisie""",1,,
+ma_fs_1053,1053,6,"""Saisie""",1,,
+ma_fs_1054,1054,6,"""Saisie""",1,,
+ma_fs_1055,1055,6,"""Saisie""",1,,
+ma_fs_1056,1056,6,"""Saisie""",1,,
+ma_fs_974,974,6,ASE('232'),1,,
+ma_fs_975,975,6,ASE('233'),1,,
+ma_fs_976,976,6,ASE('234'),1,,
+ma_fs_978,978,6,ASE('235'),1,,
+ma_fs_979,979,6,ASE('238'),1,,
+ma_fs_977,977,6,ASE('239'),1,,
+ma_fs_1001,1001,6,"""Saisie""",1,,
+ma_fs_1002,1002,6,"""Saisie""",1,,
+ma_fs_1003,1003,6,"""Saisie""",1,,
+ma_fs_1004,1004,6,"""Saisie""",1,,
+ma_fs_1006,1006,6,"""Saisie""",1,,
+ma_fs_1007,1007,6,"""Saisie""",1,,
+ma_fs_1005,1005,6,"""Saisie""",1,,
+ma_fs_1015,1015,6,"""Saisie""",1,,
+ma_fs_1016,1016,6,"""Saisie""",1,,
+ma_fs_1017,1017,6,"""Saisie""",1,,
+ma_fs_1018,1018,6,"""Saisie""",1,,
+ma_fs_1020,1020,6,"""Saisie""",1,,
+ma_fs_1021,1021,6,"""Saisie""",1,,
+ma_fs_1019,1019,6,"""Saisie""",1,,
+ma_fs_1029,1029,6,"""Saisie""",1,,
+ma_fs_1030,1030,6,"""Saisie""",1,,
+ma_fs_1031,1031,6,"""Saisie""",1,,
+ma_fs_1032,1032,6,"""Saisie""",1,,
+ma_fs_1034,1034,6,"""Saisie""",1,,
+ma_fs_1035,1035,6,"""Saisie""",1,,
+ma_fs_1033,1033,6,"""Saisie""",1,,
+ma_fs_1043,1043,6,"""Saisie""",1,,
+ma_fs_1044,1044,6,"""Saisie""",1,,
+ma_fs_1045,1045,6,"""Saisie""",1,,
+ma_fs_1046,1046,6,"""Saisie""",1,,
+ma_fs_1048,1048,6,"""Saisie""",1,,
+ma_fs_1049,1049,6,"""Saisie""",1,,
+ma_fs_1047,1047,6,"""Saisie""",1,,
+ma_fs_1057,1057,6,"""Saisie""",1,,
+ma_fs_1058,1058,6,"""Saisie""",1,,
+ma_fs_1059,1059,6,"""Saisie""",1,,
+ma_fs_1060,1060,6,"""Saisie""",1,,
+ma_fs_1062,1062,6,"""Saisie""",1,,
+ma_fs_1063,1063,6,"""Saisie""",1,,
+ma_fs_1061,1061,6,"""Saisie""",1,,
+ma_fs_1233,1233,11,EDI('1238')+EDI('1243')+EDI('1248'),1,,
+ma_fs_1716,1716,11,EDI('1717')+EDI('1718')+EDI('1719')+EDI('1720')+EDI('1721')+EDI('1722')+EDI('1723'),1,,
+ma_fs_1012,1012,6,"""Saisie""",1,,
+ma_fs_1384,1384,7,"""Saisie""",0,,Distribution de bénéfices
+ma_fs_1238,1238,11,"""Saisie""",1,,
+ma_fs_1651,1651,11,"""Saisie""",1,,
+ma_fs_1652,1652,11,"""Saisie""",1,,
+ma_fs_1653,1653,11,"""Saisie""",1,,
+ma_fs_1654,1654,11,"""Saisie""",1,,
+ma_fs_1718,1718,11,"""Saisie""",1,,
+ma_fs_1723,1723,11,"""Saisie""",1,,
+ma_fs_2066,2066,15,"""Saisie""",0,,
+ma_fs_2076,2076,15,"""Saisie""",0,,
+ma_fs_1760,1760,23,ASE('315')-ASE('3158'),0,,
+ma_fs_1617,1617,23,EDI('1615')-EDI('1616'),0,,
+ma_fs_71,71,12,0,0,,
+ma_fs_1110,1110,20,"""Saisie""",0,,
+ma_fs_1119,1119,20,"""Saisie""",0,,
+ma_fs_1128,1128,20,"""Saisie""",0,,
+ma_fs_1137,1137,20,"""Saisie""",0,,
+ma_fs_1146,1146,20,"""Saisie""",0,,
+ma_fs_1155,1155,20,"""Saisie""",0,,
+ma_fs_1164,1164,20,"""Saisie""",0,,
+ma_fs_1173,1173,20,"""Saisie""",0,,
+ma_fs_1182,1182,20,"""Saisie""",0,,
+ma_fs_1191,1191,20,"""Saisie""",0,,
+ma_fs_1200,1200,20,EDI('1110')+EDI('1119')+EDI('1128')+EDI('1137')+EDI('1146')+EDI('1155')+EDI('1164')+EDI('1173')+EDI('1182')+EDI('1191'),0,,
+ma_fs_1111,1111,20,"""Saisie""",0,,
+ma_fs_1120,1120,20,"""Saisie""",0,,
+ma_fs_1129,1129,20,"""Saisie""",0,,
+ma_fs_1138,1138,20,"""Saisie""",0,,
+ma_fs_1147,1147,20,"""Saisie""",0,,
+ma_fs_1156,1156,20,"""Saisie""",0,,
+ma_fs_1165,1165,20,"""Saisie""",0,,
+ma_fs_1174,1174,20,"""Saisie""",0,,
+ma_fs_1183,1183,20,"""Saisie""",0,,
+ma_fs_1192,1192,20,"""Saisie""",0,,
+ma_fs_1201,1201,20,EDI('1111')+EDI('1120')+EDI('1129')+EDI('1138')+EDI('1147')+EDI('1156')+EDI('1165')+EDI('1174')+EDI('1183')+EDI('1192'),0,,
+ma_fs_1112,1112,20,"""Saisie""",0,,
+ma_fs_1121,1121,20,"""Saisie""",0,,
+ma_fs_1130,1130,20,"""Saisie""",0,,
+ma_fs_1139,1139,20,"""Saisie""",0,,
+ma_fs_1148,1148,20,"""Saisie""",0,,
+ma_fs_1157,1157,20,"""Saisie""",0,,
+ma_fs_1166,1166,20,"""Saisie""",0,,
+ma_fs_1175,1175,20,"""Saisie""",0,,
+ma_fs_1184,1184,20,"""Saisie""",0,,
+ma_fs_1193,1193,20,"""Saisie""",0,,
+ma_fs_1202,1202,20,EDI('1112')+EDI('1121')+EDI('1130')+EDI('1139')+EDI('1148')+EDI('1157')+EDI('1166')+EDI('1175')+EDI('1184')+EDI('1193'),0,,
+ma_fs_1113,1113,20,"""Saisie""",0,,
+ma_fs_1122,1122,20,"""Saisie""",0,,
+ma_fs_1131,1131,20,"""Saisie""",0,,
+ma_fs_1140,1140,20,"""Saisie""",0,,
+ma_fs_1149,1149,20,"""Saisie""",0,,
+ma_fs_1158,1158,20,"""Saisie""",0,,
+ma_fs_1167,1167,20,"""Saisie""",0,,
+ma_fs_1176,1176,20,"""Saisie""",0,,
+ma_fs_1185,1185,20,"""Saisie""",0,,
+ma_fs_1194,1194,20,"""Saisie""",0,,
+ma_fs_1203,1203,20,EDI('1113')+EDI('1122')+EDI('1131')+EDI('1140')+EDI('1149')+EDI('1158')+EDI('1167')+EDI('1176')+EDI('1185')+EDI('1194'),0,,
+ma_fs_1114,1114,20,"""Saisie""",0,,
+ma_fs_1123,1123,20,"""Saisie""",0,,
+ma_fs_1132,1132,20,"""Saisie""",0,,
+ma_fs_1141,1141,20,"""Saisie""",0,,
+ma_fs_1150,1150,20,"""Saisie""",0,,
+ma_fs_1159,1159,20,"""Saisie""",0,,
+ma_fs_1168,1168,20,"""Saisie""",0,,
+ma_fs_1177,1177,20,"""Saisie""",0,,
+ma_fs_1186,1186,20,"""Saisie""",0,,
+ma_fs_1195,1195,20,"""Saisie""",0,,
+ma_fs_1204,1204,20,EDI('1114')+EDI('1123')+EDI('1132')+EDI('1141')+EDI('1150')+EDI('1159')+EDI('1168')+EDI('1177')+EDI('1186')+EDI('1195'),0,,
+ma_fs_1115,1115,20,"""Saisie""",0,,
+ma_fs_1116,1116,20,"""Saisie""",0,,
+ma_fs_1124,1124,20,"""Saisie""",0,,
+ma_fs_1125,1125,20,"""Saisie""",0,,
+ma_fs_1133,1133,20,"""Saisie""",0,,
+ma_fs_1134,1134,20,"""Saisie""",0,,
+ma_fs_1142,1142,20,"""Saisie""",0,,
+ma_fs_1143,1143,20,"""Saisie""",0,,
+ma_fs_1151,1151,20,"""Saisie""",0,,
+ma_fs_1152,1152,20,"""Saisie""",0,,
+ma_fs_1160,1160,20,"""Saisie""",0,,
+ma_fs_1161,1161,20,"""Saisie""",0,,
+ma_fs_1169,1169,20,"""Saisie""",0,,
+ma_fs_1178,1178,20,"""Saisie""",0,,
+ma_fs_1179,1179,20,"""Saisie""",0,,
+ma_fs_1187,1187,20,"""Saisie""",0,,
+ma_fs_1188,1188,20,"""Saisie""",0,,
+ma_fs_1196,1196,20,"""Saisie""",0,,
+ma_fs_1197,1197,20,"""Saisie""",0,,
+ma_fs_1205,1205,20,EDI('1115')+EDI('1124')+EDI('1133')+EDI('1142')+EDI('1151')+EDI('1160')+EDI('1169')+EDI('1178')+EDI('1187')+EDI('1196'),0,,
+ma_fs_1206,1206,20,EDI('1116')+EDI('1125')+EDI('1134')+EDI('1143')+EDI('1152')+EDI('1161')+EDI('1170')+EDI('1179')+EDI('1188')+EDI('1197'),0,,
+ma_fs_1170,1170,20,"""Saisie""",0,,
+ma_fs_13430,13430,2,EDI('13431')+EDI('13432'),1,,
+ma_fs_70,70,8,"""Saisie""",0,,
+ma_fs_53,53,10,"""Saisie""",0,,
+ma_fs_18,18,16,-SE('111') + SE('1117') + SE('1119'),0,,
+ma_fs_22,22,19,EDI('1093'),0,,
+ma_fs_4562,4562,31,SE('210')+SE('211')+SE('212')+SE('213'),2,,
+ma_fs_4563,4563,31,-SE('2811')+SE('2911')-SE('2812')+SE('2912')+SE('2813')+SE('2913'),2,,
+ma_fs_4564,4564,31,EDI('4562')-EDI('4563'),2,,IMMOBILISATION EN NON VALEUR (A) (EXERCICE Net)
+ma_fs_4565,4565,31,ASE('210')+ASE('211')+ASE('212')+ASE('213')-(-ASE('2811')+ASE('2911')-ASE('2812')+ASE('2912')+ASE('2813')+ASE('2913')),2,,
+ma_fs_4567,4567,31,EDI('4572')+EDI('4577'),2,,IMMOBILISATIONS INCORPORELLES (B) (EXERCICE Brut)
+ma_fs_4572,4572,31,SE('223'),2,,
+ma_fs_4577,4577,31,SE('221')+SE('222')+SE('227')+SE('228'),2,,
+ma_fs_4573,4573,31,SE('2823')+SE('2923'),2,,
+ma_fs_4568,4568,31,EDI('4573')+EDI('4578'),2,,IMMOBILISATIONS INCORPORELLES (B) (EXERCICE Amort - Prov)
+ma_fs_4578,4578,31,-SE('2821')-SE('2921')-SE('2822')-SE('2922')-SE('2827')-SE('2927')-SE('2828')-SE('2928'),2,,
+ma_fs_4569,4569,31,EDI('4574')+EDI('4579'),2,,IMMOBILISATIONS INCORPORELLES (B) (EXERCICE Net)
+ma_fs_4574,4574,31,EDI('4572')-EDI('4573'),2,,Fonds commercial (EXERCICE Net)
+ma_fs_4579,4579,31,EDI('4577')-EDI('4578'),2,,Immobilisations incorporelles diverses (EXERCICE Net)
+ma_fs_4575,4575,31,ASE('223')-ASE('2823')-ASE('2923'),2,,
+ma_fs_4580,4580,31,ASE('221')+ASE('222')+ASE('227')+ASE('228') +ASE('2821')+ASE('2921')+ASE('2822')+ASE('2922')+ASE('2827')+ASE('2927')+ASE('2828')+ASE('2928'),2,,
+ma_fs_4570,4570,31,EDI('4575')+EDI('4580'),2,,
+ma_fs_4582,4582,31,EDI('4587')+EDI('4592')+EDI('4597')+EDI('4602')+EDI('4607'),2,,IMMOBILISATIONS CORPORELLES (C) (EXERCICE Brut)
+ma_fs_4583,4583,31,EDI('4588')+EDI('4593')+EDI('4598')+EDI('4603')+EDI('4608'),2,,IMMOBILISATIONS CORPORELLES (C) (EXERCICE Amort - Prov)
+ma_fs_4584,4584,31,EDI('4582')-EDI('4583'),2,,IMMOBILISATIONS CORPORELLES (C) (EXERCICE Net)
+ma_fs_4589,4589,31,EDI('4587')-EDI('4588'),2,,Terrains (EXERCICE Net)
+ma_fs_4594,4594,31,EDI('4592')-EDI('4593'),2,,Constructions (EXERCICE Net)
+ma_fs_4599,4599,31,EDI('4597')-EDI('4598'),2,,"Installations techniques, matériel et outillage (EXERCICE Net)"
+ma_fs_4604,4604,31,EDI('4602')-EDI('4603'),2,,Matériel transport (EXERCICE Net)
+ma_fs_4609,4609,31,EDI('4607')-EDI('4608'),2,,Immobilisations corporelles diverses (EXERCICE Net)
+ma_fs_4585,4585,31,EDI('4590')+EDI('4595')+EDI('4600')+EDI('4605')+EDI('4610'),2,,
+ma_fs_4590,4590,31,ASE('231')-(ASE('2831')+ASE('2931')),2,,
+ma_fs_4595,4595,31,ASE('232')+ASE('2832')+ASE('2932'),2,,
+ma_fs_4600,4600,31,ASE('233')+ASE('2833')-ASE('2933'),2,,
+ma_fs_4605,4605,31,ASE('234')+ ASE('2834')-ASE('2934'),2,,
+ma_fs_4610,4610,31,ASE('235')+ASE('237')+ASE('238')+ASE('239')-(- ASE('2835')-ASE('2935')-ASE('2837')-ASE('2937')-ASE('2838')-ASE('2938')-ASE('2839')-ASE('2939')),2,,
+ma_fs_4587,4587,31,SE('231'),2,,
+ma_fs_4592,4592,31,SE('232'),2,,
+ma_fs_4597,4597,31,SE('233'),2,,
+ma_fs_4602,4602,31,SE('234'),2,,
+ma_fs_4607,4607,31,SE('235')+SE('237')+SE('238')+SE('239'),2,,
+ma_fs_4588,4588,31,SE('2831')+SE('2931'),2,,
+ma_fs_4593,4593,31,-SE('2832')-SE('2932'),2,,
+ma_fs_4598,4598,31,-SE('2833')+SE('2933'),2,,
+ma_fs_4603,4603,31,-SE('2834')+SE('2934'),2,,
+ma_fs_4608,4608,31,-SE('2835')-SE('2935')-SE('2837')-SE('2937')-SE('2838')-SE('2938')-SE('2839')-SE('2939'),2,,
+ma_fs_4612,4612,31,SE('240')+SE('241')+SE('248')+SE('251')+SE('258')+SE('271')+SE('272'),2,,
+ma_fs_4613,4613,31,SE('2840')+SE('2940')+SE('2841')+SE('2941')+SE('2848')+SE('2948')+SE('2851')+SE('2951')+SE('2858')+SE('2958')+SE('2871')+SE('2971')+SE('2872')+SE('2972'),2,,
+ma_fs_4614,4614,31,EDI('4612')-EDI('4613'),2,,IMMOBILISATIONS FINANCIERES (D)  (EXERCICE Net)
+ma_fs_4615,4615,31,ASE('240')+ASE('241')+ASE('248')+ASE('251')+ASE('258')+ASE('271')+ASE('272') -(ASE('2840')+ASE('2940')+ASE('2841')+SE('2941')+ASE('2848')+ASE('2948')+ASE('2851')+ASE('2951')+ASE('2858')+ASE('2958')+ASE('2871')+ASE('2971')+ASE('2872')+ASE('2972')),2,,
+ma_fs_4617,4617,31,EDI('4562')+EDI('4567')+EDI('4582')+EDI('4612'),2,,TOTAL I (A+B+C+D) (EXERCICE Brut)
+ma_fs_4618,4618,31,EDI('4563')+EDI('4568')+EDI('4583')+EDI('4613'),2,,TOTAL I (A+B+C+D) (EXERCICE Amort - Prov)
+ma_fs_4619,4619,31,EDI('4617')-EDI('4618'),2,,TOTAL I (A+B+C+D) (EXERCICE Net)
+ma_fs_4620,4620,31,EDI('4565')+EDI('4570')+EDI('4585')+EDI('4615'),2,,
+ma_fs_4622,4622,31,EDI('4627')+EDI('4632'),2,,STOCKS (E) (EXERCICE Brut)
+ma_fs_4623,4623,31,EDI('4628')+EDI('4633'),2,,STOCKS (E) (EXERCICE Amort - Prov)
+ma_fs_4624,4624,31,EDI('4629')+EDI('4634'),2,,STOCKS (E) (EXERCICE Net)
+ma_fs_4629,4629,31,EDI('4627')-EDI('4628'),2,,Marchandises (EXERCICE Net)
+ma_fs_4634,4634,31,EDI('4632')-EDI('4633'),2,,Stocks divers (EXERCICE Net)
+ma_fs_4625,4625,31,EDI('4630')+EDI('4635'),2,,
+ma_fs_4630,4630,31,ASE('311')+ASE('3911'),2,,
+ma_fs_4635,4635,31,ASE('312')+ASE('313')+ASE('314')+ASE('315')+ASE('317') -(ASE('3912')+ASE('3913')+ASE('3914')+ASE('3915')+ASE('3917')),2,,
+ma_fs_4627,4627,31,SE('311'),2,,
+ma_fs_4632,4632,31,SE('312')+SE('313')+SE('314')+SE('315')+SE('317'),2,,
+ma_fs_4628,4628,31,-SE('3911'),2,,
+ma_fs_4633,4633,31,SE('3912')+SE('3913')+SE('3914')+SE('3915')+SE('3917'),2,,
+ma_fs_4637,4637,31,EDI('4642')+EDI('4647')+EDI('4652')+EDI('4657'),2,,CREANCES DE L'ACTIF CIRCULANT (F) (EXERCICE Brut)
+ma_fs_4638,4638,31,EDI('4643')+EDI('4648')+EDI('4653')+EDI('4658'),2,,CREANCES DE L'ACTIF CIRCULANT (F) (EXERCICE Amort - Prov)
+ma_fs_4639,4639,31,EDI('4637')-EDI('4638'),2,,CREANCES DE L'ACTIF CIRCULANT (F) (EXERCICE Net)
+ma_fs_4644,4644,31,EDI('4642')-EDI('4643'),2,,Clients et comptes rattachés (EXERCICE Net)
+ma_fs_4649,4649,31,EDI('4647')-EDI('4648'),2,,Comptes d'associés (EXERCICE Net)
+ma_fs_4654,4654,31,EDI('4652')-EDI('4653'),2,,Débiteurs divers (EXERCICE Net)
+ma_fs_4659,4659,31,EDI('4657')-EDI('4658'),2,,Comptes de régularisation Actif (EXERCICE Net)
+ma_fs_4642,4642,31,SE('342'),2,,
+ma_fs_4647,4647,31,SE('346'),2,,
+ma_fs_4652,4652,31,SE('348')+SE('3478')+SE('341')+SE('345')+SE('343')+SE('3471')+SE('3475')+SE('3473'),2,,
+ma_fs_4657,4657,31,SE('349')+SE('37'),2,,
+ma_fs_4648,4648,31,SE('3946'),2,,
+ma_fs_4653,4653,31,SE('3984')+SE('39478'),2,,
+ma_fs_4658,4658,31,SE('3949'),2,,
+ma_fs_4662,4662,31,SE('35'),2,,
+ma_fs_4663,4663,31,SE('385')+SE('395')+SE('387')+SE('397'),2,,
+ma_fs_4664,4664,31,EDI('4662')-EDI('4663'),2,,TITRES ET VALEURS DE PLACEMENT (G) (EXERCICE Net)
+ma_fs_4665,4665,31,ASE('35')-(ASE('385')+ASE('395')+ASE('387')+ASE('397')),2,,
+ma_fs_4667,4667,31,EDI('4622')+EDI('4637')+EDI('4662'),2,,TOTAL II (E+F+G) (EXERCICE Brut)
+ma_fs_4668,4668,31,EDI('4623')+EDI('4638')+EDI('4663'),2,,TOTAL II (E+F+G) (EXERCICE Amort - Prov)
+ma_fs_4669,4669,31,EDI('4667')-EDI('4668'),2,,TOTAL II (E+F+G) (EXERCICE Net)
+ma_fs_4670,4670,31,EDI('4625')+EDI('4640')+EDI('4665'),2,,
+ma_fs_4672,4672,31,EDI('4677')+EDI('4682')+EDI('4687'),2,,TRÉSORERIE - ACTIF (EXERCICE Brut)
+ma_fs_4673,4673,31,EDI('4678')+EDI('4683')+EDI('4688'),2,,TRÉSORERIE - ACTIF (EXERCICE Amort - Prov)
+ma_fs_4679,4679,31,EDI('4677')-EDI('4678'),2,,Chèques et valeurs à encaisser (EXERCICE Net)
+ma_fs_4674,4674,31,EDI('4672')-EDI('4673'),2,,TRÉSORERIE - ACTIF (Chèques et valeurs à encaisser)
+ma_fs_4675,4675,31,EDI('4680')+EDI('4685')+EDI('4690'),2,,
+ma_fs_4680,4680,31,ASE('511')-ASE('5911'),2,,
+ma_fs_4684,4684,31,EDI('4682')-EDI('4683'),2,,"Banque, T.G. et C.C.P. (EXERCICE Net)"
+ma_fs_4685,4685,31,ASE('514')-ASE('5914'),2,,
+ma_fs_4689,4689,31,EDI('4687')-EDI('4688'),2,,"Caisse, Régies d'avances et accréditifs (EXERCICE Net)"
+ma_fs_4690,4690,31,ASE('516')-ASE('5916'),2,,
+ma_fs_4692,4692,31,EDI('4672'),2,,TOTAL III (EXERCICE Brut)
+ma_fs_4693,4693,31,EDI('4673'),2,,TOTAL III (EXERCICE Amort - Prov)
+ma_fs_4694,4694,31,EDI('4692')-EDI('4693'),2,,TOTAL III (EXERCICE Net)
+ma_fs_4695,4695,31,EDI('4675'),2,,
+ma_fs_4697,4697,31,EDI('4617')+EDI('4667')+EDI('4692'),2,,TOTAL ACTIF ( I + II + III) (EXERCICE Brut)
+ma_fs_4698,4698,31,EDI('4618')+EDI('4668')+EDI('4693'),2,,TOTAL ACTIF ( I + II + III) (EXERCICE Amort - Prov)
+ma_fs_4699,4699,31,EDI('4697')-EDI('4698'),2,,TOTAL ACTIF ( I + II + III) (EXERCICE Net)
+ma_fs_4700,4700,31,EDI('4620')+EDI('4670')+EDI('4695'),2,,
+ma_fs_4677,4677,31,SE('511'),2,,
+ma_fs_4682,4682,31,SE('514'),2,,
+ma_fs_4687,4687,31,SE('516'),2,,
+ma_fs_4678,4678,31,SE('5911'),2,,
+ma_fs_4683,4683,31,SE('5914'),2,,
+ma_fs_4688,4688,31,SE('5916'),2,,
+ma_fs_12110,12110,32,EDI('5230'),2,,CAPITAUX PROPRES (A) (EXERCICE)
+ma_fs_5230,5230,32,EDI('5223')+EDI('5224')+EDI('5225')+EDI('5226')+EDI('5227')+EDI('5228')+EDI('5229'),2,,TOTAL (A) (EXERCICE)
+ma_fs_5223,5223,32,-SE('111')-SE('1119'),2,,
+ma_fs_5224,5224,32,SE('1119'),2,,
+ma_fs_5225,5225,32,-SE('112'),2,,
+ma_fs_5226,5226,32,SE('113'),2,,
+ma_fs_5227,5227,32,-SE('114')-SE('115')+SE('117'),2,,
+ma_fs_5228,5228,32,-SE('116')-SE('117')-SE('118'),2,,
+ma_fs_5229,5229,32,-SE('6')-SE('7'),2,,
+ma_fs_5231,5231,32,SE('13'),2,,
+ma_fs_5232,5232,32,-SE('14')+SE('16'),2,,
+ma_fs_5233,5233,32,-SE('15')-SE('17'),2,,
+ma_fs_5234,5234,32,EDI('5230')+EDI('5231')+EDI('5232')+EDI('5233'),2,,TOTAL I (A+B+C+D) (EXERCICE)
+ma_fs_5254,5254,32,EDI('5255')+EDI('5256')+EDI('5257')+EDI('5258'),2,,DETTES DU PASSIF CIRCULANT (E) (Exercice)
+ma_fs_5259,5259,32,-SE('45'),2,,
+ma_fs_5260,5260,32,EDI('5254')+EDI('5259'),2,,TOTAL II (F+G) (EXERCICE)
+ma_fs_5255,5255,32,-SE('441'),2,,
+ma_fs_5256,5256,32,-SE('446'),2,,
+ma_fs_5257,5257,32,-SE('448')-SE('4478')-SE('4474')-SE('442')-SE('445')-SE('443')-SE('444')-SE('4472')-SE('4475')-SE('4473'),2,,
+ma_fs_5258,5258,32,-SE('449')-SE('47'),2,,
+ma_fs_5273,5273,32,EDI('5274')+EDI('5275'),2,,TRÉSORERIE - PASSIF (EXERCICE)
+ma_fs_5276,5276,32,EDI('5273'),2,,TOTAL III (EXERCICE)
+ma_fs_5277,5277,32,EDI('5234')+EDI('5260')+EDI('5276'),2,,TOTAL PASSIF (I + II + III) (EXERCICE)
+ma_fs_5274,5274,32,-SE('552')-SE('553'),2,,
+ma_fs_5275,5275,32,-SE('554'),2,,
+ma_fs_4643,4643,31,-SE('3942'),2,,
+ma_fs_5312,5312,33,-SE('714')+SE('7148'),2,,
+ma_fs_10420,10420,8,ASE('6137'),0,,
+ma_fs_12111,12111,32,EDI('5242'),2,,
+ma_fs_5235,5235,32,-ASE('111')-ASE('1119'),2,,
+ma_fs_5236,5236,32,ASE('1119'),2,,
+ma_fs_5237,5237,32,-ASE('112'),2,,
+ma_fs_4645,4645,31,ASE('342')+ASE('3942'),2,,
+ma_fs_4650,4650,31,ASE('346')-ASE('3946'),2,,
+ma_fs_4655,4655,31,ASE('348')+ASE('3478')+ASE('341')+ASE('345')+ASE('343')+ASE('3471')+ASE('3475')+ASE('3473') - ASE('3984')- ASE('39478'),2,,
+ma_fs_4660,4660,31,ASE('349')+ASE('37')-ASE('3949'),2,,
+ma_fs_4640,4640,31,EDI('4645')+EDI('4650')+EDI('4655')+EDI('4660'),2,,
+ma_fs_5238,5238,32,ASE('113'),2,,
+ma_fs_5239,5239,32,-ASE('114')-ASE('115')+ASE('117'),2,,
+ma_fs_5240,5240,32,-ASE('116')-ASE('117')-ASE('118'),2,,
+ma_fs_5241,5241,32,-ASE('6')-ASE('7'),2,,
+ma_fs_5242,5242,32,EDI('5235')+EDI('5236')+EDI('5237')+EDI('5238')+EDI('5239')+EDI('5240')+EDI('5241'),2,,
+ma_fs_5243,5243,32,ASE('13'),2,,
+ma_fs_5244,5244,32,-ASE('14')+ASE('16'),2,,
+ma_fs_5245,5245,32,ASE('15')+ASE('17'),2,,
+ma_fs_5246,5246,32,EDI('5242')+EDI('5243')+EDI('5244')+EDI('5245'),2,,
+ma_fs_5261,5261,32,EDI('5262')+EDI('5263')+EDI('5264')+EDI('5265'),2,,
+ma_fs_5262,5262,32,-ASE('441'),2,,
+ma_fs_5263,5263,32,-ASE('446'),2,,
+ma_fs_5264,5264,32,-ASE('448')-ASE('4478')-ASE('4474')-ASE('442')-ASE('445')-ASE('443')-ASE('444')-ASE('4472')-ASE('4475')-ASE('4473'),2,,
+ma_fs_5265,5265,32,-ASE('449')-ASE('47'),2,,
+ma_fs_5266,5266,32,-ASE('45'),2,,
+ma_fs_5267,5267,32,EDI('5261')+EDI('5266'),2,,
+ma_fs_5278,5278,32,EDI('5279')+EDI('5280'),2,,
+ma_fs_5279,5279,32,-ASE('552')-ASE('553'),2,,
+ma_fs_5280,5280,32,-ASE('554'),2,,
+ma_fs_5281,5281,32,EDI('5278'),2,,
+ma_fs_5282,5282,32,EDI('5246')+EDI('5267')+EDI('5281'),2,,
+ma_fs_12086,12086,33,EDI('17909')+EDI('5311')+EDI('5312')+EDI('5313')+EDI('5314')+EDI('5315')+EDI('5316'),2,,PRODUITS COURANTS (Opérations Propres à l'exercice 1)
+ma_fs_5317,5317,33,EDI('12086'),2,,TOTAL I (Propres à l'exercice 1)
+ma_fs_17909,17909,33,EDI('5309')+EDI('5310'),2,,CHIFFRES D'AFFFAIRES (Propres à l'exercice 1)
+ma_fs_5309,5309,33,-SE('711')+SE('7118'),2,,
+ma_fs_5310,5310,33,-SE('712')+SE('7128'),2,,
+ma_fs_5311,5311,33,-SE('713')+SE('7138'),2,,
+ma_fs_5313,5313,33,-SE('716')+SE('7168'),2,,
+ma_fs_5314,5314,33,-SE('718')+SE('7188'),2,,
+ma_fs_5315,5315,33,-SE('719')+SE('7198'),2,,
+ma_fs_5316,5316,33,-SE('73')+SE('7328')+SE('7338')+SE('7388')+SE('7398'),2,,
+ma_fs_12087,12087,33,EDI('17910')+EDI('5362')+EDI('5363')+EDI('5364')+EDI('5365')+EDI('5366')+EDI('5367'),2,,PRODUITS COURANTS (Opérations Concernant les exercices précedents 2)
+ma_fs_17910,17910,33,EDI('5360')+EDI('5361'),2,,CHIFFRES D'AFFFAIRES (Opérations Concernant les exercices précedents 2)
+ma_fs_5368,5368,33,EDI('12087'),2,,TOTAL I (Opérations Concernant les exercices précedents 2)
+ma_fs_5360,5360,33,-SE('7118'),2,,
+ma_fs_5361,5361,33,-SE('7128'),2,,
+ma_fs_5362,5362,33,-SE('7138'),2,,
+ma_fs_5363,5363,33,-SE('7148'),2,,
+ma_fs_5364,5364,33,-SE('7168'),2,,
+ma_fs_5365,5365,33,-SE('7188'),2,,
+ma_fs_5366,5366,33,-SE('7198'),2,,
+ma_fs_5367,5367,33,-SE('7328')-SE('7338')-SE('7388')-SE('7398'),2,,
+ma_fs_12088,12088,33,EDI('12086')+EDI('12087'),2,,PRODUITS COURANTS (EXERCICE 3 = 1 + 2)
+ma_fs_5369,5369,33,EDI('5309')+EDI('5360'),2,,01-Ventes de marchandises (en l'état) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5370,5370,33,EDI('5310')+EDI('5361'),2,,Ventes de biens et services produits (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_17911,17911,33,EDI('17909')+EDI('17910'),2,,CHIFFRES D'AFFFAIRES (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5371,5371,33,EDI('5311')+EDI('5362'),2,,Variation de stocks de produits (+/-) (1) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5372,5372,33,EDI('5312')+EDI('5363'),2,,Immobilisations produites par l'entreprise pour elle-même (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5373,5373,33,EDI('5313')+EDI('5364'),2,,Subvention d'éxploitation (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5374,5374,33,EDI('5314')+EDI('5365'),2,,Autres produits d'exploitation (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5375,5375,33,EDI('5315')+EDI('5366'),2,,Reprises d'exploitations: transfert de charges (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5376,5376,33,EDI('5316')+EDI('5367'),2,,Poduits financiers (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5377,5377,33,EDI('5317')+EDI('5368'),2,,TOTAL I (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_12089,12089,33,EDI('17912')+EDI('5380')+EDI('5381')+EDI('5382')+EDI('5383')+EDI('5384')+EDI('5385'),2,,
+ma_fs_5378,5378,33,-ASE('711')+ASE('7118')-ASE('7118'),2,,
+ma_fs_5379,5379,33,-ASE('712'),2,,
+ma_fs_17912,17912,33,EDI('5378')+EDI('5379'),2,,
+ma_fs_5380,5380,33,-ASE('713'),2,,
+ma_fs_5381,5381,33,-ASE('714'),2,,
+ma_fs_5382,5382,33,-ASE('716'),2,,
+ma_fs_5383,5383,33,-ASE('718'),2,,
+ma_fs_5384,5384,33,-ASE('719'),2,,
+ma_fs_5385,5385,33,-ASE('73'),2,,
+ma_fs_5386,5386,33,EDI('12089'),2,,
+ma_fs_12091,12091,33,EDI('5327')+EDI('5328')+EDI('5329')+EDI('5330')+EDI('5331')+EDI('5332')+EDI('5333')+EDI('5334'),2,,CHARGES COURANTES (Opérations Propres à l'exercice 1)
+ma_fs_5335,5335,33,EDI('12091'),2,,TOTAL II (Opérations Propres à l'exercice 1)
+ma_fs_5327,5327,33,SE('611')-SE('6118'),2,,
+ma_fs_5328,5328,33,SE('612')-SE('6128'),2,,
+ma_fs_5329,5329,33,SE('613')+SE('614')-SE('6148'),2,,
+ma_fs_5330,5330,33,SE('616')-SE('6168'),2,,
+ma_fs_5331,5331,33,SE('617')-SE('6178'),2,,
+ma_fs_5332,5332,33,SE('618')-SE('6188'),2,,
+ma_fs_5333,5333,33,SE('619')-SE('6198'),2,,
+ma_fs_5334,5334,33,SE('63')-SE('6318')-SE('6388')-SE('6398'),2,,
+ma_fs_12092,12092,33,EDI('5387')+EDI('5388')+EDI('5389')+EDI('5390')+EDI('5391')+EDI('5392')+EDI('5393')+EDI('5394'),2,,Charges COURANTES (Opérations Concernant les exercices précedents 2)
+ma_fs_5395,5395,33,EDI('12092'),2,,TOTAL II (Opérations Concernant les exercices précedents 2)
+ma_fs_5387,5387,33,SE('6118'),2,,
+ma_fs_5388,5388,33,SE('6128'),2,,
+ma_fs_5389,5389,33,SE('6148'),2,,
+ma_fs_5390,5390,33,SE('6168'),2,,
+ma_fs_5391,5391,33,SE('6178'),2,,
+ma_fs_5392,5392,33,SE('6188'),2,,
+ma_fs_5393,5393,33,SE('6198'),2,,
+ma_fs_5394,5394,33,SE('6318')+SE('6338')+SE('6388')+SE('6398'),2,,
+ma_fs_12093,12093,33,EDI('12091')+EDI('12092'),2,,CHARGES COURANTES (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5396,5396,33,EDI('5327')+EDI('5387'),2,,Achats revendus de marchandises (2) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5397,5397,33,EDI('5328')+EDI('5388'),2,,Achats cosommés de matière et de Fournitures (2) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5398,5398,33,EDI('5329')+EDI('5389'),2,,Autres charges externes (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5399,5399,33,EDI('5330')+EDI('5390'),2,,Charges de personnel (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5400,5400,33,EDI('5331')+EDI('5391'),2,,Charges de personnel (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5401,5401,33,EDI('5332')+EDI('5392'),2,,Autres charges d'exploitaion (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5402,5402,33,EDI('5333')+EDI('5393'),2,,Dotations d'exploitation (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5403,5403,33,EDI('5334')+EDI('5394'),2,,Charges financiers (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5404,5404,33,EDI('5335')+EDI('5395'),2,,TOTAL II (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_12094,12094,33,EDI('5405')+EDI('5406')+EDI('5407')+EDI('5408')+EDI('5409')+EDI('5410')+EDI('5411')+EDI('5412'),2,,
+ma_fs_5405,5405,33,ASE('611'),2,,
+ma_fs_5406,5406,33,ASE('612'),2,,
+ma_fs_5407,5407,33,ASE('613')+ASE('614'),2,,
+ma_fs_5408,5408,33,ASE('616'),2,,
+ma_fs_5409,5409,33,ASE('617'),2,,
+ma_fs_5410,5410,33,ASE('618'),2,,
+ma_fs_5411,5411,33,ASE('619'),2,,
+ma_fs_5412,5412,33,ASE('63'),2,,
+ma_fs_5413,5413,33,EDI('12094'),2,,
+ma_fs_5337,5337,33,EDI('5317')-EDI('5335'),2,,RESULTAT COURANTS (I-II) (Opérations Propres à l'exercice 1)
+ma_fs_5414,5414,33,EDI('5368')-EDI('5395'),2,,-RESULTAT COURANTS (I-II) (Opérations Concernant les exercices précedents 2)
+ma_fs_5415,5415,33,EDI('5337')+EDI('5414'),2,,RESULTAT COURANTS (I-II) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5416,5416,33,EDI('5386')-EDI('5413'),2,,
+ma_fs_12096,12096,33,EDI('5340')-EDI('5341'),2,,PRODUITS ET CHARGES NON COURANTS (Opérations Propres à l'exercice 1)
+ma_fs_12097,12097,33,EDI('5417')-EDI('5418'),2,,produits et Charges NON COURANTS (Opérations Concernant les exercices précedents 2)
+ma_fs_12098,12098,33,EDI('12096')+EDI('12097'),2,,PRODUITS ET CHARGES NON COURANTS (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5419,5419,33,EDI('5340')+EDI('5417'),2,,Produits non courants (+) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5420,5420,33,EDI('5341')+EDI('5418'),2,,charges non courants (-) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_12099,12099,33,EDI('5421')-EDI('5422'),2,,
+ma_fs_5421,5421,33,-ASE('75'),2,,
+ma_fs_5422,5422,33,ASE('65'),2,,
+ma_fs_5340,5340,33,SE('7588')-SE('75')-SE('7518')-SE('7568')-SE('7578')-SE('7598'),2,,
+ma_fs_5341,5341,33,SE('65')-SE('6518')-SE('6568')-SE('6578')-SE('6588')-SE('6598'),2,,
+ma_fs_5417,5417,33,SE('7518')+SE('7568')+SE('7578')-SE('7588')+SE('7598'),2,,
+ma_fs_5418,5418,33,SE('6518')+SE('6568')+SE('6588')+SE('6598'),2,,
+ma_fs_5343,5343,33,EDI('12096'),2,,RESULTAT NON COURANTS (Opérations Propres à l'exercice 1)
+ma_fs_5423,5423,33,EDI('12097'),2,,RESULTAT NON COURANTS (Opérations Concernant les exercices précedents 2)
+ma_fs_5424,5424,33,EDI('12098'),2,,RESULTAT NON COURANTS (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5425,5425,33,EDI('12099'),2,,
+ma_fs_5345,5345,33,EDI('5337')+EDI('5343'),2,,RESULTS AVANS AMPOTS (III+V) (Opérations Propres à l'exercice 1)
+ma_fs_5426,5426,33,EDI('5414')+EDI('5423'),2,,RESULTS AVANS AMPOTS (III+V) (Opérations Concernant les exercices précedents 2)
+ma_fs_5428,5428,33,EDI('5416')+EDI('5425'),2,,
+ma_fs_5347,5347,33,SE('67')-SE('6708'),2,,
+ma_fs_5431,5431,33,SE('6708'),2,,
+ma_fs_5432,5432,33,EDI('5347')+EDI('5431'),2,,IMPOTS SUR LES RESULTAS (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5433,5433,33,ASE('67'),2,,
+ma_fs_5349,5349,33,EDI('5345')-EDI('5347'),2,,RESULTAS NET (Opérations Propres à l'exercice 1)
+ma_fs_5434,5434,33,EDI('5426')-EDI('5431'),2,,RESULTAS NET (Opérations Concernant les exercices précedents 2)
+ma_fs_5435,5435,33,EDI('5349')+EDI('5434'),2,,RESULTAS NET (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5436,5436,33,EDI('5428')-EDI('5433'),2,,
+ma_fs_5351,5351,33,EDI('5317')+EDI('5340'),2,,TOTAL DES PRODUITS (Opérations Propres à l'exercice 1)
+ma_fs_5353,5353,33,EDI('12091')+EDI('5341')+EDI('5347'),2,,TOTAL DES CHARGES (Opérations Propres à l'exercice 1)
+ma_fs_5355,5355,33,EDI('5351')-EDI('5353'),2,,RESULTAS NET (total des produits-total des charges) (Opérations Propres à l'exercice 1)
+ma_fs_5357,5357,33,EDI('5309')-EDI('5327'),2,,-MARGE PRUTE / VENTS EN L'ETAT (1-8) (Opérations Propres à l'exercice 1)
+ma_fs_5359,5359,33,EDI('17909')+EDI('5311')+EDI('5312')-EDI('5327')-EDI('5328')-EDI('5329'),2,,VALEUR AJOUTEE (1+2+3+4)-(8+9+10) (Opérations Propres à l'exercice 1)
+ma_fs_5439,5439,33,EDI('5386')+EDI('5421'),2,,
+ma_fs_5442,5442,33,EDI('12094')+EDI('5422')+EDI('5433'),2,,
+ma_fs_5445,5445,33,EDI('5439')-EDI('5442'),2,,
+ma_fs_5448,5448,33,EDI('5378')-EDI('5405'),2,,
+ma_fs_5451,5451,33,EDI('17912')+EDI('5380')+EDI('5381')-EDI('5405')-EDI('5406')-EDI('5407'),2,,
+ma_fs_5450,5450,33,EDI('5359')+EDI('5449'),2,,VALEUR AJOUTEE (1+2+3+4)-(8+9+10) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5447,5447,33,EDI('5357')+EDI('5446'),2,,MARGE PRUTE / VENTS EN L'ETAT (1-8) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5444,5444,33,EDI('5355')+EDI('5443'),2,,-RESULTAS NET (total des produits-total des charges) (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5441,5441,33,EDI('5353')+EDI('5440'),2,,TOTAL DES CHARGES (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_5438,5438,33,EDI('5351')+EDI('5437'),2,,TOTAL DES PRODUITS (TOTAUX  EXERCICE 3 = 1 + 2)
+ma_fs_E9797,E9797,41,EDI('9797')-EDI('9789')-EDI('9781')-EDI('9773'),2,,
+ma_fs_E9795,E9795,41,EDI('9795')-EDI('9787')-EDI('9779')-EDI('9771'),2,,
+ma_fs_E9794,E9794,41,0,2,,
+ma_fs_E9796,E9796,41,EDI('9796')-EDI('9788')-EDI('9780')-EDI('9772'),2,,
+ma_fs_9733,9733,41,-SE('2811')-SE('2812')+SE('2813')+SE('2810'),2,,
+ma_fs_9760,9760,41,SE('2823'),2,,
+ma_fs_9761,9761,41,SE('2821')-SE('2822')+SE('2828')+SE('2827'),2,,
+ma_fs_9757,9757,41,EDI('9760')+EDI('9761'),2,,IMMOBILISATIONS INCORPORELLES (ECART)
+ma_fs_9794,9794,41,EDI('9795')+EDI('9796')+EDI('9797')+EDI('9798')+EDI('14963'),2,,IMMOBILISATIONS CORPORELLES (Cumul d'amortissement fin exercice 4 =1+2+3)
+ma_fs_9795,9795,41,SE('2831'),2,,
+ma_fs_9796,9796,41,-SE('2832'),2,,
+ma_fs_9797,9797,41,-SE('2833'),2,,
+ma_fs_9798,9798,41,-SE('2834'),2,,
+ma_fs_9721,9721,41,-ASE('2811')-ASE('2812')+ASE('2813')+ASE('2810'),2,,
+ma_fs_9742,9742,41,EDI('9745')+EDI('9746'),2,,
+ma_fs_9745,9745,41,ASE('2823'),2,,
+ma_fs_9746,9746,41,ASE('2821')-ASE('2822')+ASE('2828')+ASE('2827'),2,,
+ma_fs_9770,9770,41,EDI('9771')+EDI('9772')+EDI('9773')+EDI('9774')+EDI('14960'),2,,
+ma_fs_9771,9771,41,ASE('2831'),2,,
+ma_fs_9772,9772,41,-ASE('2832'),2,,
+ma_fs_9773,9773,41,-ASE('2833'),2,,
+ma_fs_9774,9774,41,-ASE('2834'),2,,
+ma_fs_9725,9725,41,"""Saisie""",2,,
+ma_fs_9747,9747,41,EDI('9750')+EDI('9751'),2,,
+ma_fs_9750,9750,41,"""Saisie""",2,,
+ma_fs_9751,9751,41,"""Saisie""",2,,
+ma_fs_9778,9778,41,EDI('9779')+EDI('9780')+EDI('9781')+EDI('9782')+EDI('14961'),2,,
+ma_fs_9779,9779,41,"""Saisie""",2,,
+ma_fs_9780,9780,41,"""Saisie""",2,,
+ma_fs_9781,9781,41,"""Saisie""",2,,
+ma_fs_9782,9782,41,"""Saisie""",2,,
+ma_fs_9729,9729,41,"""Saisie""",2,,
+ma_fs_9752,9752,41,EDI('9755')+EDI('9756'),2,,
+ma_fs_9755,9755,41,"""Saisie""",2,,
+ma_fs_9756,9756,41,"""Saisie""",2,,
+ma_fs_9786,9786,41,EDI('9787')+EDI('9788')+EDI('9789')+EDI('9790')+EDI('14962'),2,,
+ma_fs_9787,9787,41,"""Saisie""",2,,
+ma_fs_9788,9788,41,"""Saisie""",2,,
+ma_fs_9789,9789,41,"""Saisie""",2,,
+ma_fs_9790,9790,41,"""Saisie""",2,,
+ma_fs_10261,10261,36,"""Saisie""",2,,
+ma_fs_13525,13525,36,"""Saisie""",2,,
+ma_fs_10299,10299,36,"""Saisie""",2,,
+ma_fs_10302,10302,36,"""Saisie""",2,,
+ma_fs_10303,10303,36,"""Saisie""",2,,
+ma_fs_10350,10350,36,"""Saisie""",2,,
+ma_fs_10351,10351,36,"""Saisie""",2,,
+ma_fs_10352,10352,36,"""Saisie""",2,,
+ma_fs_10353,10353,36,"""Saisie""",2,,
+ma_fs_10354,10354,36,"""Saisie""",2,,
+ma_fs_10356,10356,36,"""Saisie""",2,,
+ma_fs_10265,10265,36,"""Saisie""",2,,
+ma_fs_10304,10304,36,"""Saisie""",2,,
+ma_fs_10307,10307,36,"""Saisie""",2,,
+ma_fs_10308,10308,36,"""Saisie""",2,,
+ma_fs_10358,10358,36,"""Saisie""",2,,
+ma_fs_10359,10359,36,"""Saisie""",2,,
+ma_fs_10360,10360,36,"""Saisie""",2,,
+ma_fs_10361,10361,36,"""Saisie""",2,,
+ma_fs_10362,10362,36,"""Saisie""",2,,
+ma_fs_10364,10364,36,"""Saisie""",2,,
+ma_fs_10269,10269,36,"""Saisie""",2,,
+ma_fs_10309,10309,36,"""Saisie""",2,,
+ma_fs_10312,10312,36,"""Saisie""",2,,
+ma_fs_10313,10313,36,"""Saisie""",2,,
+ma_fs_10366,10366,36,"""Saisie""",2,,
+ma_fs_10367,10367,36,"""Saisie""",2,,
+ma_fs_10368,10368,36,"""Saisie""",2,,
+ma_fs_10369,10369,36,"""Saisie""",2,,
+ma_fs_10370,10370,36,"""Saisie""",2,,
+ma_fs_10372,10372,36,"""Saisie""",2,,
+ma_fs_10273,10273,36,"""Saisie""",2,,
+ma_fs_10314,10314,36,"""Saisie""",2,,
+ma_fs_10317,10317,36,"""Saisie""",2,,
+ma_fs_10318,10318,36,"""Saisie""",2,,
+ma_fs_10374,10374,36,"""Saisie""",2,,
+ma_fs_10375,10375,36,"""Saisie""",2,,
+ma_fs_10376,10376,36,"""Saisie""",2,,
+ma_fs_10377,10377,36,"""Saisie""",2,,
+ma_fs_10378,10378,36,"""Saisie""",2,,
+ma_fs_10380,10380,36,"""Saisie""",2,,
+ma_fs_10277,10277,36,"""Saisie""",2,,
+ma_fs_10319,10319,36,"""Saisie""",2,,
+ma_fs_10322,10322,36,"""Saisie""",2,,
+ma_fs_10323,10323,36,"""Saisie""",2,,
+ma_fs_10382,10382,36,"""Saisie""",2,,
+ma_fs_10383,10383,36,"""Saisie""",2,,
+ma_fs_10384,10384,36,"""Saisie""",2,,
+ma_fs_10385,10385,36,"""Saisie""",2,,
+ma_fs_10386,10386,36,"""Saisie""",2,,
+ma_fs_10388,10388,36,"""Saisie""",2,,
+ma_fs_10281,10281,36,"""Saisie""",2,,
+ma_fs_10324,10324,36,"""Saisie""",2,,
+ma_fs_10327,10327,36,"""Saisie""",2,,
+ma_fs_10328,10328,36,"""Saisie""",2,,
+ma_fs_10390,10390,36,"""Saisie""",2,,
+ma_fs_10391,10391,36,"""Saisie""",2,,
+ma_fs_10392,10392,36,"""Saisie""",2,,
+ma_fs_10393,10393,36,"""Saisie""",2,,
+ma_fs_10394,10394,36,"""Saisie""",2,,
+ma_fs_10396,10396,36,"""Saisie""",2,,
+ma_fs_10257,10257,36,ASE('210')+ASE('211')+ASE('212')+ASE('213'),2,,
+ma_fs_10294,10294,36,EDI('10297')+EDI('10298'),2,,
+ma_fs_10297,10297,36,ASE('223'),2,,
+ma_fs_10298,10298,36,ASE('221')+ASE('222')+ASE('228')+ASE('227'),2,,
+ma_fs_10342,10342,36,EDI('10343')+EDI('10344')+EDI('10345')+EDI('10346')+EDI('10348'),2,,
+ma_fs_10343,10343,36,ASE('231'),2,,
+ma_fs_10344,10344,36,ASE('232'),2,,
+ma_fs_10345,10345,36,ASE('233'),2,,
+ma_fs_10346,10346,36,ASE('234'),2,,
+ma_fs_10348,10348,36,ASE('237')+ASE('238')+ASE('239')+ASE('235'),2,,
+ma_fs_10285,10285,36,SE('210')+SE('211')+SE('212')+SE('213'),2,,
+ma_fs_10332,10332,36,SE('223'),2,,
+ma_fs_10333,10333,36,SE('221')+SE('222')+SE('228')+SE('227'),2,,
+ma_fs_10329,10329,36,EDI('10332')+EDI('10333'),2,,IMMOBILISATION INCORPORELLES (MONTANT BRUT FIN EXERC.)
+ma_fs_10398,10398,36,EDI('10399')+EDI('10400')+EDI('10401')+EDI('10402')+EDI('10404'),2,,IMMOBILISATIONS CORPORELLES (MONTANT BRUT FIN EXERC.)
+ma_fs_10399,10399,36,SE('231'),2,,
+ma_fs_10400,10400,36,SE('232'),2,,
+ma_fs_10401,10401,36,SE('233'),2,,
+ma_fs_10402,10402,36,SE('234'),2,,
+ma_fs_10404,10404,36,SE('237')+SE('238')+SE('239')+SE('235'),2,,
+ma_fs_5437,5437,33,EDI('5368')+EDI('5417'),2,,total des produits (Opérations Concernant les exercices précedents 2)
+ma_fs_5440,5440,33,EDI('12092')+EDI('5418')+EDI('5431'),2,,TOTAL DES CHARGES (Opérations Propres à l'exercice 2)
+ma_fs_5443,5443,33,EDI('5437')-EDI('5440'),2,,RESULTAS NET (Opérations Concernant les exercices précedents 2)
+ma_fs_5446,5446,33,EDI('5360')-EDI('5387'),2,,MARGE PRUTE / VENTS EN L'ETAT (1-8) (Opérations Concernant les exercices précedents 2)
+ma_fs_5449,5449,33,EDI('17910')+EDI('5362')+EDI('5363')-EDI('5387')-EDI('5388')-EDI('5389'),2,,-VALEUR AJOUTEE (1+2+3+4)-(8+9+10) (Opérations Concernant les exercices précedents 2)
+ma_fs_846,846,5,0,0,,
+ma_fs_847,847,5,0,0,,
+ma_fs_848,848,5,0,0,,
+ma_fs_845,845,5,0,0,,
+ma_fs_849,849,5,0,0,,
+ma_fs_850,850,5,0,0,,
+ma_fs_851,851,5,0,0,,
+ma_fs_852,852,5,0,0,,
+ma_fs_854,854,5,"""Saisie""",0,,
+ma_fs_855,855,5,0,0,,
+ma_fs_860,860,5,"""Saisie""",0,,
+ma_fs_864,864,5,0,0,,
+ma_fs_861,861,5,"""Saisie""",0,,
+ma_fs_865,865,5,0,0,,
+ma_fs_862,862,5,"""Saisie""",0,,
+ma_fs_866,866,5,0,0,,
+ma_fs_863,863,5,"""Saisie""",0,,
+ma_fs_867,867,5,0,0,,
+ma_fs_E1731,E1731,11,EDI('1707')+EDI('1715')-EDI('1723')-EDI('1731'),1,,* Immobilisations corporelles en cours (Ecart)
+ma_fs_11233,11233,3,EDI('11218')-EDI('11238'),1,,
+ma_fs_54,54,20,"""Saisie""",0,,
+ma_fs_1117,1117,20,"""Saisie""",0,,
+ma_fs_1126,1126,20,"""Saisie""",0,,
+ma_fs_1135,1135,20,"""Saisie""",0,,
+ma_fs_1144,1144,20,"""Saisie""",0,,
+ma_fs_1153,1153,20,"""Saisie""",0,,
+ma_fs_1162,1162,20,"""Saisie""",0,,
+ma_fs_1171,1171,20,"""Saisie""",0,,
+ma_fs_1180,1180,20,"""Saisie""",0,,
+ma_fs_1189,1189,20,"""Saisie""",0,,
+ma_fs_1198,1198,20,"""Saisie""",0,,
+ma_fs_1207,1207,20,0,0,,
+ma_fs_10091,10091,8,ASE('6136'),0,,
+ma_fs_1793,1793,8,SE('6581'),0,,
+ma_fs_2037,2037,13,0,0,,
+ma_fs_2038,2038,13,EDIST('1931'),0,,
+ma_fs_2039,2039,13,EDIST('1932'),0,,
+ma_fs_2040,2040,13,EDIST('1933'),0,,
+ma_fs_2041,2041,13,EDIST('1934'),0,,
+ma_fs_2042,2042,13,EDIST('1935'),0,,
+ma_fs_2043,2043,13,EDIST('1936'),0,,
+ma_fs_1088,1088,19,EDIST('1079'),0,,
+ma_fs_1089,1089,19,EDIST('1080'),0,,
+ma_fs_1090,1090,19,EDIST('1081'),0,,
+ma_fs_1093,1093,19,EDIST('1084'),0,,
+ma_fs_1094,1094,19,EDIST('1085'),0,,
+ma_fs_51,51,19,0,0,,
+ma_fs_52,52,19,0,0,,
+ma_fs_50,50,19,"""Saisie""",0,,
+ma_fs_1280,1280,22,EDIST('1272'),0,,
+ma_fs_1279,1279,22,EDIST('1271'),0,,
+ma_fs_1257,1257,21,EDIST('1211')+EDIST('1224'),0,,
+ma_fs_1261,1261,21,EDIST('1215')+EDIST('1228'),0,,
+ma_fs_1262,1262,21,EDIST('1216')+EDIST('1229'),0,,
+ma_fs_1263,1263,21,EDIST('1217')+EDIST('1250'),0,,
+ma_fs_1264,1264,21,EDIST('1218')+EDIST('1251'),0,,
+ma_fs_1265,1265,21,EDIST('1219')+EDIST('1252'),0,,
+ma_fs_72,72,13,0,0,,
+ma_fs_833,833,5,EDI('817')+EDI('819')+EDI('18009')+EDI('18012'),0,,
+ma_fs_14021,14021,3,EDI('11181')+EDI('11186'),1,,
+ma_fs_14024,14024,3,EDI('11184')+EDI('11189'),1,,
+ma_fs_E13531,E13531,36,0,2,,
+ma_fs_E10332,E10332,36,0,2,,
+ma_fs_E10333,E10333,36,0,2,,
+ma_fs_E10399,E10399,36,0,2,,
+ma_fs_E10400,E10400,36,0,2,,
+ma_fs_E10401,E10401,36,0,2,,
+ma_fs_E10402,E10402,36,0,2,,
+ma_fs_E10404,E10404,36,0,2,,
+ma_fs_E12108,E12108,36,0,2,,
+ma_fs_477,477,17,"""Saisie""",0,,
+ma_fs_479,479,17,"""Saisie""",0,,
+ma_fs_491,491,17,"""Saisie""",0,,
+ma_fs_E1239,E1239,11,EDI('1236')+EDI('1237')-EDI('1238')-EDI('1239'),1,,* Frais préliminaires (Ecart)
+ma_fs_E1244,E1244,11,EDI('1241')+EDI('1242')-EDI('1243')-EDI('1244'),1,,* Charges à répartir sur plusieurs exercices (Ecart)
+ma_fs_E1249,E1249,11,EDI('1246')+EDI('1247')-EDI('1248')-EDI('1249'),1,,* Primes de remboursement obligations (Ecart)
+ma_fs_E1680,E1680,11,EDI('1625')+EDI('1630')-EDI('1651')-EDI('1680'),1,,* Immobilisation en recherche et développement (Ecart)
+ma_fs_E1681,E1681,11,EDI('1626')+EDI('1631')-EDI('1652')-EDI('1681'),1,,"* Brevets, marques, droits et valeurs similaires (Ecart)"
+ma_fs_E1682,E1682,11,EDI('1627')+EDI('1632')-EDI('1653')-EDI('1682'),1,,* Fonds commercial (Ecart)
+ma_fs_E1683,E1683,11,EDI('1628')+EDI('1633')-EDI('1654')-EDI('1683'),1,,* Autres immobilisations incorporelles (Ecart)
+ma_fs_E1725,E1725,11,EDI('1701')+EDI('1709')-EDI('1717')-EDI('1725'),1,,* Terrains (Ecart)
+ma_fs_E1726,E1726,11,EDI('1702')+EDI('1710')-EDI('1718')-EDI('1726'),1,,* Constructions (Ecart)
+ma_fs_E1727,E1727,11,EDI('1703')+EDI('1711')-EDI('1719')-EDI('1727'),1,,"* Installations techniques, matériel et outillage (Ecart)"
+ma_fs_E1728,E1728,11,EDI('1704')+EDI('1712')-EDI('1720')-EDI('1728'),1,,* Matériel de transport (Ecart)
+ma_fs_E1729,E1729,11,EDI('1705')+EDI('1713')-EDI('1721')-EDI('1729'),1,,"* Mobilier, matériel de bureau et amenagement divers (Ecart)"
+ma_fs_E1730,E1730,11,EDI('1706')+EDI('1714')-EDI('1722')-EDI('1730'),1,,* Autres immobilisations corporelles (Ecart)
+ma_fs_E9761,E9761,41,EDI('9761')-EDI('9756')-EDI('9751')-EDI('9746'),2,,
+ma_fs_E9760,E9760,41,EDI('9760')-EDI('9755')-EDI('9750')-EDI('9745'),2,,
+ma_fs_E9757,E9757,41,0,2,,
+ma_fs_E9733,E9733,41,EDI('9733')-EDI('9729')-EDI('9725')-EDI('9721'),2,,
+ma_fs_E14963,E14963,41,EDI('14963')-EDI('14962')-EDI('14961')-EDI('14960'),2,,
+ma_fs_E1755,E1755,12,EDI('1755')-EDI('1748')-EDI('1749')-EDI('1750')-EDI('1751')+EDI('1752')+EDI('1753')+EDI('1754'),0,,1. Provisions pour dépréciation de l'actif immobilisé (Ecart°
+ma_fs_E1791,E1791,12,EDI('1791')-EDI('1784')-EDI('1785')-EDI('1786')-EDI('1787')+ EDI('1788')+EDI('1789')+EDI('1790'),0,,2. Provisions réglementées (Ecart)
+ma_fs_E1851,E1851,12,0,0,,
+ma_fs_E1884,E1884,12,EDI('1884')-EDI('1877')- EDI('1878')- EDI('1879')-EDI('1880')+ EDI('1881')+ EDI('1882')+ EDI('1883'),0,,4. Provisions pour dépréciation de  l'actif circulant (hors tresorerie) (Ecart)
+ma_fs_E1901,E1901,12,EDI('1901')-EDI('1894')- EDI('1895')- EDI('1896')- EDI('1897')+ EDI('1898')+ EDI('1899')+ EDI('1900'),0,,5. Autres provisions pour risques et charges (Ecart)
+ma_fs_E1910,E1910,12,EDI('1910')-EDI('1903')-EDI('1904')- EDI('1905')-EDI('1906')+ EDI('1907')+ EDI('1908')+ EDI('1909'),0,,6. Provisions pour dépréciation des comptes de trésorerie (Ecart)
+ma_fs_E1919,E1919,12,0,0,,
+ma_fs_E1928,E1928,12,0,0,,
+ma_fs_6872,6872,5,CMP(EDI('837')+EDI('839')-EDI('845')-EDI('846')-EDI('847')-EDI('848')),0,,
+ma_fs_6874,6874,5,0,0,,RESULTAT NET FISCAL : Bénéfice
+ma_fs_6873,6873,5,0,0,,RESULTAT NET FISCAL : Déficit
+ma_fs_6875,6875,5,EDI('840'),0,,
+ma_fs_819,819,5,0,0,,
+ma_fs_818,818,5,0,0,,
+ma_fs_820,820,5,CMP(EDI('11438')*-1),0,,
+ma_fs_839,839,5,0,0,,RESULTAT BRUT FISCAL : Bénéfice
+ma_fs_838,838,5,0,0,,RESULTAT BRUT FISCAL : Déficit
+ma_fs_840,840,5,CMP(EDI('834')-EDI('833')),0,,
+ma_fs_14045,14045,6,EDI('10064')+EDI('10073')+EDI('10082'),1,,
+ma_fs_14046,14046,6,EDI('10065')+EDI('10074')+EDI('10083'),1,,
+ma_fs_14047,14047,6,EDI('10066')+EDI('10075')+EDI('10084'),1,,
+ma_fs_14048,14048,6,EDI('10067')+EDI('10076')+EDI('10085'),1,,
+ma_fs_14049,14049,6,EDI('10068')+EDI('10077')+EDI('10086'),1,,
+ma_fs_14050,14050,6,EDI('10069')+EDI('10078')+EDI('10087'),1,,
+ma_fs_14051,14051,6,EDI('10070')+EDI('10079')+EDI('10088'),1,,
+ma_fs_14052,14052,6,EDI('10071')+EDI('10080')+EDI('10089'),1,,
+ma_fs_G115,G115,3,EDI('11339'),1,,
+ma_fs_14061,14061,11,EDI('1231')+EDI('1624')+EDI('1700'),1,,TOTAL GENERAL
+ma_fs_14062,14062,11,EDI('1232')+EDI('1629')+EDI('1708'),1,,TOTAL GENERAL
+ma_fs_14063,14063,11,EDI('1233')+EDI('1650')+EDI('1716'),1,,TOTAL GENERAL
+ma_fs_14064,14064,11,EDI('1234')+EDI('1679')+EDI('1724'),1,,TOTAL GENERAL
+ma_fs_E14064,E14064,11,0,1,,
+ma_fs_17914,17914,32,-SE('1111')-SE('1119')-SE('1112'),0,,
+ma_fs_17915,17915,32,"""Saisie""",2,,
+ma_fs_17917,17917,32,-SE('1111')-SE('1119')-SE('3462')-SE('1112'),0,,
+ma_fs_17918,17918,32,"""Saisie""",2,,
+ma_fs_14507,14507,36,EDI('10257')+EDI('10294')+EDI('10342'),2,,TOTAL GENERAL (DEBUT EXERCICE)
+ma_fs_14508,14508,36,EDI('10261')+EDI('10299')+EDI('10350'),2,,TOTAL GENERAL (AUGMENTATION Acquisition)
+ma_fs_14509,14509,36,EDI('10265')+EDI('10304')+EDI('10358'),2,,TOTAL GENERAL (AUGMENTATION Product.par  l'entreprise pour elle-même)
+ma_fs_14510,14510,36,EDI('10269')+EDI('10309')+EDI('10366'),2,,TOTAL GENERAL (AUGMENTATION Virement)
+ma_fs_14511,14511,36,EDI('10273')+EDI('10314')+EDI('10374'),2,,TOTAL GENERAL (DIMINUTION Cession)
+ma_fs_14512,14512,36,EDI('10277')+EDI('10319')+EDI('10382'),2,,TOTAL GENERAL (DIMINUTION Retrait)
+ma_fs_14513,14513,36,EDI('10281')+EDI('10324')+EDI('10390'),2,,TOTAL GENERAL (DIMINUTION  Virement)
+ma_fs_14514,14514,36,EDI('10285')+EDI('10329')+EDI('10398'),2,,TOTAL GENERAL (MONTANT BRUT FIN EXERC.)
+ma_fs_14502,14502,41,EDI('9721')+EDI('9742')+EDI('9770'),2,,TOTAL GENERAL (TOTAL GENERAL exercice 1)
+ma_fs_14503,14503,41,EDI('9725')+EDI('9747')+EDI('9778'),2,,TOTAL GENERAL (Dotation de l'exercice 2)
+ma_fs_14504,14504,41,EDI('9729')+EDI('9752')+EDI('9786'),2,,TOTAL GENERAL (Amortissements sur immobilisations-sorties 3)
+ma_fs_14505,14505,41,EDI('9733')+EDI('9757')+EDI('9794'),2,,TOTAL GENERAL (Cumul d'amortissement fin exercice 4 =1+2+3)
+ma_fs_E9798,E9798,41,EDI('9798')-EDI('9790')-EDI('9782')-EDI('9774'),2,,
+ma_fs_14960,14960,41,-ASE('2838')-ASE('2839')-ASE('2837')-ASE('2835'),2,,
+ma_fs_14961,14961,41,"""Saisie""",2,,
+ma_fs_14962,14962,41,"""Saisie""",2,,
+ma_fs_14963,14963,41,-SE('2838')-SE('2839')-SE('2837')-SE('2835'),2,,
+ma_fs_18009,18009,5,EDIST('822')+EDIST('825'),0,,
+ma_fs_18010,18010,5,EDIST('823')+EDIST('826'),0,,
+ma_fs_18012,18012,5,EDIST('828')+EDIST('831'),0,,
+ma_fs_18013,18013,5,EDIST('830')+EDIST('7830'),0,,
+ma_fs_14347,14347,18,"""Saisie""",0,,
+ma_fs_14349,14349,18,"""Saisie""",0,,
+ma_fs_17929,17929,18,EDI('14992')+EDI('14994')+EDI('14996'),0,,
+ma_fs_14992,14992,18,"""Saisie""",0,,
+ma_fs_14994,14994,18,"""Saisie""",0,,
+ma_fs_14996,14996,18,"""Saisie""",0,,
+ma_fs_14380,14380,18,EDI('14347')+EDI('14349')+EDI('ET_18A')+EDI('17929'),0,,
+ma_fs_14415,14415,18,"""Saisie""",0,,
+ma_fs_14002,14002,2,-ASE('118'),1,,
+ma_fs_14001,14001,2,-SE('118'),1,,
+ma_fs_14342,14342,51,"""Saisie""",0,,
+ma_fs_14343,14343,51,"""Saisie""",0,,
+ma_fs_14344,14344,51,"""Saisie""",0,,
+ma_fs_14345,14345,51,"""Saisie""",0,,
+ma_fs_14301,14301,51,"""Saisie""",0,,
+ma_fs_14303,14303,51,"""Saisie""",0,,
+ma_fs_14305,14305,51,"""Saisie""",0,,
+ma_fs_14307,14307,51,"""Saisie""",0,,
+ma_fs_14309,14309,51,"""Saisie""",0,,
+ma_fs_14311,14311,51,"""Saisie""",0,,
+ma_fs_14313,14313,51,"""Saisie""",0,,
+ma_fs_14315,14315,51,"""Saisie""",0,,
+ma_fs_14317,14317,51,"""Saisie""",0,,
+ma_fs_14319,14319,51,"""Saisie""",0,,
+ma_fs_14321,14321,51,"""Saisie""",0,,
+ma_fs_14323,14323,51,"""Saisie""",0,,
+ma_fs_14325,14325,51,"""Saisie""",0,,
+ma_fs_14327,14327,51,"""Saisie""",0,,
+ma_fs_14329,14329,51,"""Saisie""",0,,
+ma_fs_14331,14331,51,"""Saisie""",0,,
+ma_fs_14333,14333,51,"""Saisie""",0,,
+ma_fs_14335,14335,51,"""Saisie""",0,,
+ma_fs_14337,14337,51,"""Saisie""",0,,
+ma_fs_14098,14098,52,"""Saisie""",0,,
+ma_fs_14099,14099,52,"""Saisie""",0,,
+ma_fs_14101,14101,52,"""Saisie""",0,,
+ma_fs_14102,14102,52,"""Saisie""",0,,
+ma_fs_14104,14104,52,"""Saisie""",0,,
+ma_fs_14105,14105,52,"""Saisie""",0,,
+ma_fs_14068,14068,54,"""Saisie""",0,,
+ma_fs_14071,14071,54,0,0,,
+ma_fs_14074,14074,54,"""Saisie""",0,,
+ma_fs_14077,14077,54,0,0,,
+ma_fs_14080,14080,54,"""Saisie""",0,,
+ma_fs_14083,14083,54,0,0,,
+ma_fs_14069,14069,54,0,0,,
+ma_fs_14072,14072,54,"""Saisie""",0,,
+ma_fs_14075,14075,54,0,0,,
+ma_fs_14078,14078,54,"""Saisie""",0,,
+ma_fs_14081,14081,54,0,0,,
+ma_fs_14084,14084,54,"""Saisie""",0,,
+ma_fs_14113,14113,50,EDI('13385'),0,,
+ma_fs_14120,14120,50,EDI('13436'),0,,
+ma_fs_14127,14127,50,CMP((EDI('14120')-EDI('14113'))),0,,
+ma_fs_14134,14134,50,CMP((EDI('14113')-EDI('14120'))),0,,
+ma_fs_14128,14128,50,CMP((EDI('14114')-EDI('14121'))),0,,
+ma_fs_14135,14135,50,CMP((EDI('14121')-EDI('14114'))),0,,
+ma_fs_14129,14129,50,CMP((EDI('14122')-EDI('14115'))),0,,
+ma_fs_14136,14136,50,CMP((EDI('14115')-EDI('14122'))),0,,
+ma_fs_14130,14130,50,CMP((EDI('14116')-EDI('14123'))),0,,
+ma_fs_14137,14137,50,CMP((EDI('14123')-EDI('14116'))),0,,
+ma_fs_14131,14131,50,CMP((EDI('14124')-EDI('14117'))),0,,
+ma_fs_14138,14138,50,CMP((EDI('14117')-EDI('14124'))),0,,
+ma_fs_14132,14132,50,CMP((EDI('14118')-EDI('14125'))),0,,
+ma_fs_14139,14139,50,CMP((EDI('14125')-EDI('14118'))),0,,
+ma_fs_14133,14133,50,CMP((EDI('14119')-EDI('14126'))),0,,
+ma_fs_14140,14140,50,CMP((EDI('14126')-EDI('14119'))),0,,
+ma_fs_14114,14114,50,EDI('293'),0,,
+ma_fs_14121,14121,50,EDI('294'),0,,
+ma_fs_14116,14116,50,EDI('298'),0,,
+ma_fs_14123,14123,50,EDI('299'),0,,
+ma_fs_14117,14117,50,EDI('13373'),0,,
+ma_fs_14124,14124,50,EDI('13448'),0,,
+ma_fs_14118,14118,50,EDI('14116')-EDI('14117'),0,,
+ma_fs_14125,14125,50,EDI('14123')-EDI('14124'),0,,
+ma_fs_14115,14115,50,EDI('14113')-EDI('14114'),0,,
+ma_fs_14122,14122,50,EDI('14120')-EDI('14121'),0,,
+ma_fs_14119,14119,50,EDI('14115')-EDI('14118'),0,,
+ma_fs_14126,14126,50,EDI('14122')-EDI('14125'),0,,
+ma_fs_14185,14185,50,EDI('1383'),0,,
+ma_fs_14209,14209,50,EDI('1397'),0,,
+ma_fs_14173,14173,50,0,0,,
+ma_fs_14174,14174,50,0,0,,
+ma_fs_14172,14172,50,EDI('14173')+EDI('14174'),0,,
+ma_fs_14175,14175,50,EDI('14176')+EDI('14177')EDI('14178')+EDI('14179'),0,,
+ma_fs_14176,14176,50,0,0,,
+ma_fs_14177,14177,50,0,0,,
+ma_fs_14178,14178,50,0,0,,
+ma_fs_14179,14179,50,0,0,,
+ma_fs_14180,14180,50,EDI('14181')+EDI('14182'),0,,
+ma_fs_14181,14181,50,0,0,,
+ma_fs_14182,14182,50,0,0,,
+ma_fs_14183,14183,50,"""Saisie""",0,,
+ma_fs_14221,14221,50,EDI('14172')+EDI('14175')+EDI('14180')+EDI('14183'),0,,
+ma_fs_14196,14196,50,EDI('14197')+EDI('14198'),0,,
+ma_fs_14197,14197,50,0,0,,
+ma_fs_14198,14198,50,0,0,,
+ma_fs_14199,14199,50,EDI('14200')+EDI('14201')EDI('14202')+EDI('14203'),0,,
+ma_fs_14200,14200,50,0,0,,
+ma_fs_14201,14201,50,0,0,,
+ma_fs_14202,14202,50,0,0,,
+ma_fs_14203,14203,50,0,0,,
+ma_fs_14204,14204,50,EDI('14205')+EDI('14206'),0,,
+ma_fs_14205,14205,50,0,0,,
+ma_fs_14206,14206,50,0,0,,
+ma_fs_14207,14207,50,"""Saisie""",0,,
+ma_fs_14223,14223,50,EDI('14196')+EDI('14199')+EDI('14204')+EDI('14207'),0,,
+ma_fs_14186,14186,50,EDI('1384'),0,,
+ma_fs_14210,14210,50,EDI('1398'),0,,
+ma_fs_14184,14184,50,EDI('14185')-EDI('14186'),0,,
+ma_fs_14208,14208,50,EDI(14209)-EDI(14210),0,,
+ma_fs_14188,14188,50,-SE('7512'),0,,
+ma_fs_14189,14189,50,-SE('7513'),0,,
+ma_fs_14190,14190,50,-SE('7514'),0,,
+ma_fs_14191,14191,50,"""Saisie""",0,,
+ma_fs_14187,14187,50,EDI('14188')+EDI('14189')+EDI('14190')+EDI('14191'),0,,
+ma_fs_14211,14211,50,EDI('14212')+EDI('14213')+EDI('14214')+EDI('14215'),0,,
+ma_fs_14215,14215,50,"""Saisie""",0,,
+ma_fs_14212,14212,50,-ASE('7512'),0,,
+ma_fs_14213,14213,50,-ASE('7513'),0,,
+ma_fs_14214,14214,50,-ASE('7514'),0,,
+ma_fs_14193,14193,50,ASE('111')-SE('111')+ASE('112')-SE('112'),0,,
+ma_fs_14194,14194,50,ASE('131')-SE('131'),0,,
+ma_fs_14217,14217,50,"""Saisie""",0,,
+ma_fs_14218,14218,50,"""Saisie""",0,,
+ma_fs_14192,14192,50,EDI('14193')+EDI('14194'),0,,
+ma_fs_14216,14216,50,EDI('14217')+EDI('14218'),0,,
+ma_fs_14195,14195,50,"""Saisie""",0,,
+ma_fs_14219,14219,50,"""Saisie""",0,,
+ma_fs_14222,14222,50,EDI('14184')+EDI('14187')+EDI('14192')+EDI('14195'),0,,
+ma_fs_14224,14224,50,EDI('14208')+EDI('14211')+EDI('14216')+EDI('14219'),0,,
+ma_fs_14234,14234,50,EDI('10074'),0,,
+ma_fs_14235,14235,50,EDI('10083'),0,,
+ma_fs_14236,14236,50,"""Saisie""",0,,
+ma_fs_14237,14237,50,"""Saisie""",0,,
+ma_fs_14233,14233,50,EDI('14234')+EDI('14235')+EDI('14236')+EDI('14237'),0,,
+ma_fs_14241,14241,50,EDI('14242')+EDI('14243')+EDI('14244')+EDI('14245'),0,,
+ma_fs_14242,14242,50,0,0,,
+ma_fs_14243,14243,50,0,0,,
+ma_fs_14244,14244,50,0,0,,
+ma_fs_14245,14245,50,0,0,,
+ma_fs_14246,14246,50,0,0,,
+ma_fs_14247,14247,50,0,0,,
+ma_fs_14248,14248,50,0,0,,
+ma_fs_14267,14267,50,0,0,,
+ma_fs_14257,14257,50,EDI('14258')+EDI('14259')+EDI('14260')+EDI('14261'),0,,
+ma_fs_14258,14258,50,0,0,,
+ma_fs_14259,14259,50,0,0,,
+ma_fs_14260,14260,50,0,0,,
+ma_fs_14261,14261,50,0,0,,
+ma_fs_14262,14262,50,0,0,,
+ma_fs_14263,14263,50,0,0,,
+ma_fs_14264,14264,50,0,0,,
+ma_fs_14269,14269,50,EDI('14257')+EDI('14262')+EDI('14263')+EDI('14264'),0,,
+ma_fs_14249,14249,50,EDI('14250')+EDI('14251')+EDI('14252')+EDI('14253'),0,,
+ma_fs_14238,14238,50,"""Saisie""",0,,
+ma_fs_14254,14254,50,"""Saisie""",0,,
+ma_fs_14239,14239,50,"""Saisie""",0,,
+ma_fs_14255,14255,50,"""Saisie""",0,,
+ma_fs_14256,14256,50,"""Saisie""",0,,
+ma_fs_14266,14266,50,EDI('14233')+EDI('14238')+EDI('14239')+EDI('14240'),0,,
+ma_fs_14268,14268,50,EDI('14249')+EDI('14254')+EDI('14255')+EDI('14256'),0,,
+ma_fs_14240,14240,50,EDI('10065'),0,,
+ma_fs_14271,14271,50,EDI('14132'),0,,
+ma_fs_14272,14272,50,EDI('14139'),0,,
+ma_fs_14273,14273,50,"""Saisie""",0,,
+ma_fs_14274,14274,50,0,0,,
+ma_fs_14276,14276,50,EDI('14133'),0,,
+ma_fs_14277,14277,50,EDI('14140'),0,,
+ma_fs_14278,14278,50,"""Saisie""",0,,
+ma_fs_14279,14279,50,0,0,,
+ma_fs_14281,14281,50,EDI('14266')+EDI('14271')+EDI('14276')+EDI('14221'),0,,
+ma_fs_14282,14282,50,EDI('14222')+EDI('14272')+EDI('14277')+EDI('14267'),0,,
+ma_fs_14283,14283,50,EDI('14268')+EDI('14273')+EDI('14278')+EDI('14223'),0,,
+ma_fs_14284,14284,50,EDI('14224')+EDI('14269')+EDI('14274')+EDI('14279'),0,,
+ma_fs_14250,14250,50,"""Saisie""",0,,
+ma_fs_14251,14251,50,"""Saisie""",0,,
+ma_fs_14252,14252,50,"""Saisie""",0,,
+ma_fs_14253,14253,50,"""Saisie""",0,,
+ma_fs_14086,14086,54,EDI('14068')+EDI('14074')+EDI('14080'),0,,
+ma_fs_14087,14087,54,0,0,,
+ma_fs_16394,16394,54,0,0,,
+ma_fs_16397,16397,54,CMP(EDI('14086')-EDI('16395')),0,,
+ma_fs_16400,16400,54,EDI('14086'),0,,
+ma_fs_16401,16401,54,EDI('16395'),0,,
+ma_fs_16398,16398,54,CMP(EDI('16395')-EDI('14086')),0,,
+ma_fs_16395,16395,54,EDI('14072')+EDI('14078')+EDI('14084'),0,,
+ma_fs_DECISION_DU,DECISION_DU,17,"""Saisie""",0,,
+ma_fs_C5_1,C5_1,67,"""Saisie""",0,,
+ma_fs_C5_2,C5_2,67,"""Saisie""",0,,
+ma_fs_C5_3,C5_3,67,"""Saisie""",0,,
+ma_fs_C5_4,C5_4,67,"""Saisie""",0,,
+ma_fs_C3_E2,C3_E2,60,-SE('11')-SE('6')-SE('7')-SE('211')-SE('2811'),0,,
+ma_fs_C3_E4,C3_E4,60,-SE('711')-SE('712'),0,,
+ma_fs_C3_E5,C3_E5,60,-SE('6')-SE('7')+SE('67'),0,,
+ma_fs_C3_E6,C3_E6,60,SE('67'),0,,
+ma_fs_C3_E7,C3_E7,60,EDI('1384'),0,,
+ma_fs_C3_E8,C3_E8,60,-SE('114')-SE('115')-SE('116')-SE('117')-SE('118'),0,,
+ma_fs_C3_E10,C3_E10,60,"""Saisie""",0,,
+ma_fs_C3_E11,C3_E11,60,"""Saisie""",0,,
+ma_fs_C3_E13,C3_E13,60,SE('6171'),0,,
+ma_fs_C3_E14,C3_E14,60,"""Saisie""",0,,
+ma_fs_C3_E1,C3_E1,60,EDI('C3_E2'),0,,
+ma_fs_C3_E3,C3_E3,60,EDI('C3_E4')+EDI('C3_E5')+EDI('C3_E6')+EDI('C3_E7')+EDI('C3_E8'),0,,
+ma_fs_C3_E9,C3_E9,60,EDI('C3_E10')+EDI('C3_E11'),0,,
+ma_fs_C3_E12,C3_E12,60,EDI('C3_E13')+EDI('C3_E14'),0,,
+ma_fs_E1234,E1234,11,0,1,,
+ma_fs_E1679,E1679,11,0,1,,
+ma_fs_E1724,E1724,11,0,1,,
+ma_fs_C3P_E2,C3P_E2,60,-ASE('11')-ASE('6')-ASE('7')-ASE('211')-ASE('2811'),0,,
+ma_fs_C3P_E4,C3P_E4,60,-ASE('711')-ASE('712'),0,,
+ma_fs_C3P_E5,C3P_E5,60,-ASE('6')-ASE('7')+ASE('67'),0,,
+ma_fs_C3P_E6,C3P_E6,60,ASE('67'),0,,
+ma_fs_C3P_E7,C3P_E7,60,EDI('1398'),0,,
+ma_fs_C3P_E8,C3P_E8,60,-ASE('114')-ASE('115')-ASE('116')-ASE('117')-ASE('118'),0,,
+ma_fs_C3P_E10,C3P_E10,60,"""Saisie""",0,,
+ma_fs_C3P_E11,C3P_E11,60,"""Saisie""",0,,
+ma_fs_C3P_E13,C3P_E13,60,ASE('6171'),0,,
+ma_fs_C3P_E14,C3P_E14,60,"""Saisie""",0,,
+ma_fs_C3P_E1,C3P_E1,60,EDI('C3P_E2'),0,,
+ma_fs_C3P_E3,C3P_E3,60,EDI('C3P_E4')+EDI('C3P_E5')+EDI('C3P_E6')+EDI('C3P_E7')+EDI('C3P_E8'),0,,
+ma_fs_C3P_E9,C3P_E9,60,EDI('C3P_E10')+EDI('C3P_E11'),0,,
+ma_fs_C3P_E12,C3P_E12,60,EDI('C3P_E13')+EDI('C3P_E14'),0,,
+ma_fs_C3PP_E2,C3PP_E2,60,"""Saisie""",0,,
+ma_fs_C3PP_E4,C3PP_E4,60,"""Saisie""",0,,
+ma_fs_C3PP_E5,C3PP_E5,60,"""Saisie""",0,,
+ma_fs_C3PP_E6,C3PP_E6,60,"""Saisie""",0,,
+ma_fs_C3PP_E7,C3PP_E7,60,"""Saisie""",0,,
+ma_fs_C3PP_E8,C3PP_E8,60,"""Saisie""",0,,
+ma_fs_C3PP_E10,C3PP_E10,60,"""Saisie""",0,,
+ma_fs_C3PP_E11,C3PP_E11,60,"""Saisie""",0,,
+ma_fs_C3PP_E13,C3PP_E13,60,"""Saisie""",0,,
+ma_fs_C3PP_E14,C3PP_E14,60,"""Saisie""",0,,
+ma_fs_C3PP_E1,C3PP_E1,60,EDI('C3PP_E2'),0,,
+ma_fs_C3PP_E3,C3PP_E3,60,EDI('C3PP_E4')+EDI('C3PP_E5')+EDI('C3PP_E6')+EDI('C3PP_E7')+EDI('C3PP_E8'),0,,
+ma_fs_C3PP_E9,C3PP_E9,60,EDI('C3PP_E10')+EDI('C3PP_E11'),0,,
+ma_fs_C3PP_E12,C3PP_E12,60,EDI('C3PP_E13')+EDI('C3PP_E14'),0,,
+ma_fs_E1834,E1834,12,EDI('1834')-EDI('1827')- EDI('1828')- EDI('1829')-EDI('1830')+ EDI('1831')+ EDI('1832')+ EDI('1833'),0,,3. Provisions durables pour risques et charges (Ecart)
+ma_fs_B13_E1,B13_E1,61,EDI('11338'),0,,
+ma_fs_B13_E2,B13_E2,61,"""Saisie""",0,,
+ma_fs_B13_E3,B13_E3,61,"""Saisie""",0,,
+ma_fs_B13_E4,B13_E4,61,EDI('B13_E1')+EDI('B13_E2')-EDI('B13_E3'),0,,
+ma_fs_B13_E5,B13_E5,61,"""Saisie""",0,,
+ma_fs_B13_E6,B13_E6,61,EDI('B13_E4')-EDI('B13_E5'),0,,
+ma_fs_B13_E7,B13_E7,61,"""Saisie""",0,,
+ma_fs_B9_T2,B9_T2,66,"""Somme""",0,,
+ma_fs_B9_T3,B9_T3,66,"""Somme""",0,,
+ma_fs_B1_E1,B1_E1,62,SE('2111')+SE('2112')+SE('2113')+SE('2114')+SE('2116')+SE('2117')+SE('2118'),0,,
+ma_fs_B1_E2,B1_E2,62,SE('2111'),0,,
+ma_fs_B1_E3,B1_E3,62,SE('2112'),0,,
+ma_fs_B1_E4,B1_E4,62,SE('2113'),0,,
+ma_fs_B1_E5,B1_E5,62,SE('2114'),0,,
+ma_fs_B1_E6,B1_E6,62,-SE('2116'),0,,
+ma_fs_B1_E7,B1_E7,62,-SE('2117'),0,,
+ma_fs_B1_E8,B1_E8,62,SE('2118'),0,,
+ma_fs_B1_E9,B1_E9,62,SE('2121')+SE('2125')+SE('2128'),0,,
+ma_fs_B1_E10,B1_E10,62,SE('2121'),0,,
+ma_fs_B1_E11,B1_E11,62,SE('2125'),0,,
+ma_fs_B1_E12,B1_E12,62,SE('2128'),0,,
+ma_fs_B1_E13,B1_E13,62,-SE('213'),0,,
+ma_fs_B1_E14,B1_E14,62,SE('213'),0,,
+ma_fs_B1_E15,B1_E15,62,EDI('B1_E1')+EDI('B1_E9')+EDI('B1_E13'),0,,
+ma_fs_ET_18A,ET_18A,18,"""Somme""",0,,
+ma_fs_B6_E1,B6_E1,63,SE('241')+SE('248'),0,,
+ma_fs_B6_E2,B6_E2,63,SE('241'),0,,
+ma_fs_B6_E3,B6_E3,63,SE('248'),0,,
+ma_fs_B6_E4,B6_E4,63,SE('341')+SE('342')+SE('343')+SE('345')+SE('346')+SE('348')+SE('349'),0,,
+ma_fs_B6_E5,B6_E5,63,SE('341'),0,,
+ma_fs_B6_E6,B6_E6,63,SE('342'),0,,
+ma_fs_B6_E7,B6_E7,63,SE('343'),0,,
+ma_fs_B6_E8,B6_E8,63,SE('345'),0,,
+ma_fs_B6_E9,B6_E9,63,SE('346'),0,,
+ma_fs_B6_E10,B6_E10,63,SE('348'),0,,
+ma_fs_B6_E11,B6_E11,63,SE('349'),0,,
+ma_fs_B6_E12,B6_E12,63,SE('241')+SE('248')+SE('341')+SE('342')+SE('343')+SE('345')+SE('346')+SE('348')+SE('349'),0,,
+ma_fs_B6_E13,B6_E13,63,"""Somme""",0,,
+ma_fs_B6_E14,B6_E14,63,"""Saisie""",0,,
+ma_fs_B6_E15,B6_E15,63,"""Saisie""",0,,
+ma_fs_B6_E16,B6_E16,63,"""Somme""",0,,
+ma_fs_B6_E17,B6_E17,63,"""Saisie""",0,,
+ma_fs_B6_E18,B6_E18,63,"""Saisie""",0,,
+ma_fs_B6_E19,B6_E19,63,"""Saisie""",0,,
+ma_fs_B6_E20,B6_E20,63,"""Saisie""",0,,
+ma_fs_B6_E21,B6_E21,63,"""Saisie""",0,,
+ma_fs_B6_E22,B6_E22,63,"""Saisie""",0,,
+ma_fs_B6_E23,B6_E23,63,"""Saisie""",0,,
+ma_fs_B6_E24,B6_E24,63,"""Somme""",0,,
+ma_fs_B6_E25,B6_E25,63,"""Somme""",0,,
+ma_fs_B6_E26,B6_E26,63,"""Somme""",0,,
+ma_fs_B6_E27,B6_E27,63,"""Somme""",0,,
+ma_fs_B6_E28,B6_E28,63,"""Somme""",0,,
+ma_fs_B6_E29,B6_E29,63,"""Somme""",0,,
+ma_fs_B6_E30,B6_E30,63,"""Somme""",0,,
+ma_fs_B6_E31,B6_E31,63,"""Somme""",0,,
+ma_fs_B6_E32,B6_E32,63,"""Somme""",0,,
+ma_fs_B6_E33,B6_E33,63,"""Somme""",0,,
+ma_fs_B6_E34,B6_E34,63,"""Somme""",0,,
+ma_fs_B6_E35,B6_E35,63,"""Somme""",0,,
+ma_fs_B6_E36,B6_E36,63,"""Somme""",0,,
+ma_fs_B6_E37,B6_E37,63,"""Somme""",0,,
+ma_fs_B6_E38,B6_E38,63,"""Saisie""",0,,
+ma_fs_B6_E39,B6_E39,63,"""Saisie""",0,,
+ma_fs_B6_E40,B6_E40,63,"""Somme""",0,,
+ma_fs_B6_E41,B6_E41,63,"""Saisie""",0,,
+ma_fs_B6_E42,B6_E42,63,"""Saisie""",0,,
+ma_fs_B6_E43,B6_E43,63,"""Saisie""",0,,
+ma_fs_B6_E44,B6_E44,63,"""Saisie""",0,,
+ma_fs_B6_E45,B6_E45,63,"""Saisie""",0,,
+ma_fs_B6_E46,B6_E46,63,"""Saisie""",0,,
+ma_fs_B6_E47,B6_E47,63,"""Saisie""",0,,
+ma_fs_B6_E48,B6_E48,63,"""Somme""",0,,
+ma_fs_B6_E49,B6_E49,63,"""Somme""",0,,
+ma_fs_B6_E50,B6_E50,63,"""Saisie""",0,,
+ma_fs_B6_E51,B6_E51,63,"""Saisie""",0,,
+ma_fs_B6_E52,B6_E52,63,"""Somme""",0,,
+ma_fs_B6_E53,B6_E53,63,"""Saisie""",0,,
+ma_fs_B6_E54,B6_E54,63,"""Saisie""",0,,
+ma_fs_B6_E55,B6_E55,63,"""Saisie""",0,,
+ma_fs_B6_E56,B6_E56,63,"""Saisie""",0,,
+ma_fs_B6_E57,B6_E57,63,"""Saisie""",0,,
+ma_fs_B6_E58,B6_E58,63,"""Saisie""",0,,
+ma_fs_B6_E59,B6_E59,63,"""Saisie""",0,,
+ma_fs_B6_E60,B6_E60,63,"""Somme""",0,,
+ma_fs_B6_E61,B6_E61,63,"""Somme""",0,,
+ma_fs_B6_E62,B6_E62,63,"""Saisie""",0,,
+ma_fs_B6_E63,B6_E63,63,"""Saisie""",0,,
+ma_fs_B6_E64,B6_E64,63,"""Somme""",0,,
+ma_fs_B6_E65,B6_E65,63,"""Saisie""",0,,
+ma_fs_B6_E66,B6_E66,63,"""Saisie""",0,,
+ma_fs_B6_E67,B6_E67,63,"""Saisie""",0,,
+ma_fs_B6_E68,B6_E68,63,"""Saisie""",0,,
+ma_fs_B6_E69,B6_E69,63,"""Saisie""",0,,
+ma_fs_B6_E70,B6_E70,63,"""Saisie""",0,,
+ma_fs_B6_E71,B6_E71,63,"""Saisie""",0,,
+ma_fs_B6_E72,B6_E72,63,"""Somme""",0,,
+ma_fs_B6_E73,B6_E73,63,"""Somme""",0,,
+ma_fs_B6_E74,B6_E74,63,"""Saisie""",0,,
+ma_fs_B6_E75,B6_E75,63,"""Saisie""",0,,
+ma_fs_B6_E76,B6_E76,63,"""Somme""",0,,
+ma_fs_B6_E77,B6_E77,63,"""Saisie""",0,,
+ma_fs_B6_E78,B6_E78,63,"""Saisie""",0,,
+ma_fs_B6_E79,B6_E79,63,"""Saisie""",0,,
+ma_fs_B6_E80,B6_E80,63,"""Saisie""",0,,
+ma_fs_B6_E81,B6_E81,63,"""Saisie""",0,,
+ma_fs_B6_E82,B6_E82,63,"""Saisie""",0,,
+ma_fs_B6_E83,B6_E83,63,"""Saisie""",0,,
+ma_fs_B6_E84,B6_E84,63,"""Somme""",0,,
+ma_fs_B6_E85,B6_E85,63,"""Somme""",0,,
+ma_fs_B6_E86,B6_E86,63,"""Saisie""",0,,
+ma_fs_B6_E87,B6_E87,63,"""Saisie""",0,,
+ma_fs_B6_E88,B6_E88,63,"""Somme""",0,,
+ma_fs_B6_E89,B6_E89,63,"""Saisie""",0,,
+ma_fs_B6_E90,B6_E90,63,"""Saisie""",0,,
+ma_fs_B6_E91,B6_E91,63,"""Saisie""",0,,
+ma_fs_B6_E92,B6_E92,63,"""Saisie""",0,,
+ma_fs_B6_E93,B6_E93,63,"""Saisie""",0,,
+ma_fs_B6_E94,B6_E94,63,"""Saisie""",0,,
+ma_fs_B6_E95,B6_E95,63,"""Saisie""",0,,
+ma_fs_B6_E96,B6_E96,63,"""Somme""",0,,
+ma_fs_B7_E1,B7_E1,64,-SE('141')-SE('148'),0,,
+ma_fs_B7_E2,B7_E2,64,-SE('141'),0,,
+ma_fs_B7_E3,B7_E3,64,-SE('148'),0,,
+ma_fs_B7_E4,B7_E4,64,-SE('441')-SE('442')-SE('443')-SE('444')-SE('445')-SE('446')-SE('448')-SE('449'),0,,
+ma_fs_B7_E5,B7_E5,64,-SE('441'),0,,
+ma_fs_B7_E6,B7_E6,64,-SE('442'),0,,
+ma_fs_B7_E7,B7_E7,64,-SE('443'),0,,
+ma_fs_B7_E8,B7_E8,64,-SE('444'),0,,
+ma_fs_B7_E9,B7_E9,64,-SE('445'),0,,
+ma_fs_B7_E10,B7_E10,64,-SE('446'),0,,
+ma_fs_B7_E11,B7_E11,64,-SE('448'),0,,
+ma_fs_B7_E12,B7_E12,64,-SE('449'),0,,
+ma_fs_B7_E13,B7_E13,64,-SE('141')-SE('148')-SE('441')-SE('442')-SE('443')-SE('444')-SE('445')-SE('446')-SE('448')-SE('449'),0,,
+ma_fs_B7_E14,B7_E14,64,"""Somme""",0,,
+ma_fs_B7_E15,B7_E15,64,"""Saisie""",0,,
+ma_fs_B7_E16,B7_E16,64,"""Saisie""",0,,
+ma_fs_B7_E17,B7_E17,64,"""Somme""",0,,
+ma_fs_B7_E18,B7_E18,64,"""Saisie""",0,,
+ma_fs_B7_E19,B7_E19,64,"""Saisie""",0,,
+ma_fs_B7_E20,B7_E20,64,"""Saisie""",0,,
+ma_fs_B7_E21,B7_E21,64,"""Saisie""",0,,
+ma_fs_B7_E22,B7_E22,64,"""Saisie""",0,,
+ma_fs_B7_E23,B7_E23,64,"""Saisie""",0,,
+ma_fs_B7_E24,B7_E24,64,"""Saisie""",0,,
+ma_fs_B7_E25,B7_E25,64,"""Saisie""",0,,
+ma_fs_B7_E26,B7_E26,64,"""Somme""",0,,
+ma_fs_B7_E27,B7_E27,64,"""Somme""",0,,
+ma_fs_B7_E28,B7_E28,64,"""Somme""",0,,
+ma_fs_B7_E29,B7_E29,64,"""Somme""",0,,
+ma_fs_B7_E30,B7_E30,64,"""Somme""",0,,
+ma_fs_B7_E31,B7_E31,64,"""Somme""",0,,
+ma_fs_B7_E32,B7_E32,64,"""Somme""",0,,
+ma_fs_B7_E33,B7_E33,64,"""Somme""",0,,
+ma_fs_B7_E34,B7_E34,64,"""Somme""",0,,
+ma_fs_B7_E35,B7_E35,64,"""Somme""",0,,
+ma_fs_B7_E36,B7_E36,64,"""Somme""",0,,
+ma_fs_B7_E37,B7_E37,64,"""Somme""",0,,
+ma_fs_B7_E38,B7_E38,64,"""Somme""",0,,
+ma_fs_B7_E39,B7_E39,64,"""Somme""",0,,
+ma_fs_B7_E40,B7_E40,64,"""Somme""",0,,
+ma_fs_B7_E41,B7_E41,64,"""Saisie""",0,,
+ma_fs_B7_E42,B7_E42,64,"""Saisie""",0,,
+ma_fs_B7_E43,B7_E43,64,"""Somme""",0,,
+ma_fs_B7_E44,B7_E44,64,"""Saisie""",0,,
+ma_fs_B7_E45,B7_E45,64,"""Saisie""",0,,
+ma_fs_B7_E46,B7_E46,64,"""Saisie""",0,,
+ma_fs_B7_E47,B7_E47,64,"""Saisie""",0,,
+ma_fs_B7_E48,B7_E48,64,"""Saisie""",0,,
+ma_fs_B7_E49,B7_E49,64,"""Saisie""",0,,
+ma_fs_B7_E50,B7_E50,64,"""Saisie""",0,,
+ma_fs_B7_E51,B7_E51,64,"""Saisie""",0,,
+ma_fs_B7_E52,B7_E52,64,"""Somme""",0,,
+ma_fs_B7_E53,B7_E53,64,"""Somme""",0,,
+ma_fs_B7_E54,B7_E54,64,"""Saisie""",0,,
+ma_fs_B7_E55,B7_E55,64,"""Saisie""",0,,
+ma_fs_B7_E56,B7_E56,64,"""Somme""",0,,
+ma_fs_B7_E57,B7_E57,64,"""Saisie""",0,,
+ma_fs_B7_E58,B7_E58,64,"""Saisie""",0,,
+ma_fs_B7_E59,B7_E59,64,"""Saisie""",0,,
+ma_fs_B7_E60,B7_E60,64,"""Saisie""",0,,
+ma_fs_B7_E61,B7_E61,64,"""Saisie""",0,,
+ma_fs_B7_E62,B7_E62,64,"""Saisie""",0,,
+ma_fs_B7_E63,B7_E63,64,"""Saisie""",0,,
+ma_fs_B7_E64,B7_E64,64,"""Saisie""",0,,
+ma_fs_B7_E65,B7_E65,64,"""Somme""",0,,
+ma_fs_B7_E66,B7_E66,64,"""Somme""",0,,
+ma_fs_B7_E67,B7_E67,64,"""Saisie""",0,,
+ma_fs_B7_E68,B7_E68,64,"""Saisie""",0,,
+ma_fs_B7_E69,B7_E69,64,"""Somme""",0,,
+ma_fs_B7_E70,B7_E70,64,"""Saisie""",0,,
+ma_fs_B7_E71,B7_E71,64,"""Saisie""",0,,
+ma_fs_B7_E72,B7_E72,64,"""Saisie""",0,,
+ma_fs_B7_E73,B7_E73,64,"""Saisie""",0,,
+ma_fs_B7_E74,B7_E74,64,"""Saisie""",0,,
+ma_fs_B7_E75,B7_E75,64,"""Saisie""",0,,
+ma_fs_B7_E76,B7_E76,64,"""Saisie""",0,,
+ma_fs_B7_E77,B7_E77,64,"""Saisie""",0,,
+ma_fs_B7_E78,B7_E78,64,"""Somme""",0,,
+ma_fs_B7_E79,B7_E79,64,"""Somme""",0,,
+ma_fs_B7_E80,B7_E80,64,"""Saisie""",0,,
+ma_fs_B7_E81,B7_E81,64,"""Saisie""",0,,
+ma_fs_B7_E82,B7_E82,64,"""Somme""",0,,
+ma_fs_B7_E83,B7_E83,64,"""Saisie""",0,,
+ma_fs_B7_E84,B7_E84,64,"""Saisie""",0,,
+ma_fs_B7_E85,B7_E85,64,"""Saisie""",0,,
+ma_fs_B7_E86,B7_E86,64,"""Saisie""",0,,
+ma_fs_B7_E87,B7_E87,64,"""Saisie""",0,,
+ma_fs_B7_E88,B7_E88,64,"""Saisie""",0,,
+ma_fs_B7_E89,B7_E89,64,"""Saisie""",0,,
+ma_fs_B7_E90,B7_E90,64,"""Saisie""",0,,
+ma_fs_B7_E91,B7_E91,64,"""Somme""",0,,
+ma_fs_B7_E92,B7_E92,64,"""Somme""",0,,
+ma_fs_B7_E93,B7_E93,64,"""Saisie""",0,,
+ma_fs_B7_E94,B7_E94,64,"""Saisie""",0,,
+ma_fs_B7_E95,B7_E95,64,"""Somme""",0,,
+ma_fs_B7_E96,B7_E96,64,"""Saisie""",0,,
+ma_fs_B7_E97,B7_E97,64,"""Saisie""",0,,
+ma_fs_B7_E98,B7_E98,64,"""Saisie""",0,,
+ma_fs_B7_E99,B7_E99,64,"""Saisie""",0,,
+ma_fs_B7_E100,B7_E100,64,"""Saisie""",0,,
+ma_fs_B7_E101,B7_E101,64,"""Saisie""",0,,
+ma_fs_B7_E102,B7_E102,64,"""Saisie""",0,,
+ma_fs_B7_E103,B7_E103,64,"""Saisie""",0,,
+ma_fs_B7_E104,B7_E104,64,"""Somme""",0,,
+ma_fs_ET_18B,ET_18B,18,"""Somme""",0,,
+ma_fs_E14505,E14505,41,0,2,,
+ma_fs_E10285,E10285,36,0,2,,
+ma_fs_E10329,E10329,36,0,2,,
+ma_fs_E10398,E10398,36,0,2,,
+ma_fs_E14514,E14514,36,0,2,,
+ma_fs_15005,15005,55,EDI('15006')-EDI('15007')+EDI('15008')+EDI('15009'),2,,CAPACITE D'AUTOFINANCEMENT (C.A.F.) (Exercice)
+ma_fs_15010,15010,55,EDI('15011')-EDI('15012')+EDI('15013')+EDI('15014'),2,,
+ma_fs_15006,15006,55,EDI('1332'),2,,Résultat net de l'exercice (Exercice)
+ma_fs_15011,15011,55,EDI('1357'),2,,
+ma_fs_15007,15007,55,EDI('1381'),2,,Porduits des Cessions d'immobilisations (Exercice)
+ma_fs_15012,15012,55,EDI('1395'),2,,
+ma_fs_15008,15008,55,EDI('1382'),2,,Valeurs nettes d'amortissement des immobilisations cédées (Exercice)
+ma_fs_15013,15013,55,EDI('1396'),2,,
+ma_fs_15009,15009,55,EDI('1375')+EDI('1376')+EDI('1377')-EDI('1378')-EDI('1379')-EDI('1380'),2,,(Dotations - Reprises) liées à l'actif immobilisé et aux financement  (Exercice)
+ma_fs_15014,15014,55,EDI('1389')+EDI('1390')+EDI('1391')-EDI('1392')-EDI('1393')-EDI('1394'),2,,
+ma_fs_15023,15023,55,EDI('5234'),2,,Financement Permanent ((a)  Exercice)
+ma_fs_15031,15031,55,EDI('5246'),2,,
+ma_fs_15039,15039,55,CMP(EDI('15031')-EDI('15023')),2,,
+ma_fs_15047,15047,55,CMP(EDI('15023')-EDI('15031')),2,,
+ma_fs_15024,15024,55,EDI('4619'),2,,Moins actif immobilisé ((a)  Exercice)
+ma_fs_15032,15032,55,EDI('4620'),2,,
+ma_fs_15040,15040,55,CMP(EDI('15024')-EDI('15032')),2,,
+ma_fs_15048,15048,55,CMP(EDI('15032')-EDI('15024')),2,,
+ma_fs_15025,15025,55,EDI('15023')-EDI('15024'),2,,Fonds de roulement fonctionnel (1-2) (A) ((a)  Exercice)
+ma_fs_15033,15033,55,EDI('15031')-EDI('15032'),2,,
+ma_fs_15041,15041,55,EDI('15039')+EDI('15040'),2,,
+ma_fs_15049,15049,55,EDI('15047')+EDI('15048'),2,,
+ma_fs_15026,15026,55,EDI('4669'),2,,Actif circulant ((a)  Exercice)
+ma_fs_15034,15034,55,EDI('4670'),2,,
+ma_fs_15042,15042,55,CMP(EDI('15026')-EDI('15034')),2,,
+ma_fs_15050,15050,55,CMP(EDI('15034')-EDI('15026')),2,,
+ma_fs_15027,15027,55,EDI('5260'),2,,Moins passif circulant ((a)  Exercice)
+ma_fs_15035,15035,55,EDI('5267'),2,,
+ma_fs_15043,15043,55,CMP(EDI('15035')-EDI('15027')),2,,
+ma_fs_15051,15051,55,CMP(EDI('15027')-EDI('15035')),2,,
+ma_fs_15028,15028,55,EDI('15026')-EDI('15027'),2,,= Besoin de financement global (4-5) (B) ((a)  Exercice)
+ma_fs_15036,15036,55,EDI('15034')-EDI('15035'),2,,
+ma_fs_15044,15044,55,CMP(EDI('15028')-EDI('15036')),2,,
+ma_fs_15052,15052,55,CMP(EDI('15036')-EDI('15028')),2,,
+ma_fs_15029,15029,55,EDI('15025')-EDI('15028'),2,,TRESORERIE NETTE (Actif-Passif) = A-B ((a)  Exercice)
+ma_fs_15037,15037,55,EDI('15033')-EDI('15036'),2,,
+ma_fs_15045,15045,55,CMP(EDI('15029')-EDI('15037')),2,,
+ma_fs_15053,15053,55,CMP(EDI('15037')-EDI('15029')),2,,
+ma_fs_15046,15046,55,EDI('15041')+EDI('15044')+EDI('15045'),2,,
+ma_fs_15054,15054,55,EDI('15049')+EDI('15052')+EDI('15053'),2,,
+ma_fs_D489,D489,17,"""Saisie""",0,,
+ma_fs_TD489,TD489,17,"""Saisie""",0,,
+ma_fs_M2067,M2067,15,MDE('4455')+MDE('44755'),0,,
+ma_fs_M2066,M2066,15,MCE('4455')+MCE('44755'),0,,
+ma_fs_M2076,M2076,15,MDE('3455')+MDE('34755')-MDE('34551'),0,,
+ma_fs_M2077,M2077,15,MCE('3455')+MCE('34755')-MCE('34551'),0,,
+ma_fs_E2068,E2068,15,EDI('2068')-EDI('2065')-EDI('2066')+EDI('2067'),0,,
+ma_fs_E2078,E2078,15,EDI('2078')-EDI('2075')-EDI('2076')+EDI('2077'),0,,
+ma_fs_E2083,E2083,15,EDI('2083')-EDI('2080')-EDI('2081')+EDI('2082'),0,,
+ma_fs_M2081,M2081,15,MDE('34551'),0,,
+ma_fs_M2082,M2082,15,MCE('34551'),0,,
+ma_fs_M1238,M1238,11,MDE('2811'),1,,
+ma_fs_M1243,M1243,11,MDE('2812'),1,,
+ma_fs_M1248,M1248,11,MDE('2813'),1,,
+ma_fs_M1651,M1651,11,MDE('2821'),1,,
+ma_fs_M1652,M1652,11,MDE('2822'),1,,
+ma_fs_M1653,M1653,11,MDE('2823'),1,,
+ma_fs_M1654,M1654,11,MDE('2828'),1,,
+ma_fs_M1717,M1717,11,MDE('2831'),1,,
+ma_fs_M1718,M1718,11,MDE('2832'),1,,
+ma_fs_M1719,M1719,11,MDE('2833'),1,,
+ma_fs_M1720,M1720,11,MDE('2834'),1,,
+ma_fs_M1721,M1721,11,MDE('2835'),1,,
+ma_fs_M1722,M1722,11,MDE('2838'),1,,
+ma_fs_M1723,M1723,11,MDE('2839'),1,,
+ma_fs_M1237,M1237,11,MCE('2811'),1,,
+ma_fs_M1242,M1242,11,MCE('2812'),1,,
+ma_fs_M1247,M1247,11,MCE('2813'),1,,
+ma_fs_M1630,M1630,11,MCE('2821'),1,,
+ma_fs_M1631,M1631,11,MCE('2822'),1,,
+ma_fs_M1632,M1632,11,MCE('2823'),1,,
+ma_fs_M1633,M1633,11,MCE('2828'),1,,
+ma_fs_M1709,M1709,11,MCE('2831'),1,,
+ma_fs_M1711,M1711,11,MCE('2833'),1,,
+ma_fs_M1712,M1712,11,MCE('2834'),1,,
+ma_fs_M1713,M1713,11,MCE('2835'),1,,
+ma_fs_M1714,M1714,11,MCE('2838'),1,,
+ma_fs_M1715,M1715,11,MCE('2839'),1,,
+ma_fs_M1710,M1710,11,MCE('2832'),1,,
+ma_fs_M9725,M9725,41,MCE('281'),2,,
+ma_fs_M9729,M9729,41,MDE('281'),2,,
+ma_fs_M9750,M9750,41,MCE('2823'),2,,
+ma_fs_M9755,M9755,41,MDE('2823'),2,,
+ma_fs_M9751,M9751,41,MCE('282')-MCE('2823'),2,,
+ma_fs_M9756,M9756,41,MDE('282')-MDE('2823'),2,,
+ma_fs_M9779,M9779,41,MCE('2831'),2,,
+ma_fs_M9780,M9780,41,MCE('2832'),2,,
+ma_fs_M9781,M9781,41,MCE('2833'),2,,
+ma_fs_M9782,M9782,41,MCE('2834'),2,,
+ma_fs_M14961,M14961,41,MCE('2839')+MCE('2835')+MCE('2838'),2,,
+ma_fs_M14962,M14962,41,MDE('2839'))+MDE('2835')+MDE('2838'),2,,
+ma_fs_M9787,M9787,41,MDE('2831'),2,,
+ma_fs_M9788,M9788,41,MDE('2832'),2,,
+ma_fs_M9789,M9789,41,MDE('2833'),2,,
+ma_fs_M9790,M9790,41,MDE('2834'),2,,
+ma_fs_E1064,E1064,6,EDI('966')+EDI('980')+EDI('994')+EDI('1008')-EDI('1022')-EDI('1036')-EDI('1050')-EDI('1064'),1,,- Frais préliminaires (Ecart)
+ma_fs_E1065,E1065,6,EDI('967')+EDI('981')+EDI('995')+EDI('1009')-EDI('1023')-EDI('1037')-EDI('1051')-EDI('1065'),1,,- Charges à répartir sur plusieurs exercice (Ecart)
+ma_fs_E1066,E1066,6,EDI('968')+EDI('982')+EDI('996')+EDI('1010')-EDI('1024')-EDI('1038')-EDI('1052')-EDI('1066'),1,,- Primes de remboursemen - obligations (Ecart)
+ma_fs_E1067,E1067,6,EDI('969')+EDI('983')+EDI('997')+EDI('1011')-EDI('1025')-EDI('1039')-EDI('1053')-EDI('1067'),1,,- Immobilisation en recherche e - développement (Ecart)
+ma_fs_E1068,E1068,6,EDI('970')+EDI('984')+EDI('998')+EDI('1012')-EDI('1026')-EDI('1040')-EDI('1054')-EDI('1068'),1,,"- Brevets, marques, droits e - valeurs similaires (Ecart)"
+ma_fs_E1069,E1069,6,EDI('969')+EDI('983')+EDI('997')+EDI('1011')-EDI('1025')-EDI('1039')-EDI('1053')-EDI('1067'),1,,- Fonds commercial (Ecart)
+ma_fs_E1070,E1070,6,EDI('972')+EDI('986')+EDI('1000')+EDI('1014')-EDI('1028')-EDI('1042')-EDI('1056')-EDI('1070'),1,,- Autres immobilisations incorporelles (Ecart)
+ma_fs_E1071,E1071,6,EDI('973')+EDI('987')+EDI('1001')+EDI('1015')-EDI('1029')-EDI('1043')-EDI('1057')-EDI('1071'),1,,- Terrains (Ecart)
+ma_fs_E1072,E1072,6,EDI('974')+EDI('988')+EDI('1002')+EDI('1016')-EDI('1030')-EDI('1044')-EDI('1058')-EDI('1072'),1,,- Constructions (Ecart)
+ma_fs_E1073,E1073,6,EDI('975')+EDI('989')+EDI('1003')+EDI('1017')-EDI('1031')-EDI('1045')-EDI('1059')-EDI('1073'),1,,"- Installations techniques, matériel e - outillage (Ecart)"
+ma_fs_E1074,E1074,6,EDI('976')+EDI('990')+EDI('1004')+EDI('1018')-EDI('1032')-EDI('1046')-EDI('1060')-EDI('1074'),1,,- Matériel de transport (Ecart)
+ma_fs_E1075,E1075,6,EDI('977')+EDI('991')+EDI('1005')+EDI('1019')-EDI('1033')-EDI('1047')-EDI('1061')-EDI('1075'),1,,"- Mobilier, matériel de bureau e - amenagement (Ecart)"
+ma_fs_E1076,E1076,6,EDI('978')+EDI('992')+EDI('1006')+EDI('1020')-EDI('1034')-EDI('1048')-EDI('1062')-EDI('1076'),1,,- Autres immobilisations corporelles (Ecart)
+ma_fs_E1077,E1077,6,EDI('979')+EDI('993')+EDI('1007')+EDI('1021')-EDI('1034')-EDI('1049')-EDI('1063')-EDI('1077'),1,,- Immobilisations corporelles en cours (Ecart)
+ma_fs_M980,M980,6,MDE('211'),1,,
+ma_fs_M981,M981,6,MDE('212'),1,,
+ma_fs_M982,M982,6,MDE('213'),1,,
+ma_fs_M983,M983,6,MDE('221'),1,,
+ma_fs_M984,M984,6,MDE('222'),1,,
+ma_fs_M985,M985,6,MDE('223'),1,,
+ma_fs_M986,M986,6,MDE('22')-MDE('221')-MDE('222')-MDE('223'),1,,
+ma_fs_M987,M987,6,MDE('231'),1,,
+ma_fs_M988,M988,6,MDE('232'),1,,
+ma_fs_M989,M989,6,MDE('233'),1,,
+ma_fs_M990,M990,6,MDE('234'),1,,
+ma_fs_M991,M991,6,MDE('239'),1,,
+ma_fs_M992,M992,6,MDE('235'),1,,
+ma_fs_M993,M993,6,MDE('236')+MDE('237')+MDE('238'),1,,
+ma_fs_M1022,M1022,6,MCE('211'),1,,
+ma_fs_M1023,M1023,6,MCE('212'),1,,
+ma_fs_M1024,M1024,6,MCE('213'),1,,
+ma_fs_M1025,M1025,6,MCE('221'),1,,
+ma_fs_M1026,M1026,6,MCE('222'),1,,
+ma_fs_M1027,M1027,6,MCE('223'),1,,
+ma_fs_M1028,M1028,6,MCE('22')-MCE('221')-MCE('222')-MCE('223'),1,,
+ma_fs_M1029,M1029,6,MCE('231'),1,,
+ma_fs_M1030,M1030,6,MCE('232'),1,,
+ma_fs_M1031,M1031,6,MCE('233'),1,,
+ma_fs_M1032,M1032,6,MCE('234'),1,,
+ma_fs_M1033,M1033,6,MCE('239'),1,,
+ma_fs_M1034,M1034,6,MCE('235'),1,,
+ma_fs_M1035,M1035,6,MCE('236')+MCE('237')+MCE('238'),1,,
+ma_fs_M10261,M10261,36,MDE('21'),2,,
+ma_fs_M10302,M10302,36,MDE('223'),2,,
+ma_fs_M10303,M10303,36,MDE('22')-MDE('223'),2,,
+ma_fs_M10351,M10351,36,MDE('231'),2,,
+ma_fs_M10352,M10352,36,MDE('232'),2,,
+ma_fs_M10353,M10353,36,MDE('233'),2,,
+ma_fs_M10354,M10354,36,MDE('234'),2,,
+ma_fs_M10356,M10356,36,MDE('235')+MDE('236')+MDE('237')+MDE('238')+MDE('239'),2,,
+ma_fs_M10273,M10273,36,MCE('21'),2,,
+ma_fs_M10317,M10317,36,MCE('223'),2,,
+ma_fs_M10318,M10318,36,MCE('22')-MCE('223'),2,,
+ma_fs_M10375,M10375,36,MCE('231'),2,,
+ma_fs_M10376,M10376,36,MCE('232'),2,,
+ma_fs_M10377,M10377,36,MCE('233'),2,,
+ma_fs_M10378,M10378,36,MCE('234'),2,,
+ma_fs_M10380,M10380,36,MCE('235')+MCE('236')+MCE('237')+MCE('238')+MCE('239'),2,,

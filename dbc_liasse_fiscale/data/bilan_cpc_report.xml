@@ -1,0 +1,2036 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bilan_cpc_report" model="account.report">
+        <field name="name">Compte de Produits et Charges (CPC)</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="True"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_cpc_column_propres" model="account.report.column">
+                <field name="name">Opérations propres à l'exercice</field>
+                <field name="expression_label">propres</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cpc_column_anterieures" model="account.report.column">
+                <field name="name">Opérations concernant les exercices précédents</field>
+                <field name="expression_label">anterieures</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cpc_column_total_n" model="account.report.column">
+                <field name="name">Totaux de l'exercice (3 = 1 + 2)</field>
+                <field name="expression_label">total_n</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cpc_column_total_prev" model="account.report.column">
+                <field name="name">Totaux de l'exercice précédent (4)</field>
+                <field name="expression_label">total_prev</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_cpc_line_i_produits_exploitation" model="account.report.line">
+                <field name="name">I. PRODUITS D'EXPLOITATION</field>
+                <field name="code">I_PRODUITS_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_produits_exploitation_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11176</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_produits_exploitation_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11177</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_produits_exploitation_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11178</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_produits_exploitation_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11179</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_ventes_marchandises" model="account.report.line">
+                <field name="name">Ventes de marchandises (en l'état)</field>
+                <field name="code">I_VENTES_MARCHANDISES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_ventes_marchandises_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11181</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_ventes_marchandises_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11182</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_ventes_marchandises_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11183</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_ventes_marchandises_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11184</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_ventes_biens_services" model="account.report.line">
+                <field name="name">Ventes de biens et services produits</field>
+                <field name="code">I_VENTES_BIENS_SERVICES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_ventes_biens_services_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11186</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_ventes_biens_services_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11187</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_ventes_biens_services_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11188</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_ventes_biens_services_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11189</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_chiffres_affaires" model="account.report.line">
+                <field name="name">Chiffres d'affaires</field>
+                <field name="code">I_CHIFFRES_AFFAIRES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">40</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_chiffres_affaires_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14021</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_chiffres_affaires_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14022</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_chiffres_affaires_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14023</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_chiffres_affaires_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14024</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_variation_stocks" model="account.report.line">
+                <field name="name">Variation de stocks de produits (+/-) (1)</field>
+                <field name="code">I_VARIATION_STOCKS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">50</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_variation_stocks_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11191</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_variation_stocks_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11192</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_variation_stocks_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11193</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_variation_stocks_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11194</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_immob_produites" model="account.report.line">
+                <field name="name">Immobilisations produites par l'entreprise pour elle-même</field>
+                <field name="code">I_IMMOB_PRODUITES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">60</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_immob_produites_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11196</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_immob_produites_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11197</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_immob_produites_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11198</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_immob_produites_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11199</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_subventions_expl" model="account.report.line">
+                <field name="name">Subventions d'exploitation</field>
+                <field name="code">I_SUBVENTIONS_EXPL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_subventions_expl_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11201</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_subventions_expl_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11202</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_subventions_expl_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11203</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_subventions_expl_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11204</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_autres_produits" model="account.report.line">
+                <field name="name">Autres produits d'exploitation</field>
+                <field name="code">I_AUTRES_PRODUITS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">80</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_autres_produits_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11206</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_autres_produits_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11207</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_autres_produits_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11208</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_autres_produits_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11209</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_reprises_expl" model="account.report.line">
+                <field name="name">Reprises d'exploitation: transferts de charges</field>
+                <field name="code">I_REPRISES_EXPL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">90</field>
+                <field name="parent_id" ref="bilan_cpc_line_i_produits_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_reprises_expl_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11211</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_reprises_expl_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11212</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_reprises_expl_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11213</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_reprises_expl_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11214</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_i_total" model="account.report.line">
+                <field name="name">Total I</field>
+                <field name="code">I_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_i_total_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11216</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_total_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11217</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_total_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11218</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_i_total_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11219</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_charges_exploitation" model="account.report.line">
+                <field name="name">II. CHARGES D'EXPLOITATION</field>
+                <field name="code">II_CHARGES_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">110</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_charges_exploitation_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11226</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_charges_exploitation_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11227</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_charges_exploitation_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11228</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_charges_exploitation_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11229</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_achats_revendus" model="account.report.line">
+                <field name="name">Achats revendus (2) de marchandises</field>
+                <field name="code">II_ACHATS_REVENDUS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">120</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_achats_revendus_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11221</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_achats_revendus_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11222</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_achats_revendus_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11223</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_achats_revendus_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11224</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_achats_consommes" model="account.report.line">
+                <field name="name">Achats consommés (2) de matières et fournitures</field>
+                <field name="code">II_ACHATS_CONSOMMES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">130</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_achats_consommes_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11256</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_achats_consommes_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11257</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_achats_consommes_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11258</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_achats_consommes_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11259</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_autres_charges_ext" model="account.report.line">
+                <field name="name">Autres charges externes</field>
+                <field name="code">II_AUTRES_CHARGES_EXT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">140</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_autres_charges_ext_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11261</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_autres_charges_ext_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11262</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_autres_charges_ext_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11263</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_autres_charges_ext_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11264</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_impots_taxes" model="account.report.line">
+                <field name="name">Impôts et taxes</field>
+                <field name="code">II_IMPOTS_TAXES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">150</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_impots_taxes_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11251</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_impots_taxes_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11252</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_impots_taxes_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11253</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_impots_taxes_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11254</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_charges_personnel" model="account.report.line">
+                <field name="name">Charges de personnel</field>
+                <field name="code">II_CHARGES_PERSONNEL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">160</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_charges_personnel_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11266</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_charges_personnel_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11267</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_charges_personnel_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11268</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_charges_personnel_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11269</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_autres_charges" model="account.report.line">
+                <field name="name">Autres charges d'exploitation</field>
+                <field name="code">II_AUTRES_CHARGES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">170</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_autres_charges_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11246</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_autres_charges_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11247</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_autres_charges_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11248</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_autres_charges_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11249</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_dotations" model="account.report.line">
+                <field name="name">Dotations d'exploitation</field>
+                <field name="code">II_DOTATIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">180</field>
+                <field name="parent_id" ref="bilan_cpc_line_ii_charges_exploitation"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_dotations_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11241</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_dotations_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11242</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_dotations_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11243</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_dotations_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11244</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ii_total" model="account.report.line">
+                <field name="name">Total II</field>
+                <field name="code">II_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">190</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ii_total_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11236</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_total_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11237</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_total_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11238</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ii_total_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11239</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iii_resultat_exploitation" model="account.report.line">
+                <field name="name">III. RESULTAT D'EXPLOITATION (I - II)</field>
+                <field name="code">III_RESULTAT_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">200</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iii_resultat_exploitation_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11231</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iii_resultat_exploitation_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11232</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iii_resultat_exploitation_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11233</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iii_resultat_exploitation_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11234</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iv_produits_financiers" model="account.report.line">
+                <field name="name">IV. PRODUITS FINANCIERS</field>
+                <field name="code">IV_PRODUITS_FINANCIERS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">210</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iv_produits_financiers_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11326</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_produits_financiers_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11327</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_produits_financiers_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11328</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_produits_financiers_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11329</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iv_titres_participation" model="account.report.line">
+                <field name="name">Produits des titres de participation et autres titres immobilisés</field>
+                <field name="code">IV_TITRES_PARTICIPATION</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">220</field>
+                <field name="parent_id" ref="bilan_cpc_line_iv_produits_financiers"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iv_titres_participation_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11271</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_titres_participation_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11272</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_titres_participation_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11273</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_titres_participation_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11274</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iv_gains_change" model="account.report.line">
+                <field name="name">Gains de change</field>
+                <field name="code">IV_GAINS_CHANGE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">230</field>
+                <field name="parent_id" ref="bilan_cpc_line_iv_produits_financiers"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iv_gains_change_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11276</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_gains_change_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11277</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_gains_change_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11278</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_gains_change_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11279</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iv_interets" model="account.report.line">
+                <field name="name">Intérêts et autres produits financiers</field>
+                <field name="code">IV_INTERETS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">240</field>
+                <field name="parent_id" ref="bilan_cpc_line_iv_produits_financiers"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iv_interets_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11281</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_interets_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11282</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_interets_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11283</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_interets_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11284</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iv_reprises_fin" model="account.report.line">
+                <field name="name">Reprises financières; transferts de charges</field>
+                <field name="code">IV_REPRISES_FIN</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">250</field>
+                <field name="parent_id" ref="bilan_cpc_line_iv_produits_financiers"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iv_reprises_fin_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11286</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_reprises_fin_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11287</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_reprises_fin_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11288</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_reprises_fin_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11289</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_iv_total" model="account.report.line">
+                <field name="name">Total IV</field>
+                <field name="code">IV_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">260</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_iv_total_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11291</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_total_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11292</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_total_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11293</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_iv_total_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11294</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_v_charges_financieres" model="account.report.line">
+                <field name="name">V. CHARGES FINANCIERES</field>
+                <field name="code">V_CHARGES_FINANCIERES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">270</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_v_charges_financieres_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11321</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_charges_financieres_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11322</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_charges_financieres_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11323</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_charges_financieres_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11324</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_v_charges_interets" model="account.report.line">
+                <field name="name">Charges d'intérêts</field>
+                <field name="code">V_CHARGES_INTERETS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">280</field>
+                <field name="parent_id" ref="bilan_cpc_line_v_charges_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_v_charges_interets_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11296</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_charges_interets_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11297</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_charges_interets_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11298</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_charges_interets_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11299</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_v_pertes_change" model="account.report.line">
+                <field name="name">Pertes de change</field>
+                <field name="code">V_PERTES_CHANGE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">290</field>
+                <field name="parent_id" ref="bilan_cpc_line_v_charges_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_v_pertes_change_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11301</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_pertes_change_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11302</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_pertes_change_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11303</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_pertes_change_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11304</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_v_autres_charges_fin" model="account.report.line">
+                <field name="name">Autres charges financières</field>
+                <field name="code">V_AUTRES_CHARGES_FIN</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">300</field>
+                <field name="parent_id" ref="bilan_cpc_line_v_charges_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_v_autres_charges_fin_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11306</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_autres_charges_fin_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11307</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_autres_charges_fin_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11308</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_autres_charges_fin_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11309</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_v_dotations_fin" model="account.report.line">
+                <field name="name">Dotations financières</field>
+                <field name="code">V_DOTATIONS_FIN</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">310</field>
+                <field name="parent_id" ref="bilan_cpc_line_v_charges_financieres"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_v_dotations_fin_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11311</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_dotations_fin_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11312</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_dotations_fin_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11313</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_dotations_fin_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11314</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_v_total" model="account.report.line">
+                <field name="name">Total V</field>
+                <field name="code">V_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">320</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_v_total_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11316</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_total_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11317</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_total_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11318</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_v_total_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11319</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_vi_resultat_financier" model="account.report.line">
+                <field name="name">VI. RESULTAT FINANCIER (IV - V)</field>
+                <field name="code">VI_RESULTAT_FINANCIER</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">330</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_vi_resultat_financier_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11331</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_vi_resultat_financier_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11332</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_vi_resultat_financier_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11333</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_vi_resultat_financier_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11334</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_vii_resultat_courant" model="account.report.line">
+                <field name="name">VII. RESULTAT COURANT (III + VI)</field>
+                <field name="code">VII_RESULTAT_COURANT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">340</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_vii_resultat_courant_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11336</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_vii_resultat_courant_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11337</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_vii_resultat_courant_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11338</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_vii_resultat_courant_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11339</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_produits_non_courants" model="account.report.line">
+                <field name="name">VIII. PRODUITS NON COURANTS</field>
+                <field name="code">VIII_PRODUITS_NON_COURANTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">350</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_produits_non_courants_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11391</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_produits_non_courants_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11392</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_produits_non_courants_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11393</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_produits_non_courants_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11394</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_cessions" model="account.report.line">
+                <field name="name">Produits des cessions d'immobilisations</field>
+                <field name="code">VIII_CESSIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">360</field>
+                <field name="parent_id" ref="bilan_cpc_line_viii_produits_non_courants"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_cessions_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11341</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_cessions_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11342</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_cessions_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11343</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_cessions_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11344</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_subventions_equilibre" model="account.report.line">
+                <field name="name">Subventions d'équilibre</field>
+                <field name="code">VIII_SUBVENTIONS_EQUILIBRE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">370</field>
+                <field name="parent_id" ref="bilan_cpc_line_viii_produits_non_courants"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_subventions_equilibre_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11346</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_subventions_equilibre_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11347</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_subventions_equilibre_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11348</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_subventions_equilibre_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11349</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_reprises_subventions" model="account.report.line">
+                <field name="name">Reprises sur subventions d'investissement</field>
+                <field name="code">VIII_REPRISES_SUBVENTIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">380</field>
+                <field name="parent_id" ref="bilan_cpc_line_viii_produits_non_courants"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_reprises_subventions_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11351</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_reprises_subventions_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11352</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_reprises_subventions_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11353</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_reprises_subventions_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11354</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_autres_produits" model="account.report.line">
+                <field name="name">Autres produits non courants</field>
+                <field name="code">VIII_AUTRES_PRODUITS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">390</field>
+                <field name="parent_id" ref="bilan_cpc_line_viii_produits_non_courants"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_autres_produits_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11356</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_autres_produits_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11357</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_autres_produits_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11358</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_autres_produits_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11359</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_reprises_non_courantes" model="account.report.line">
+                <field name="name">Reprises non courantes; transferts de charges</field>
+                <field name="code">VIII_REPRISES_NON_COURANTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">400</field>
+                <field name="parent_id" ref="bilan_cpc_line_viii_produits_non_courants"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_reprises_non_courantes_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11361</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_reprises_non_courantes_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11362</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_reprises_non_courantes_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11363</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_reprises_non_courantes_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11364</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_viii_total" model="account.report.line">
+                <field name="name">Total VIII</field>
+                <field name="code">VIII_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">410</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_viii_total_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11366</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_total_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11367</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_total_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11368</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_viii_total_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11369</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ix_charges_non_courantes" model="account.report.line">
+                <field name="name">IX. CHARGES NON COURANTES</field>
+                <field name="code">IX_CHARGES_NON_COURANTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">420</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ix_charges_non_courantes_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11396</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_charges_non_courantes_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11397</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_charges_non_courantes_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11398</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_charges_non_courantes_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11399</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ix_vna_immob_cedees" model="account.report.line">
+                <field name="name">Valeurs nettes d'amortissements des immobilisations cédées</field>
+                <field name="code">IX_VNA_IMMOB_CEDEES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">430</field>
+                <field name="parent_id" ref="bilan_cpc_line_ix_charges_non_courantes"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ix_vna_immob_cedees_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11371</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_vna_immob_cedees_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11372</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_vna_immob_cedees_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11373</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_vna_immob_cedees_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11374</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ix_subventions_accordees" model="account.report.line">
+                <field name="name">Subventions accordées</field>
+                <field name="code">IX_SUBVENTIONS_ACCORDEES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">440</field>
+                <field name="parent_id" ref="bilan_cpc_line_ix_charges_non_courantes"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ix_subventions_accordees_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11376</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_subventions_accordees_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11377</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_subventions_accordees_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11378</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_subventions_accordees_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11379</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ix_autres_charges" model="account.report.line">
+                <field name="name">Autres charges non courantes</field>
+                <field name="code">IX_AUTRES_CHARGES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">450</field>
+                <field name="parent_id" ref="bilan_cpc_line_ix_charges_non_courantes"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ix_autres_charges_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11381</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_autres_charges_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11382</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_autres_charges_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11383</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_autres_charges_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11384</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ix_dotations_non_courantes" model="account.report.line">
+                <field name="name">Dotations non courantes aux amortissements et aux provisions</field>
+                <field name="code">IX_DOTATIONS_NON_COURANTES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">460</field>
+                <field name="parent_id" ref="bilan_cpc_line_ix_charges_non_courantes"/>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ix_dotations_non_courantes_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11386</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_dotations_non_courantes_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11387</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_dotations_non_courantes_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11388</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_dotations_non_courantes_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11389</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_ix_total" model="account.report.line">
+                <field name="name">Total IX</field>
+                <field name="code">IX_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">470</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_ix_total_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11406</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_total_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11407</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_total_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11408</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_ix_total_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11409</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_x_resultat_non_courant" model="account.report.line">
+                <field name="name">X. RESULTAT NON COURANT (VIII - IX)</field>
+                <field name="code">X_RESULTAT_NON_COURANT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">480</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_x_resultat_non_courant_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11401</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_x_resultat_non_courant_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11402</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_x_resultat_non_courant_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11403</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_x_resultat_non_courant_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11404</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_xi_resultat_avant_impots" model="account.report.line">
+                <field name="name">XI. RESULTAT AVANT IMPOTS (VII + X)</field>
+                <field name="code">XI_RESULTAT_AVANT_IMPOTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">490</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_xi_resultat_avant_impots_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11411</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xi_resultat_avant_impots_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11412</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xi_resultat_avant_impots_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11413</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xi_resultat_avant_impots_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11414</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_xii_impots" model="account.report.line">
+                <field name="name">XII. IMPOTS SUR LES RESULTATS</field>
+                <field name="code">XII_IMPOTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">500</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_xii_impots_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11416</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xii_impots_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11417</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xii_impots_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11418</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xii_impots_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11419</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_xiii_resultat_net" model="account.report.line">
+                <field name="name">XIII. RESULTAT NET (XI - XII)</field>
+                <field name="code">XIII_RESULTAT_NET</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">510</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_xiii_resultat_net_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11421</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xiii_resultat_net_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11422</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xiii_resultat_net_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11423</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xiii_resultat_net_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11424</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_xiv_total_produits" model="account.report.line">
+                <field name="name">XIV. TOTAL DES PRODUITS (I + IV + VIII)</field>
+                <field name="code">XIV_TOTAL_PRODUITS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">520</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_xiv_total_produits_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11426</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xiv_total_produits_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11427</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xiv_total_produits_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11428</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xiv_total_produits_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11429</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_xv_total_charges" model="account.report.line">
+                <field name="name">XV. TOTAL DES CHARGES (II + V + IX + XII)</field>
+                <field name="code">XV_TOTAL_CHARGES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">530</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_xv_total_charges_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11431</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xv_total_charges_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11432</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xv_total_charges_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11433</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xv_total_charges_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11434</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_cpc_line_xvi_resultat_net" model="account.report.line">
+                <field name="name">XVI. RESULTAT NET (XIV - XV)</field>
+                <field name="code">XVI_RESULTAT_NET</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">540</field>
+                <field name="expression_ids">
+                    <record id="bilan_cpc_expr_xvi_resultat_net_propres" model="account.report.expression">
+                        <field name="label">propres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11436</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xvi_resultat_net_anterieures" model="account.report.expression">
+                        <field name="label">anterieures</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11437</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xvi_resultat_net_total_n" model="account.report.expression">
+                        <field name="label">total_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11438</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cpc_expr_xvi_resultat_net_total_prev" model="account.report.expression">
+                        <field name="label">total_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_11439</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <record id="action_ma_bilan_cpc_report" model="ir.actions.client">
+        <field name="name">C.P.C</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-cpc</field>
+        <field name="context" eval="{'report_id': ref('bilan_cpc_report')}"/>
+    </record>
+
+    <menuitem id="menu_ma_bilan_cpc_report"
+              name="C.P.C"
+              action="action_ma_bilan_cpc_report"
+              parent="account.account_reports_legal_statements_menu"
+              groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

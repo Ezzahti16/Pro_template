@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_eval_report" model="account.report">
+    <field name="name">Principales Méthodes d'Evaluation Spécifiques à l'Entreprise</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_eval_report_column_description" model="account.report.column">
+            <field name="name">DESCRIPTION</field>
+            <field name="expression_label">description</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+        <record id="bilan_eval_report_line_EVAL_ACTIF_IM" model="account.report.line">
+                <field name="name">I. ACTIF IMMOBILISE</field>
+                <field name="code">EVAL_ACTIF_IM</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">10</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ACTIF_IM_A_ENTREE" model="account.report.line">
+                <field name="name">A. EVALUATION A L'ENTREE</field>
+                <field name="code">EVAL_ACTIF_IM_A_ENTREE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM"/>
+                <field name="sequence">20</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_NON_VALEURS" model="account.report.line">
+                <field name="name">1. Immobilisation en non-valeurs</field>
+                <field name="code">EVAL_NON_VALEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_A_ENTREE"/>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_NON_VALEURS_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14342</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_INCORPORELLES" model="account.report.line">
+                <field name="name">2. Immobilisation incorporelles</field>
+                <field name="code">EVAL_INCORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_A_ENTREE"/>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_INCORPORELLES_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14343</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_CORPORELLES" model="account.report.line">
+                <field name="name">3. Immobilisations corporelles</field>
+                <field name="code">EVAL_CORPORELLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_A_ENTREE"/>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_CORPORELLES_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14344</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_FINANCIERES" model="account.report.line">
+                <field name="name">4. Immobilisations financières</field>
+                <field name="code">EVAL_FINANCIERES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_A_ENTREE"/>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_FINANCIERES_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14345</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ACTIF_IM_CORRECTIONS" model="account.report.line">
+                <field name="name">B. CORRECTIONS DE VALEUR</field>
+                <field name="code">EVAL_ACTIF_IM_CORRECTIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM"/>
+                <field name="sequence">70</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_METHODES_AMORT" model="account.report.line">
+                <field name="name">1. Méthodes d'amortissements</field>
+                <field name="code">EVAL_METHODES_AMORT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_CORRECTIONS"/>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_METHODES_AMORT_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14301</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_PROVISIONS_DEPRECIATION" model="account.report.line">
+                <field name="name">2. Méthodes d'évaluation des provisions pour dépréciation</field>
+                <field name="code">EVAL_PROVISIONS_DEPRECIATION</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_CORRECTIONS"/>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_PROVISIONS_DEPRECIATION_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14303</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ECARTS_CONVERSION_ACTIF" model="account.report.line">
+                <field name="name">3. Méthodes de détermination des écarts de conversion - Actif</field>
+                <field name="code">EVAL_ECARTS_CONVERSION_ACTIF</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_IM_CORRECTIONS"/>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_ECARTS_CONVERSION_ACTIF_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14305</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ACTIF_CIRC" model="account.report.line">
+                <field name="name">II. ACTIF CIRCULANT (Hors trésorerie)</field>
+                <field name="code">EVAL_ACTIF_CIRC</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">110</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ACTIF_CIRC_A_ENTREE" model="account.report.line">
+                <field name="name">A. EVALUATION A L'ENTREE</field>
+                <field name="code">EVAL_ACTIF_CIRC_A_ENTREE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC"/>
+                <field name="sequence">120</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_STOCKS" model="account.report.line">
+                <field name="name">1. Stocks</field>
+                <field name="code">EVAL_STOCKS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC_A_ENTREE"/>
+                <field name="sequence">130</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_STOCKS_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14307</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_CREANCES" model="account.report.line">
+                <field name="name">2. Créances</field>
+                <field name="code">EVAL_CREANCES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC_A_ENTREE"/>
+                <field name="sequence">140</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_CREANCES_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14309</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_TITRES_VALEURS" model="account.report.line">
+                <field name="name">3. Titres et valeurs de placement</field>
+                <field name="code">EVAL_TITRES_VALEURS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC_A_ENTREE"/>
+                <field name="sequence">150</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_TITRES_VALEURS_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14311</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ACTIF_CIRC_CORRECTIONS" model="account.report.line">
+                <field name="name">B. CORRECTIONS DE VALEUR</field>
+                <field name="code">EVAL_ACTIF_CIRC_CORRECTIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC"/>
+                <field name="sequence">160</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_CIRC_PROVISIONS" model="account.report.line">
+                <field name="name">1. Méthodes d'évaluation des provisions pour dépréciation</field>
+                <field name="code">EVAL_CIRC_PROVISIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC_CORRECTIONS"/>
+                <field name="sequence">170</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_CIRC_PROVISIONS_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14313</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_CIRC_ECARTS_CONVERSION" model="account.report.line">
+                <field name="name">2. Méthodes de détermination des écarts de conversion - Actif</field>
+                <field name="code">EVAL_CIRC_ECARTS_CONVERSION</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_ACTIF_CIRC_CORRECTIONS"/>
+                <field name="sequence">180</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_CIRC_ECARTS_CONVERSION_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14315</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_FINANCEMENT" model="account.report.line">
+                <field name="name">III. FINANCEMENT PERMANENT</field>
+                <field name="code">EVAL_FINANCEMENT</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">190</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_METHODES_REEVALUATION" model="account.report.line">
+                <field name="name">1. Méthodes de réévaluation</field>
+                <field name="code">EVAL_METHODES_REEVALUATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_FINANCEMENT"/>
+                <field name="sequence">200</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_METHODES_REEVALUATION_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14317</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_PROVISIONS_REGLEMENTEES" model="account.report.line">
+                <field name="name">2. Méthodes d'évaluation des provisions réglementées</field>
+                <field name="code">EVAL_PROVISIONS_REGLEMENTEES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_FINANCEMENT"/>
+                <field name="sequence">210</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_PROVISIONS_REGLEMENTEES_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14319</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_DETTES_FINANCEMENT" model="account.report.line">
+                <field name="name">3. Dettes de financement permanent</field>
+                <field name="code">EVAL_DETTES_FINANCEMENT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_FINANCEMENT"/>
+                <field name="sequence">220</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_DETTES_FINANCEMENT_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14321</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_PROVISIONS_DURABLES" model="account.report.line">
+                <field name="name">4. Méthodes d'évaluation des provisions durables pour risques et charges</field>
+                <field name="code">EVAL_PROVISIONS_DURABLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_FINANCEMENT"/>
+                <field name="sequence">230</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_PROVISIONS_DURABLES_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14323</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_ECARTS_CONVERSION_PASSIF" model="account.report.line">
+                <field name="name">5. Méthodes de détermination des écarts de conversion - Passif</field>
+                <field name="code">EVAL_ECARTS_CONVERSION_PASSIF</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_FINANCEMENT"/>
+                <field name="sequence">240</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_ECARTS_CONVERSION_PASSIF_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14325</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_PASSIF_CIRC" model="account.report.line">
+                <field name="name">IV. PASSIF CIRCULANT (Hors trésorerie)</field>
+                <field name="code">EVAL_PASSIF_CIRC</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">250</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_DETTES_PASSIF_CIRC" model="account.report.line">
+                <field name="name">1. Dettes du passif circulant</field>
+                <field name="code">EVAL_DETTES_PASSIF_CIRC</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_PASSIF_CIRC"/>
+                <field name="sequence">260</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_DETTES_PASSIF_CIRC_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14327</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_AUTRES_PROVISIONS" model="account.report.line">
+                <field name="name">2. Méthodes d'évaluation des autres provisions pour risques et charges</field>
+                <field name="code">EVAL_AUTRES_PROVISIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_PASSIF_CIRC"/>
+                <field name="sequence">270</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_AUTRES_PROVISIONS_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14329</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_PASSIF_ECARTS_CONVERSION" model="account.report.line">
+                <field name="name">3. Méthodes de détermination des écarts de conversion - Passif</field>
+                <field name="code">EVAL_PASSIF_ECARTS_CONVERSION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_PASSIF_CIRC"/>
+                <field name="sequence">280</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_PASSIF_ECARTS_CONVERSION_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14331</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_TRESORERIE" model="account.report.line">
+                <field name="name">V. TRESORERIE</field>
+                <field name="code">EVAL_TRESORERIE</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">290</field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_TRESORERIE_ACTIF" model="account.report.line">
+                <field name="name">1. Trésorerie - Actif</field>
+                <field name="code">EVAL_TRESORERIE_ACTIF</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_TRESORERIE"/>
+                <field name="sequence">300</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_TRESORERIE_ACTIF_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14333</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_TRESORERIE_PASSIF" model="account.report.line">
+                <field name="name">2. Trésorerie - Passif</field>
+                <field name="code">EVAL_TRESORERIE_PASSIF</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_TRESORERIE"/>
+                <field name="sequence">310</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_TRESORERIE_PASSIF_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14335</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_eval_report_line_EVAL_TRESORERIE_PROVISIONS" model="account.report.line">
+                <field name="name">3. Méthodes d'évaluation des provisions pour dépréciation</field>
+                <field name="code">EVAL_TRESORERIE_PROVISIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="parent_id" ref="bilan_eval_report_line_EVAL_TRESORERIE"/>
+                <field name="sequence">320</field>
+                <field name="expression_ids">
+                    <record id="bilan_eval_report_expr_EVAL_TRESORERIE_PROVISIONS_description" model="account.report.expression">
+                        <field name="label">description</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14337</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_bilan_eval_report" model="ir.actions.client">
+    <field name="name">Principales Méthodes d'Evaluation</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-eval</field>
+    <field name="context" eval="{'report_id': ref('bilan_eval_report')}"/>
+</record>
+
+<menuitem id="menu_bilan_eval_report" name="Principales Méthodes d'Evaluation" action="action_bilan_eval_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

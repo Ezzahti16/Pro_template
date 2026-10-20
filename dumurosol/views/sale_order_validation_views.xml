@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_validation_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.validation.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Bandeau de statut de validation, juste sous le header standard -->
+            <xpath expr="//form/sheet" position="before">
+                <div class="alert alert-info d-flex justify-content-between align-items-center"
+                     role="alert"
+                     invisible="validation_state not in ('pending', 'to_correct')">
+                    <div>
+                        <strong invisible="validation_state != 'pending'">
+                            En attente de validation depuis le
+                            <field name="validation_submitted_date" readonly="1" nolabel="1"/>
+                            — Niveau courant :
+                            <field name="current_validation_level_id" readonly="1" nolabel="1"/>
+                            (Règle : <field name="current_validation_rule_id" readonly="1" nolabel="1"/>)
+                        </strong>
+                        <strong invisible="validation_state != 'to_correct'">
+                            À corriger — Motif du rejet :
+                            <field name="validation_rejection_reason" readonly="1" nolabel="1"/>
+                        </strong>
+                    </div>
+                    <div>
+                        <button name="%(action_sale_order_approve_wizard)d" type="action"
+                                string="Valider" class="btn-success"
+                                invisible="not is_current_user_validator or validation_state != 'pending'"/>
+                        <button name="%(action_sale_order_reject_wizard)d" type="action"
+                                string="Rejeter" class="btn-danger"
+                                invisible="not is_current_user_validator or validation_state != 'pending'"/>
+                        <button name="action_resubmit_validation" type="object"
+                                string="Re-soumettre" class="btn-primary"
+                                invisible="validation_state != 'to_correct'"/>
+                    </div>
+                </div>
+                <div class="alert alert-success" role="alert" invisible="validation_state != 'validated'">
+                    <strong>Devis validé</strong> — circuit de validation entièrement complété.
+                </div>
+                <div class="alert alert-danger" role="alert" invisible="validation_state != 'rejected'">
+                    <strong>Devis rejeté.</strong>
+                    <field name="validation_rejection_reason" readonly="1" nolabel="1"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_current_user_validator" invisible="1"/>
+            </xpath>
+
+            <!-- Onglet Historique de validation -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Historique de validation" name="validation_history"
+                      invisible="validation_state == 'none'">
+                    <separator string="Circuit de validation et validateurs désignés"/>
+                    <field name="validation_step_ids" nolabel="1" readonly="1">
+                        <list decoration-success="status == 'approved'"
+                              decoration-danger="status == 'rejected'"
+                              decoration-info="status == 'pending'"
+                              decoration-muted="status == 'not_reached'">
+                            <field name="level_sequence" string="Niveau"/>
+                            <field name="level_name" string="Libellé du niveau"/>
+                            <field name="validator_names" string="Validateur(s)"/>
+                            <field name="status_label" string="Étape"/>
+                            <field name="status" column_invisible="1"/>
+                        </list>
+                    </field>
+                    <separator string="Décisions déjà enregistrées"/>
+                    <field name="validation_log_ids" readonly="1">
+                        <list decoration-success="decision == 'approved'"
+                              decoration-danger="decision == 'rejected'">
+                            <field name="decision_date"/>
+                            <field name="level_id"/>
+                            <field name="validator_user_id"/>
+                            <field name="decision" widget="badge"/>
+                            <field name="comment" string="Remarque"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_order_tree_validation_inherit" model="ir.ui.view">
+        <field name="name">sale.order.list.validation.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="amount_total" position="after">
+                <field name="validation_state" optional="show" widget="badge"
+                       decoration-success="validation_state == 'validated'"
+                       decoration-warning="validation_state == 'pending'"
+                       decoration-danger="validation_state in ('rejected', 'to_correct')"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_validation_inherit" model="ir.ui.view">
+        <field name="name">sale.order.search.validation.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                <filter string="En attente de ma validation" name="filter_pending_my_validation"
+                        domain="[('validation_state', '=', 'pending'),
+                                 ('current_validation_level_id.user_ids', 'in', [uid])]"/>
+                <filter string="À corriger" name="filter_to_correct"
+                        domain="[('validation_state', '=', 'to_correct')]"/>
+            </xpath>
+            <xpath expr="//search" position="inside">
+                <group>
+                    <filter string="État de validation" name="group_validation_state"
+                            context="{'group_by': 'validation_state'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

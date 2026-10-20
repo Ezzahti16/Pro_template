@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document_inherit_dumurosol" inherit_id="sale.report_saleorder_document">
+        <!-- Sur une ligne dont le produit est "Divers", on n'affiche pas le
+             texte brut de la description (qui commence par "Divers"), mais
+             uniquement le détail complémentaire tapé par le vendeur, via
+             sale.order.line._get_report_description(). -->
+        <xpath expr="//td[@name='td_product_name']/span[@t-field='line.name']" position="replace">
+            <span t-out="line._get_report_description()">Bacon Burger</span>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="cancel_reason_client" model="dumurosol.sale.order.cancel.reason">
+        <field name="name">Demande du client</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="cancel_reason_price" model="dumurosol.sale.order.cancel.reason">
+        <field name="name">Prix / conditions non acceptés</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="cancel_reason_error" model="dumurosol.sale.order.cancel.reason">
+        <field name="name">Erreur de saisie</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="cancel_reason_stock" model="dumurosol.sale.order.cancel.reason">
+        <field name="name">Produit indisponible</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="cancel_reason_other" model="dumurosol.sale.order.cancel.reason">
+        <field name="name">Autre</field>
+        <field name="sequence">100</field>
+        <field name="requires_precision">True</field>
+    </record>
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_validation_log_list" model="ir.ui.view">
+        <field name="name">dumurosol.sale.validation.log.list</field>
+        <field name="model">dumurosol.sale.validation.log</field>
+        <field name="arch" type="xml">
+            <list string="Journal des décisions" create="false" edit="false" delete="false"
+                  decoration-success="decision == 'approved'" decoration-danger="decision == 'rejected'">
+                <field name="decision_date"/>
+                <field name="sale_order_id"/>
+                <field name="rule_id"/>
+                <field name="level_id"/>
+                <field name="validator_user_id"/>
+                <field name="decision" widget="badge"/>
+                <field name="comment"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sale_validation_log_form" model="ir.ui.view">
+        <field name="name">dumurosol.sale.validation.log.form</field>
+        <field name="model">dumurosol.sale.validation.log</field>
+        <field name="arch" type="xml">
+            <form string="Décision de validation" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="rule_id"/>
+                            <field name="level_id"/>
+                        </group>
+                        <group>
+                            <field name="validator_user_id"/>
+                            <field name="decision" widget="badge"/>
+                            <field name="decision_date"/>
+                        </group>
+                    </group>
+                    <group string="Commentaire">
+                        <field name="comment" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_validation_log_search" model="ir.ui.view">
+        <field name="name">dumurosol.sale.validation.log.search</field>
+        <field name="model">dumurosol.sale.validation.log</field>
+        <field name="arch" type="xml">
+            <search string="Journal des décisions">
+                <field name="sale_order_id"/>
+                <field name="rule_id"/>
+                <field name="validator_user_id"/>
+                <filter string="Validées" name="filter_approved" domain="[('decision', '=', 'approved')]"/>
+                <filter string="Rejetées" name="filter_rejected" domain="[('decision', '=', 'rejected')]"/>
+                <separator/>
+                <filter string="Ce mois-ci" name="filter_this_month"
+                        domain="[('decision_date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Validateur" name="group_validator" context="{'group_by': 'validator_user_id'}"/>
+                    <filter string="Règle" name="group_rule" context="{'group_by': 'rule_id'}"/>
+                    <filter string="Décision" name="group_decision" context="{'group_by': 'decision'}"/>
+                    <filter string="Date (mois)" name="group_month" context="{'group_by': 'decision_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sale_validation_log" model="ir.actions.act_window">
+        <field name="name">Journal des décisions</field>
+        <field name="res_model">dumurosol.sale.validation.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

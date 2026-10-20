@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+    <!--
+        "Tableau des Plus ou Moins Values sur Cessions ou Retraits
+        d'Immobilisations". The legacy xlsx has two parts: a repeatable
+        per-disposal DETAIL grid (codes 1929-1936: date, compte principal,
+        montant brut, amortissements cumulés, valeur nette, produit de
+        cession, plus/moins values) and a single TOTAL row (codes
+        2037-2043). The detail codes don't exist in the live formulas API
+        (checked: all None) - only the TOTAL row's codes are real, and they
+        reference the detail codes via EDIST(...), so this report is built
+        as a single "TOTAL" row only, matching every other report in this
+        module (one EDI code per cell). It will read 0 until the live
+        system starts populating the underlying per-disposal codes some
+        other way.
+    -->
+    <record id="bilan_cession_immob_report" model="account.report">
+        <field name="name">Tableau des Plus ou Moins Values sur Cessions ou Retraits d'Immobilisations</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_cession_column_compte_principal" model="account.report.column">
+                <field name="name">Compte Principal</field>
+                <field name="expression_label">compte_principal</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cession_column_montant_brut" model="account.report.column">
+                <field name="name">Montant Brut</field>
+                <field name="expression_label">montant_brut</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cession_column_amort_cumules" model="account.report.column">
+                <field name="name">Amortissements Cumulés</field>
+                <field name="expression_label">amort_cumules</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cession_column_valeur_nette" model="account.report.column">
+                <field name="name">Valeur Nette d'Amortissements</field>
+                <field name="expression_label">valeur_nette</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cession_column_produit_cession" model="account.report.column">
+                <field name="name">Produit de Cession</field>
+                <field name="expression_label">produit_cession</field>
+                <field name="sequence">50</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cession_column_plus_values" model="account.report.column">
+                <field name="name">Plus Values</field>
+                <field name="expression_label">plus_values</field>
+                <field name="sequence">60</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_cession_column_moins_values" model="account.report.column">
+                <field name="name">Moins Values</field>
+                <field name="expression_label">moins_values</field>
+                <field name="sequence">70</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_cession_line_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">CESSION_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_cession_expr_total_compte_principal" model="account.report.expression">
+                        <field name="label">compte_principal</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2037</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cession_expr_total_montant_brut" model="account.report.expression">
+                        <field name="label">montant_brut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2038</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cession_expr_total_amort_cumules" model="account.report.expression">
+                        <field name="label">amort_cumules</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2039</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cession_expr_total_valeur_nette" model="account.report.expression">
+                        <field name="label">valeur_nette</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2040</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cession_expr_total_produit_cession" model="account.report.expression">
+                        <field name="label">produit_cession</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2041</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cession_expr_total_plus_values" model="account.report.expression">
+                        <field name="label">plus_values</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2042</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_cession_expr_total_moins_values" model="account.report.expression">
+                        <field name="label">moins_values</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2043</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <record id="action_dbc_bilan_cession_immob_report" model="ir.actions.client">
+        <field name="name">Tableau des Plus ou Moins Values sur Cessions ou Retraits d'Immobilisations</field>
+        <field name="tag">account_report</field>
+        <field name="path">dbc-bilan-cession-immob</field>
+        <field name="context" eval="{'report_id': ref('bilan_cession_immob_report')}"/>
+    </record>
+    <menuitem id="menu_dbc_bilan_cession_immob_report" name="Plus ou Moins Values sur Cessions d'Immobilisations" parent="account.account_reports_legal_statements_menu" action="action_dbc_bilan_cession_immob_report" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+
+</odoo>

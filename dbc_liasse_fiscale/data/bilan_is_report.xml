@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+    <!--
+        "État pour le Calcul de l'Impôt sur les Sociétés - Entreprises
+        encouragées". Single "Montant" column, no N/N-1 comparison - matches
+        the source layout (sheet "18" of the legacy xlsx).
+
+        Two of the EDI codes used here ("ET_18A" and "ET_18B") have the
+        literal formule "Somme" instead of a real formula or "Saisie": the
+        legacy system treats them as a manually-entered total with no
+        further breakdown. account_report.py's is_saisie_code()/
+        _get_saisie_codes() now treat "Somme" exactly like "Saisie" (manual
+        entry, editable cell, blank until filled in) - see that file for
+        the change. The "TOTAL" row below binds directly to edi_17929
+        instead of edi_ET_18B though, since 17929 already computes the
+        exact same sum (14992+14994+14996) from a real formula.
+    -->
+    <record id="bilan_is_report" model="account.report">
+        <field name="name">État pour le Calcul de l'Impôt sur les Sociétés</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="True"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_is_column_montant" model="account.report.column">
+                <field name="name">Montant</field>
+                <field name="expression_label">montant</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_is_line_ca_taxable" model="account.report.line">
+                <field name="name">1- CA taxable</field>
+                <field name="code">IS_CA_TAXABLE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_ca_taxable_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14347</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_ca_exonere" model="account.report.line">
+                <field name="name">2- CA exonéré à 100%</field>
+                <field name="code">IS_CA_EXONERE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_ca_exonere_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14349</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_ca_taux_reduit" model="account.report.line">
+                <field name="name">3- CA soumis au taux réduit</field>
+                <field name="code">IS_CA_TAUX_REDUIT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_ca_taux_reduit_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_ET_18A</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_autres_produits" model="account.report.line">
+                <field name="name">4- Autres produits taxables</field>
+                <field name="code">IS_AUTRES_PRODUITS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_autres_produits_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_17929</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_autres_produits_expl" model="account.report.line">
+                <field name="name">- Autres produits d'exploitation</field>
+                <field name="code">IS_AUTRES_PRODUITS_EXPL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">50</field>
+                <field name="parent_id" ref="bilan_is_line_autres_produits"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_autres_produits_expl_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14992</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_produits_financiers" model="account.report.line">
+                <field name="name">- Produits financiers</field>
+                <field name="code">IS_PRODUITS_FINANCIERS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">60</field>
+                <field name="parent_id" ref="bilan_is_line_autres_produits"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_produits_financiers_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14994</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_subventions" model="account.report.line">
+                <field name="name">- Subventions</field>
+                <field name="code">IS_SUBVENTIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="parent_id" ref="bilan_is_line_autres_produits"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_subventions_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14996</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_autres_produits_total" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">IS_AUTRES_PRODUITS_TOTAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">80</field>
+                <field name="parent_id" ref="bilan_is_line_autres_produits"/>
+                <field name="foldable" eval="True"/>
+                <field name="expression_ids">
+                    <!-- Same value as the "4- Autres produits taxables" header
+                         above (edi_17929), matching the legacy layout where
+                         both the section header and this closing total line
+                         show the same figure. Bound directly to edi_17929
+                         rather than edi_ET_18B ("Somme") since 17929 already
+                         computes this exact sum from a real formula. -->
+                    <record id="bilan_is_expr_autres_produits_total_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_17929</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_denominateur" model="account.report.line">
+                <field name="name">5- Dénominateur (1 + 2 + 3 + 4)</field>
+                <field name="code">IS_DENOMINATEUR</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_denominateur_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14380</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_is_line_montant_is_du" model="account.report.line">
+                <field name="name">6- Montant de l'impôt sur les sociétés (IS) dû</field>
+                <field name="code">IS_MONTANT_DU</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_is_expr_montant_is_du_montant" model="account.report.expression">
+                        <field name="label">montant</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14415</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <record id="action_dbc_bilan_is_report" model="ir.actions.client">
+        <field name="name">État pour le Calcul de l'Impôt sur les Sociétés</field>
+        <field name="tag">account_report</field>
+        <field name="path">dbc-bilan-is</field>
+        <field name="context" eval="{'report_id': ref('bilan_is_report')}"/>
+    </record>
+    <menuitem id="menu_dbc_bilan_is_report" name="État pour le Calcul de l'Impôt sur les Sociétés" parent="account.account_reports_legal_statements_menu" action="action_dbc_bilan_is_report" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+
+</odoo>

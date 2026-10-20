@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ma_fiscal_setting,ma.fiscal.setting,model_ma_fiscal_setting,base.group_user,1,1,1,1
+access_ma_fiscal_client,ma.fiscal.client,model_ma_fiscal_client,base.group_user,1,1,1,1

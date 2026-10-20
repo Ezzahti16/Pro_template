@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dumurosol_sale_order_cancel_wizard_form" model="ir.ui.view">
+        <field name="name">dumurosol.sale.order.cancel.wizard.form</field>
+        <field name="model">dumurosol.sale.order.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Annuler le devis">
+                <field name="order_id" invisible="1"/>
+                <group>
+                    <field name="cancel_reason_id" required="1" options="{'no_create': True}"/>
+                    <field name="cancel_reason_requires_precision" invisible="1"/>
+                    <field name="note"
+                           required="cancel_reason_requires_precision"
+                           placeholder="Précisions complémentaires"/>
+                </group>
+                <footer>
+                    <button string="Confirmer l'annulation"
+                            name="action_confirm_cancel"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Annuler" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+    <record id="bilan_prov_report" model="account.report">
+        <field name="name">Tableau des Provisions</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="True"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_prov_column_debut" model="account.report.column">
+                <field name="name">Montant debut exercice</field>
+                <field name="expression_label">debut</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_dot_exploitation" model="account.report.column">
+                <field name="name">Dotations d'exploitation</field>
+                <field name="expression_label">dot_exploitation</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_dot_financieres" model="account.report.column">
+                <field name="name">Dotations financieres</field>
+                <field name="expression_label">dot_financieres</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_dot_non_courantes" model="account.report.column">
+                <field name="name">Dotations non courantes</field>
+                <field name="expression_label">dot_non_courantes</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_rep_exploitation" model="account.report.column">
+                <field name="name">Reprises d'exploitation</field>
+                <field name="expression_label">rep_exploitation</field>
+                <field name="sequence">50</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_rep_financieres" model="account.report.column">
+                <field name="name">Reprises financieres</field>
+                <field name="expression_label">rep_financieres</field>
+                <field name="sequence">60</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_rep_non_courantes" model="account.report.column">
+                <field name="name">Reprises non courantes</field>
+                <field name="expression_label">rep_non_courantes</field>
+                <field name="sequence">70</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_prov_column_fin" model="account.report.column">
+                <field name="name">Montant fin exercice</field>
+                <field name="expression_label">fin</field>
+                <field name="sequence">80</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_prov_line_provisions_immo" model="account.report.line">
+                <field name="name">1. Provisions pour depreciation de l'actif immobilise</field>
+                <field name="code">PROVISIONS_IMMO</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_provisions_immo_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1748</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1749</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1750</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1751</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1752</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1753</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1754</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_immo_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1755</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_provisions_regl" model="account.report.line">
+                <field name="name">2. Provisions reglementees</field>
+                <field name="code">PROVISIONS_REGL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_provisions_regl_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1784</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1785</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1786</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1787</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1788</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1789</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1790</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_regl_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1791</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_provisions_durables" model="account.report.line">
+                <field name="name">3. Provisions durables pour risques et charges</field>
+                <field name="code">PROVISIONS_DURABLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_provisions_durables_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1827</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1828</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1829</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1830</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1831</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1832</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1833</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_durables_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1834</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_sous_total_a" model="account.report.line">
+                <field name="name">SOUS TOTAL (A)</field>
+                <field name="code">SOUS_TOTAL_A</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_sous_total_a_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1844</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1845</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1846</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1847</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1848</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1849</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1850</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_a_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1851</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_provisions_circulant" model="account.report.line">
+                <field name="name">4. Provisions pour depreciation de l'actif circulant (hors tresorerie)</field>
+                <field name="code">PROVISIONS_CIRCULANT</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_provisions_circulant_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1877</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1878</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1879</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1880</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1881</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1882</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1883</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_circulant_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1884</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_provisions_autres" model="account.report.line">
+                <field name="name">5. Autres provisions pour risques et charges</field>
+                <field name="code">PROVISIONS_AUTRES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_provisions_autres_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1894</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1895</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1896</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1897</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1898</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1899</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1900</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_autres_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1901</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_provisions_tresorerie" model="account.report.line">
+                <field name="name">6. Provisions pour depreciation des comptes de tresorerie</field>
+                <field name="code">PROVISIONS_TRESORERIE</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_provisions_tresorerie_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1903</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1904</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1905</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1906</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1907</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1908</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1909</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_provisions_tresorerie_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1910</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_sous_total_b" model="account.report.line">
+                <field name="name">SOUS TOTAL (B)</field>
+                <field name="code">SOUS_TOTAL_B</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_sous_total_b_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1912</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1913</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1914</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1915</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1916</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1917</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1918</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_sous_total_b_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1919</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_prov_line_total_ab" model="account.report.line">
+                <field name="name">TOTAL (A+B)</field>
+                <field name="code">TOTAL_AB</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_prov_expr_total_ab_debut" model="account.report.expression">
+                        <field name="label">debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1921</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_dot_exploitation" model="account.report.expression">
+                        <field name="label">dot_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1922</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_dot_financieres" model="account.report.expression">
+                        <field name="label">dot_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1923</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_dot_non_courantes" model="account.report.expression">
+                        <field name="label">dot_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1924</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_rep_exploitation" model="account.report.expression">
+                        <field name="label">rep_exploitation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1925</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_rep_financieres" model="account.report.expression">
+                        <field name="label">rep_financieres</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1926</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_rep_non_courantes" model="account.report.expression">
+                        <field name="label">rep_non_courantes</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1927</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_prov_expr_total_ab_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1928</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <!-- <record id="action_ma_bilan_prov_report" model="ir.actions.client">
+        <field name="name">Tableau des Provisions</field>
+        <field name="tag">account_report</field>
+        <field name="params">
+            <field name="options">{}</field>
+            <field name="model">account.report</field>
+            <field name="report_name">bilan_prov_report</field>
+        </field>
+    </record> -->
+
+    <record id="action_ma_bilan_prov_report" model="ir.actions.client">
+        <field name="name">Tableau des Provisions</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-prov</field>
+        <field name="context" eval="{'report_id': ref('bilan_prov_report')}"/>
+    </record>
+    <menuitem id="menu_ma_bilan_prov_report" name="Tableau des Provisions" parent="account.account_reports_legal_statements_menu" action="action_ma_bilan_prov_report" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+
+</odoo>

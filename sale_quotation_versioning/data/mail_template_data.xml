@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="mail_template_new_quotation_version" model="mail.template">
+        <field name="name">Devis : nouvelle version disponible</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Nouvelle version de votre devis {{ object.parent_quotation_id.name or '' }}</field>
+        <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+        <field name="partner_to">{{ object.partner_id.id }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p>Bonjour <t t-out="object.partner_id.name or ''"/>,</p>
+                <p>
+                    Une nouvelle version de votre devis est disponible :
+                    <strong t-out="object.name or ''"/>.
+                </p>
+                <p>Nous restons à votre disposition pour toute question.</p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+</odoo>

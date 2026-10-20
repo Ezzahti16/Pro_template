@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_order_reject_wizard_form" model="ir.ui.view">
+        <field name="name">dumurosol.sale.order.reject.wizard.form</field>
+        <field name="model">dumurosol.sale.order.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Rejeter le devis">
+                <field name="sale_order_id" invisible="1"/>
+                <group>
+                    <field name="reason" nolabel="0" string="Motif de rejet (obligatoire)"
+                           placeholder="Précisez la raison du rejet..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_reject" type="object"
+                            string="Confirmer le rejet" class="btn-danger"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sale_order_reject_wizard" model="ir.actions.act_window">
+        <field name="name">Rejeter le devis</field>
+        <field name="res_model">dumurosol.sale.order.reject.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

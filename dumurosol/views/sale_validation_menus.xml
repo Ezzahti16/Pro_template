@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_sale_validation_root"
+              name="Workflow Validation"
+              parent="sale.sale_menu_root"
+              sequence="95"
+              groups="dumurosol.group_sale_validation_user"/>
+
+    <menuitem id="menu_sale_validation_rule"
+              name="Règles de validation"
+              parent="menu_sale_validation_root"
+              action="action_sale_validation_rule"
+              sequence="10"
+              groups="dumurosol.group_sale_validation_admin"/>
+
+    <menuitem id="menu_sale_validation_test_wizard"
+              name="Tester une configuration"
+              parent="menu_sale_validation_root"
+              action="action_sale_validation_test_wizard"
+              sequence="15"
+              groups="dumurosol.group_sale_validation_admin"/>
+
+    <menuitem id="menu_sale_validation_log"
+              name="Journal des décisions"
+              parent="menu_sale_validation_root"
+              action="action_sale_validation_log"
+              sequence="20"
+              groups="dumurosol.group_sale_validation_user"/>
+
+    <menuitem id="menu_sale_validation_dashboard_root"
+              name="Analyse des validations"
+              parent="menu_sale_validation_root"
+              sequence="30"
+              groups="dumurosol.group_sale_validation_admin"/>
+
+    <menuitem id="menu_sale_validation_dashboard_logs"
+              name="Tableau de bord des décisions"
+              parent="menu_sale_validation_dashboard_root"
+              action="action_sale_validation_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_sale_validation_dashboard_orders"
+              name="Devis par statut"
+              parent="menu_sale_validation_dashboard_root"
+              action="action_sale_order_validation_dashboard"
+              sequence="20"/>
+
+</odoo>

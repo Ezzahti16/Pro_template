@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_dumurosol" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.dumurosol</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <button name="action_cancel" position="attributes">
+                <attribute name="name">action_cancel_with_reason</attribute>
+                <attribute name="confirm"></attribute>
+            </button>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="cancel_reason_id" invisible="state != 'cancel'"/>
+                <field name="cancel_reason_note" invisible="state != 'cancel' or not cancel_reason_note"/>
+            </xpath>
+
+            <!-- Le déverrouillage ne doit être possible que sur une commande
+                 confirmée (state == 'sale'), pas sur un devis "Envoyé" :
+                 une fois verrouillé, un devis envoyé le reste jusqu'à sa
+                 confirmation (ou son annulation). -->
+            <button name="action_unlock" position="attributes">
+                <attribute name="invisible">not locked or state != 'sale'</attribute>
+            </button>
+
+            <!-- Numéro de commande (séquence CMD) : champ distinct, affiché
+                 sous la référence de devis d'origine (jamais modifiée). -->
+            <xpath expr="//div[hasclass('oe_title')]" position="inside">
+                <div invisible="not confirmed_order_number">
+                    <span class="text-muted">Numéro de commande : </span>
+                    <field name="confirmed_order_number" readonly="1" class="oe_inline"/>
+                </div>
+            </xpath>
+
+            <!-- Blocage global : plutôt que de traiter champ par champ (le
+                 natif Odoo ne rend certains champs readonly, comme
+                 payment_term_id/fiscal_position_id, qu'individuellement, ce
+                 qui laisse des trous), on rend la totalité de la fiche
+                 (sheet) non modifiable dès qu'une commande est confirmée ou
+                 annulée. C'est le même mécanisme que celui utilisé par Odoo
+                 lui-même (ex: account.move.line form, groupe "readonly=1"
+                 englobant plusieurs champs) : la condition posée sur un
+                 conteneur se propage à tous les champs qu'il contient, sans
+                 avoir à le répéter sur chacun. Les boutons (Confirmer,
+                 Annuler, Valider/Rejeter...) ne sont pas des champs et
+                 restent donc cliquables.
+                 Volontairement indépendant du champ natif "locked"/du
+                 paramètre "Verrouiller les commandes confirmées" : ce
+                 blocage s'applique systématiquement, que ce paramètre
+                 standard soit activé ou non. -->
+            <!-- <xpath expr="//sheet" position="attributes">
+                <attribute name="readonly">state in ('sale', 'cancel')</attribute>
+            </xpath> -->
+
+            <!-- Ces champs portent déjà leur propre condition readonly
+                 native (basée sur "locked"), qui prévaudrait sinon sur celle
+                 du sheet : on les aligne explicitement sur la même règle. -->
+            <!-- <field name="order_line" position="attributes">
+                <attribute name="readonly">state in ('sale', 'cancel')</attribute>
+            </field>
+            <field name="partner_invoice_id" position="attributes">
+                <attribute name="readonly">state in ('sale', 'cancel')</attribute>
+            </field>
+            <field name="partner_shipping_id" position="attributes">
+                <attribute name="readonly">state in ('sale', 'cancel')</attribute>
+            </field> -->
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_tva15_report" model="account.report">
+    <field name="name">Détail de la Taxe sur la Valeur Ajoutée</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_tva15_column_solde_debut" model="account.report.column">
+            <field name="name">Solde au début de l'exercice</field>
+            <field name="expression_label">solde_debut</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_tva15_column_operations" model="account.report.column">
+            <field name="name">Opérations comptables de l'exercice</field>
+            <field name="expression_label">operations</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_tva15_column_declarations" model="account.report.column">
+            <field name="name">Déclarations T.V.A de l'exercice</field>
+            <field name="expression_label">declarations</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_tva15_column_fin" model="account.report.column">
+            <field name="name">Solde fin d'exercice (1+2-3=4)</field>
+            <field name="expression_label">fin</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_tva15_column_ecart" model="account.report.column">
+            <field name="name">ECART</field>
+            <field name="expression_label">ecart</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+            <record id="bilan_tva15_line_a_facturee" model="account.report.line">
+                <field name="name">A. T.V.A. Facturée</field>
+                <field name="code">TVA15_A_FACTUREE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">1</field>
+                <field name="expression_ids">
+                    <record id="bilan_tva15_expr_a_facturee_solde_debut" model="account.report.expression">
+                        <field name="label">solde_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2065</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_tva15_expr_a_facturee_operations" model="account.report.expression">
+                        <field name="label">operations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2066</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_a_facturee_declarations" model="account.report.expression">
+                        <field name="label">declarations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2067</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_a_facturee_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2068</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_a_facturee_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E2068</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_tva15_line_b_recuperable" model="account.report.line">
+                <field name="name">B. T.V.A. Récupérable</field>
+                <field name="code">TVA15_B_RECUPERABLE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">2</field>
+                <field name="expression_ids">
+                    <record id="bilan_tva15_expr_b_recuperable_solde_debut" model="account.report.expression">
+                        <field name="label">solde_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2070</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_recuperable_operations" model="account.report.expression">
+                        <field name="label">operations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2071</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_recuperable_declarations" model="account.report.expression">
+                        <field name="label">declarations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2072</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_recuperable_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2073</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_tva15_line_b_sur_charges" model="account.report.line">
+                <field name="name">Sur charges</field>
+                <field name="code">TVA15_B_SUR_CHARGES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">3</field>
+                <field name="expression_ids">
+                    <record id="bilan_tva15_expr_b_sur_charges_solde_debut" model="account.report.expression">
+                        <field name="label">solde_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2075</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_charges_operations" model="account.report.expression">
+                        <field name="label">operations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2076</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_charges_declarations" model="account.report.expression">
+                        <field name="label">declarations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2077</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_charges_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2078</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_charges_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E2078</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_tva15_line_b_sur_immobilisations" model="account.report.line">
+                <field name="name">Sur immobilisations</field>
+                <field name="code">TVA15_B_SUR_IMMOBILISATIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">4</field>
+                <field name="expression_ids">
+                    <record id="bilan_tva15_expr_b_sur_immobilisations_solde_debut" model="account.report.expression">
+                        <field name="label">solde_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2080</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_immobilisations_operations" model="account.report.expression">
+                        <field name="label">operations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2081</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_immobilisations_declarations" model="account.report.expression">
+                        <field name="label">declarations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2082</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_immobilisations_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2083</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_b_sur_immobilisations_ecart" model="account.report.expression">
+                        <field name="label">ecart</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_E2083</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_tva15_line_c_due_credit" model="account.report.line">
+                <field name="name">C. T.V.A. due ou crédit de T.V.A = (A - B)</field>
+                <field name="code">TVA15_C_DUE_CREDIT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">5</field>
+                <field name="expression_ids">
+                    <record id="bilan_tva15_expr_c_due_credit_solde_debut" model="account.report.expression">
+                        <field name="label">solde_debut</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2085</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_tva15_expr_c_due_credit_operations" model="account.report.expression">
+                        <field name="label">operations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2086</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_c_due_credit_declarations" model="account.report.expression">
+                        <field name="label">declarations</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2087</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_tva15_expr_c_due_credit_fin" model="account.report.expression">
+                        <field name="label">fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_2088</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_tva15_report" model="ir.actions.client">
+    <field name="name">Détail T.V.A</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-tva15</field>
+    <field name="context" eval="{'report_id': ref('bilan_tva15_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_tva15_report" name="Détail T.V.A" action="action_ma_bilan_tva15_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

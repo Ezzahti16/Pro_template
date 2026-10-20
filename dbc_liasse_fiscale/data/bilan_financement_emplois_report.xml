@@ -1,0 +1,974 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+    <!--
+        Table II of the "Tableau de Financement de l'Exercice" (report 50):
+        "Emplois et Ressources".
+        See bilan_financement_synthese_report.xml for why this is its own
+        independent account.report instead of a second column layout on the
+        same report.
+    -->
+    <record id="bilan_financement_emplois_report" model="account.report">
+        <field name="name">Emplois et Ressources</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_financement_emplois_column_emplois_n" model="account.report.column">
+                <field name="name">Exercice - Emplois</field>
+                <field name="expression_label">emplois_n</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_financement_emplois_column_ressources_n" model="account.report.column">
+                <field name="name">Exercice - Ressources</field>
+                <field name="expression_label">ressources_n</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_financement_emplois_column_emplois_n1" model="account.report.column">
+                <field name="name">Exercice précédent - Emplois</field>
+                <field name="expression_label">emplois_n1</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_financement_emplois_column_ressources_n1" model="account.report.column">
+                <field name="name">Exercice précédent - Ressources</field>
+                <field name="expression_label">ressources_n1</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+
+            <!-- I- RESSOURCES STABLES DE L'EXERCICE (FLUX) -->
+            <record id="bilan_financement_emplois_line_ressources_title" model="account.report.line">
+                <field name="name">I- RESSOURCES STABLES DE L'EXERCICE (FLUX)</field>
+                <field name="code">FIN_EMPL_RESSOURCES_TITLE</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">10</field>
+            </record>
+            <record id="bilan_financement_emplois_line_autofinancement" model="account.report.line">
+                <field name="name">Autofinancement (A)</field>
+                <field name="code">FIN_EMPL_AUTOFINANCEMENT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_autofinancement_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14172</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_autofinancement_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14184</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_autofinancement_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14196</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_autofinancement_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14208</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_caf" model="account.report.line">
+                <field name="name">+ Capacité d'autofinancement</field>
+                <field name="code">FIN_EMPL_CAF</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_caf_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14173</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_caf_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14185</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_caf_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14197</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_caf_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14209</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_distributions" model="account.report.line">
+                <field name="name">- Distributions de bénéfices</field>
+                <field name="code">FIN_EMPL_DISTRIBUTIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_distributions_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14174</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_distributions_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14186</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_distributions_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14198</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_distributions_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14210</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_cessions" model="account.report.line">
+                <field name="name">Cessions et reductions d'immobilisations (B)</field>
+                <field name="code">FIN_EMPL_CESSIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_cessions_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14175</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14187</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14199</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14211</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_cessions_incorp" model="account.report.line">
+                <field name="name">+ Cessions d'immobilisations incorporelles</field>
+                <field name="code">FIN_EMPL_CESSIONS_INCORP</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_cessions_incorp_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14176</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_incorp_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14188</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_incorp_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14200</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_incorp_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14212</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_cessions_corp" model="account.report.line">
+                <field name="name">+ Cessions d'immobilisations corporelles</field>
+                <field name="code">FIN_EMPL_CESSIONS_CORP</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">70</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_cessions_corp_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14177</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_corp_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14189</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_corp_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14201</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_corp_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14213</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_cessions_fin" model="account.report.line">
+                <field name="name">+ Cessions d'immobilisations financières</field>
+                <field name="code">FIN_EMPL_CESSIONS_FIN</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_cessions_fin_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14178</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_fin_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14190</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_fin_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14202</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_cessions_fin_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14214</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_recuperations" model="account.report.line">
+                <field name="name">+ Récupérations sur créances immobilisées</field>
+                <field name="code">FIN_EMPL_RECUPERATIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_recuperations_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14179</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_recuperations_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14191</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_recuperations_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14203</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_recuperations_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14215</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_augmentation_cp" model="account.report.line">
+                <field name="name">Augmentation des capitaux propres et assimiles (C)</field>
+                <field name="code">FIN_EMPL_AUGMENTATION_CP</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_augmentation_cp_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14180</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_cp_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14192</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_cp_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14204</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_cp_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14216</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_augmentation_capital" model="account.report.line">
+                <field name="name">+ Augmentation du capital, apports</field>
+                <field name="code">FIN_EMPL_AUGMENTATION_CAPITAL</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">110</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_augmentation_capital_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14181</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_capital_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14193</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_capital_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14205</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_capital_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14217</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_subventions" model="account.report.line">
+                <field name="name">+ Subventions d'investissement</field>
+                <field name="code">FIN_EMPL_SUBVENTIONS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">120</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_subventions_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14182</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_subventions_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14194</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_subventions_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14206</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_subventions_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14218</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_augmentation_dettes" model="account.report.line">
+                <field name="name">Augmentation des dettes de financement (D) (1)</field>
+                <field name="code">FIN_EMPL_AUGMENTATION_DETTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">130</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_augmentation_dettes_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14183</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_dettes_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14195</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_dettes_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14207</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_dettes_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14219</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_total_1" model="account.report.line">
+                <field name="name">TOTAL I - RESSOURCES STABLES (A+B+C+D)</field>
+                <field name="code">FIN_EMPL_TOTAL_1</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">140</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_total_1_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14221</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_1_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14222</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_1_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14223</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_1_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14224</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- II- EMPLOIS STABLES DE L'EXERCICE (FLUX) -->
+            <record id="bilan_financement_emplois_line_emplois_title" model="account.report.line">
+                <field name="name">II- EMPLOIS STABLES DE L'EXERCICE (FLUX)</field>
+                <field name="code">FIN_EMPL_EMPLOIS_TITLE</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">150</field>
+            </record>
+            <record id="bilan_financement_emplois_line_acquisitions" model="account.report.line">
+                <field name="name">Acquisitions et augmentations d'immobilisations (E)</field>
+                <field name="code">FIN_EMPL_ACQUISITIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">160</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_acquisitions_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14233</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14241</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14249</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14257</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_acquisitions_incorp" model="account.report.line">
+                <field name="name">+ Acquisitions d'immobilisations incorporelles</field>
+                <field name="code">FIN_EMPL_ACQUISITIONS_INCORP</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">170</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_acquisitions_incorp_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14234</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_incorp_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14242</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_incorp_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14250</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_incorp_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14258</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_acquisitions_corp" model="account.report.line">
+                <field name="name">+ Acquisitions d'immobilisation corporelles</field>
+                <field name="code">FIN_EMPL_ACQUISITIONS_CORP</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">180</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_acquisitions_corp_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14235</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_corp_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14243</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_corp_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14251</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_corp_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14259</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_acquisitions_fin" model="account.report.line">
+                <field name="name">+ Acquisitions d'immobilisation financières</field>
+                <field name="code">FIN_EMPL_ACQUISITIONS_FIN</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">190</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_acquisitions_fin_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14236</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_fin_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14244</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_fin_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14252</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_acquisitions_fin_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14260</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_augmentation_creances" model="account.report.line">
+                <field name="name">+ Augmentation des créances immobilisées</field>
+                <field name="code">FIN_EMPL_AUGMENTATION_CREANCES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">200</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_augmentation_creances_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14237</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_creances_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14245</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_creances_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14253</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_augmentation_creances_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14261</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_remb_cp" model="account.report.line">
+                <field name="name">Remboursement des capitaux propres (F)</field>
+                <field name="code">FIN_EMPL_REMB_CP</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">210</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_remb_cp_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14238</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_remb_cp_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14246</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_remb_cp_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14254</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_remb_cp_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14262</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_remb_dettes" model="account.report.line">
+                <field name="name">Remboursements des dettes de financement (G)</field>
+                <field name="code">FIN_EMPL_REMB_DETTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">220</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_remb_dettes_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14239</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_remb_dettes_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14247</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_remb_dettes_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14255</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_remb_dettes_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14263</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_emplois_non_valeurs" model="account.report.line">
+                <field name="name">Emplois en non valeurs (H)</field>
+                <field name="code">FIN_EMPL_EMPLOIS_NON_VALEURS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">230</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_emplois_non_valeurs_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14240</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_emplois_non_valeurs_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14248</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_emplois_non_valeurs_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14256</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_emplois_non_valeurs_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14264</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_emplois_line_total_2" model="account.report.line">
+                <field name="name">TOTAL II - EMPLOIS STABLES (E+F+G+H)</field>
+                <field name="code">FIN_EMPL_TOTAL_2</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">240</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_total_2_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14266</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_2_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14267</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_2_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14268</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_2_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14269</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+
+            <record id="bilan_financement_emplois_line_variation_bfg" model="account.report.line">
+                <field name="name">III- VARIATION DU BESOIN DE FINANCEMENT GLOBAL (B.F.G)</field>
+                <field name="code">FIN_EMPL_VARIATION_BFG</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">250</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_variation_bfg_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14271</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_variation_bfg_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14272</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_variation_bfg_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14273</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_variation_bfg_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14274</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+
+            <record id="bilan_financement_emplois_line_variation_tresorerie" model="account.report.line">
+                <field name="name">IV- VARIATION DE LA TRESORERIE</field>
+                <field name="code">FIN_EMPL_VARIATION_TRESORERIE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">260</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_variation_tresorerie_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14276</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_variation_tresorerie_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14277</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_variation_tresorerie_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14278</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_variation_tresorerie_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14279</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+
+            <record id="bilan_financement_emplois_line_total_general" model="account.report.line">
+                <field name="name">TOTAL GENERAL</field>
+                <field name="code">FIN_EMPL_TOTAL_GENERAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">270</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_emplois_expr_total_general_en" model="account.report.expression">
+                        <field name="label">emplois_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14281</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_general_rn" model="account.report.expression">
+                        <field name="label">ressources_n</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14282</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_general_en1" model="account.report.expression">
+                        <field name="label">emplois_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14283</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_emplois_expr_total_general_rn1" model="account.report.expression">
+                        <field name="label">ressources_n1</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14284</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+
+        </field>
+    </record>
+
+</odoo>

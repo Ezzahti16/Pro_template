@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_devises_report" model="account.report">
+    <field name="name">Tableau des Opérations en Devises Comptabilisées pendant l'Exercice</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_devises_report_column_entree" model="account.report.column">
+            <field name="name">ENTREE CONTRE VALEUR EN DH</field>
+            <field name="expression_label">entree</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_devises_report_column_sortie" model="account.report.column">
+            <field name="name">SORTIE CONTRE VALEUR EN DH</field>
+            <field name="expression_label">sortie</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+        <record id="bilan_devises_report_line_DEVISES_FINANCEMENT_PERMANENT" model="account.report.line">
+                <field name="name">Financement permanent</field>
+                <field name="code">DEVISES_FINANCEMENT_PERMANENT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_FINANCEMENT_PERMANENT_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14068</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_FINANCEMENT_PERMANENT_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14069</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_IMMOBILISATIONS_BRUTES" model="account.report.line">
+                <field name="name">Immobilisations brutes</field>
+                <field name="code">DEVISES_IMMOBILISATIONS_BRUTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_IMMOBILISATIONS_BRUTES_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14071</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_IMMOBILISATIONS_BRUTES_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14072</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_RENTREES_IMMOBILISATIONS" model="account.report.line">
+                <field name="name">Rentrées sur immobilisations</field>
+                <field name="code">DEVISES_RENTREES_IMMOBILISATIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_RENTREES_IMMOBILISATIONS_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14074</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_RENTREES_IMMOBILISATIONS_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14075</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_REMBOURSEMENT_DETTES" model="account.report.line">
+                <field name="name">Remboursement des dettes de financement</field>
+                <field name="code">DEVISES_REMBOURSEMENT_DETTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_REMBOURSEMENT_DETTES_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14077</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_REMBOURSEMENT_DETTES_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14078</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_PRODUITS" model="account.report.line">
+                <field name="name">Produits</field>
+                <field name="code">DEVISES_PRODUITS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_PRODUITS_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14080</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_PRODUITS_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14081</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_CHARGES" model="account.report.line">
+                <field name="name">Charges</field>
+                <field name="code">DEVISES_CHARGES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_CHARGES_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14083</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_CHARGES_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14084</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_TOTAL_ENTREES" model="account.report.line">
+                <field name="name">TOTAL DES ENTREES</field>
+                <field name="code">DEVISES_TOTAL_ENTREES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">70</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_TOTAL_ENTREES_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14086</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_TOTAL_ENTREES_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14087</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_TOTAL_SORTIES" model="account.report.line">
+                <field name="name">TOTAL DES SORTIES</field>
+                <field name="code">DEVISES_TOTAL_SORTIES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_TOTAL_SORTIES_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_16394</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_TOTAL_SORTIES_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_16395</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_BALANCE" model="account.report.line">
+                <field name="name">BALANCE DEVISES</field>
+                <field name="code">DEVISES_BALANCE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_BALANCE_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_16397</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_BALANCE_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_16398</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_devises_report_line_DEVISES_TOTAL" model="account.report.line">
+                <field name="name">TOTAL</field>
+                <field name="code">DEVISES_TOTAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_devises_report_expr_DEVISES_TOTAL_entree" model="account.report.expression">
+                        <field name="label">entree</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_16400</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_devises_report_expr_DEVISES_TOTAL_sortie" model="account.report.expression">
+                        <field name="label">sortie</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_16401</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_bilan_devises_report" model="ir.actions.client">
+    <field name="name">Opérations en Devises</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-devises</field>
+    <field name="context" eval="{'report_id': ref('bilan_devises_report')}"/>
+</record>
+
+<menuitem id="menu_bilan_devises_report" name="Opérations en Devises" action="action_bilan_devises_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

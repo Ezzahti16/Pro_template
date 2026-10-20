@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+    <!--
+        Table I of the "Tableau de Financement de l'Exercice" (report 50):
+        "Synthèse des masses du bilan".
+        This is a normal, self-contained account.report (same engine as every
+        other report of this module) but it is never opened on its own: it is
+        combined with bilan_financement_emplois_report by the "Tableau de
+        Financement" combined screen/xlsx (see bilan_financement_report.xml
+        and models/account_report_financement.py) since Odoo's account.report
+        only supports one column layout per screen.
+    -->
+    <record id="bilan_financement_synthese_report" model="account.report">
+        <field name="name">Synthèse des masses du bilan</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_financement_synthese_column_a" model="account.report.column">
+                <field name="name">(a) Exercice</field>
+                <field name="expression_label">a</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_financement_synthese_column_b" model="account.report.column">
+                <field name="name">(b) Exercice précédent</field>
+                <field name="expression_label">b</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_financement_synthese_column_c" model="account.report.column">
+                <field name="name">Variations (a-b) Emplois (c)</field>
+                <field name="expression_label">c</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_financement_synthese_column_d" model="account.report.column">
+                <field name="name">Variations (a-b) Ressources (d)</field>
+                <field name="expression_label">d</field>
+                <field name="sequence">40</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_financement_synthese_line_1" model="account.report.line">
+                <field name="name">1. Financement Permanent</field>
+                <field name="code">FIN_SYNTH_1</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_1_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14113</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_1_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14120</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_1_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14127</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_1_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14134</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_synthese_line_2" model="account.report.line">
+                <field name="name">2. Moins actif immobilisé</field>
+                <field name="code">FIN_SYNTH_2</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_2_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14114</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_2_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14121</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_2_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14128</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_2_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14135</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_synthese_line_3" model="account.report.line">
+                <field name="name">= Fonds de roulement fonctionnel (1-2) (A)</field>
+                <field name="code">FIN_SYNTH_3</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_3_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14115</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_3_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14122</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_3_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14129</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_3_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14136</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_synthese_line_4" model="account.report.line">
+                <field name="name">4. Actif circulant</field>
+                <field name="code">FIN_SYNTH_4</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_4_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14116</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_4_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14123</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_4_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14130</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_4_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14137</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_synthese_line_5" model="account.report.line">
+                <field name="name">5. Moins passif circulant</field>
+                <field name="code">FIN_SYNTH_5</field>
+                <field name="hierarchy_level">2</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_5_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14117</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_5_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14124</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_5_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14131</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_5_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14138</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_synthese_line_6" model="account.report.line">
+                <field name="name">= Besoin de financement global (4-5) (B)</field>
+                <field name="code">FIN_SYNTH_6</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_6_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14118</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_6_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14125</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_6_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14132</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_6_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14139</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_financement_synthese_line_7" model="account.report.line">
+                <field name="name">TRESORERIE NETTE (Actif-Passif) = A-B</field>
+                <field name="code">FIN_SYNTH_7</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">70</field>
+                <field name="expression_ids">
+                    <record id="bilan_financement_synthese_expr_7_a" model="account.report.expression">
+                        <field name="label">a</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14119</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_7_b" model="account.report.expression">
+                        <field name="label">b</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14126</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_7_c" model="account.report.expression">
+                        <field name="label">c</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14133</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_financement_synthese_expr_7_d" model="account.report.expression">
+                        <field name="label">d</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14140</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+</odoo>

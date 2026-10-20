@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+    <record id="bilan_esg_report" model="account.report">
+        <field name="name">Etat des Soldes de Gestion (E.S.G)</field>
+        <field name="country_id" ref="base.ma"/>
+        <field name="default_opening_date_filter">today</field>
+        <field name="filter_date_range" eval="True"/>
+        <field name="filter_analytic_groupby" eval="False"/>
+        <field name="filter_journals" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="filter_period_comparison" eval="True"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="allow_account_audit_status_on_lines" eval="True"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="column_ids">
+            <record id="bilan_esg_column_exercice" model="account.report.column">
+                <field name="name">EXERCICE</field>
+                <field name="expression_label">exercice</field>
+                <field name="sequence">10</field>
+                <field name="figure_type">monetary</field>
+            </record>
+            <record id="bilan_esg_column_exercice_prev" model="account.report.column">
+                <field name="name">EXERCICE PRECEDENT</field>
+                <field name="expression_label">exercice_prev</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">monetary</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="bilan_esg_line_tfr_title" model="account.report.line">
+                <field name="name">I. Tableau de formation des Résultats (T.F.R)</field>
+                <field name="code">ESG_TFR</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">10</field>
+            </record>
+            <record id="bilan_esg_line_tfr_ventes_marchandises" model="account.report.line">
+                <field name="name">Ventes de marchandises (en l'état)</field>
+                <field name="code">ESG_TFR_VENTES_MARCHANDISES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">11</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_ventes_marchandises_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1308</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_ventes_marchandises_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1333</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_achats_revendus" model="account.report.line">
+                <field name="name">Achats revendus de marchandises</field>
+                <field name="code">ESG_TFR_ACHATS_REVENDUS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">12</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_achats_revendus_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1309</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_achats_revendus_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1334</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_marge_brute" model="account.report.line">
+                <field name="name">I. MARGE BRUTE SUR VENTES EN L'ETAT</field>
+                <field name="code">ESG_TFR_MARGE_BRUTE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">13</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_marge_brute_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1310</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_marge_brute_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1335</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_production" model="account.report.line">
+                <field name="name">II. PRODUCTION DE L'EXERCICE : (3+4+5)</field>
+                <field name="code">ESG_TFR_PRODUCTION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">14</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_production_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1311</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_production_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1336</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_ventes_biens" model="account.report.line">
+                <field name="name">Ventes de biens et services produits</field>
+                <field name="code">ESG_TFR_VENTES_BIENS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">15</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_ventes_biens_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1312</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_ventes_biens_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1337</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_variation_stocks" model="account.report.line">
+                <field name="name">Variation stocks de produits</field>
+                <field name="code">ESG_TFR_VARIATION_STOCKS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">16</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_variation_stocks_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1313</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_variation_stocks_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1338</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_immob_prod" model="account.report.line">
+                <field name="name">Immobilisations produites par l'entreprise pour elle-même</field>
+                <field name="code">ESG_TFR_IMMOB_PROD</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">17</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_immob_prod_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1314</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_immob_prod_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1339</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_consommation" model="account.report.line">
+                <field name="name">III. CONSOMMATION DE L'EXERCICE : (6+7)</field>
+                <field name="code">ESG_TFR_CONSOMMATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">18</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_consommation_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1315</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_consommation_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1340</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_achats_consommes" model="account.report.line">
+                <field name="name">Achats consommés de matières et fournitures</field>
+                <field name="code">ESG_TFR_ACHATS_CONSOMMES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">19</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_achats_consommes_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1316</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_achats_consommes_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1341</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_autres_charges_externes" model="account.report.line">
+                <field name="name">Autres charges externes</field>
+                <field name="code">ESG_TFR_AUTRES_CHARGES_EXTERNES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_autres_charges_externes_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1317</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_autres_charges_externes_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1342</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_valeur_ajoutee" model="account.report.line">
+                <field name="name">IV. VALEUR AJOUTEE (I+II-III)</field>
+                <field name="code">ESG_TFR_VALEUR_AJOUTEE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">21</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_valeur_ajoutee_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1318</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_valeur_ajoutee_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1343</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_subventions" model="account.report.line">
+                <field name="name">Subvention d'exploitation</field>
+                <field name="code">ESG_TFR_SUBVENTIONS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">22</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_subventions_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1319</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_subventions_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1344</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_impots_taxes" model="account.report.line">
+                <field name="name">Impôts et taxes</field>
+                <field name="code">ESG_TFR_IMPOTS_TAXES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">23</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_impots_taxes_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1320</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_impots_taxes_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1345</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_charges_personnel" model="account.report.line">
+                <field name="name">Charges de personnel</field>
+                <field name="code">ESG_TFR_CHARGES_PERSONNEL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">24</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_charges_personnel_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1321</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_charges_personnel_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1346</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_ebe" model="account.report.line">
+                <field name="name">V. EXEDENT BRUT D'EXPLOITATION (EBE) OU INSUFFISANCE BRUTE D'EXPLOITATION (IBE)</field>
+                <field name="code">ESG_TFR_EBE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">25</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_ebe_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_4063</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_ebe_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_4064</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_autres_produits" model="account.report.line">
+                <field name="name">Autres produits d'exploitation</field>
+                <field name="code">ESG_TFR_AUTRES_PRODUITS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">26</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_autres_produits_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_4066</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_autres_produits_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_4067</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_autres_charges" model="account.report.line">
+                <field name="name">Autres charges d'exploitation</field>
+                <field name="code">ESG_TFR_AUTRES_CHARGES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">27</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_autres_charges_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1324</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_autres_charges_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1349</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_reprises_exploitation" model="account.report.line">
+                <field name="name">Reprises d'exploitation : transferts de charges</field>
+                <field name="code">ESG_TFR_REPRISES_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">28</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_reprises_exploitation_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1325</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_reprises_exploitation_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1350</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_dotations_exploitation" model="account.report.line">
+                <field name="name">Dotations d'exploitation</field>
+                <field name="code">ESG_TFR_DOTATIONS_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">29</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_dotations_exploitation_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1326</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_dotations_exploitation_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1351</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_resultat_exploitation" model="account.report.line">
+                <field name="name">VI. RESULTAT D'EXPLOITATION (+ ou -)</field>
+                <field name="code">ESG_TFR_RESULTAT_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">30</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_resultat_exploitation_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1327</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_resultat_exploitation_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1352</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_resultat_financier" model="account.report.line">
+                <field name="name">VII. RESULTAT FINANCIER</field>
+                <field name="code">ESG_TFR_RESULTAT_FINANCIER</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">31</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_resultat_financier_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1328</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_resultat_financier_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1353</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_resultat_courant" model="account.report.line">
+                <field name="name">VIII. RESULTAT COURANT</field>
+                <field name="code">ESG_TFR_RESULTAT_COURANT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">32</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_resultat_courant_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1329</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_resultat_courant_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1354</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_resultat_non_courant" model="account.report.line">
+                <field name="name">IX. RESULTAT NON COURANT</field>
+                <field name="code">ESG_TFR_RESULTAT_NON_COURANT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">33</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_resultat_non_courant_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1330</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_resultat_non_courant_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1355</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_impot_resultats" model="account.report.line">
+                <field name="name">Impôt sur les résultats</field>
+                <field name="code">ESG_TFR_IMPOT_RESULTATS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">34</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_impot_resultats_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1331</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_impot_resultats_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1356</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_tfr_resultat_net" model="account.report.line">
+                <field name="name">X. RESULTAT NET DE L'EXERCICE (+ ou -)</field>
+                <field name="code">ESG_TFR_RESULTAT_NET</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">35</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_tfr_resultat_net_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1332</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_tfr_resultat_net_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1357</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_title" model="account.report.line">
+                <field name="name">II. CAPACITE D'AUTOFINANCEMENT (C.A.F.) - AUTOFINANCEMENT</field>
+                <field name="code">ESG_CAF</field>
+                <field name="hierarchy_level">0</field>
+                <field name="sequence">40</field>
+                <field name="parent_id" eval="False"/>
+            </record>
+            <record id="bilan_esg_line_caf_resultat_net_exercice" model="account.report.line">
+                <field name="name">Résultat net de l'exercice</field>
+                <field name="code">ESG_CAF_RESULTAT_NET_EXERCICE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">41</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_resultat_net_exercice_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1372</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_resultat_net_exercice_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1386</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_benefice" model="account.report.line">
+                <field name="name">Bénéfice +</field>
+                <field name="code">ESG_CAF_BENEFICE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">42</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_benefice_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1373</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_benefice_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1387</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_perte" model="account.report.line">
+                <field name="name">Perte -</field>
+                <field name="code">ESG_CAF_PERTE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">43</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_perte_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1374</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_perte_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1388</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_dot_exploitation" model="account.report.line">
+                <field name="name">Dotations d'exploitations (1)</field>
+                <field name="code">ESG_CAF_DOT_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">44</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_dot_exploitation_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1375</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_dot_exploitation_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1389</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_dot_financieres" model="account.report.line">
+                <field name="name">Dotations financières (1)</field>
+                <field name="code">ESG_CAF_DOT_FINANCIERES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">45</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_dot_financieres_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1376</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_dot_financieres_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1390</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_dot_non_courantes" model="account.report.line">
+                <field name="name">Dotations non courantes (1)</field>
+                <field name="code">ESG_CAF_DOT_NON_COURANTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">46</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_dot_non_courantes_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1377</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_dot_non_courantes_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1391</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_rep_exploitation" model="account.report.line">
+                <field name="name">Reprises d'exploitation (2)</field>
+                <field name="code">ESG_CAF_REP_EXPLOITATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">47</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_rep_exploitation_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1378</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_rep_exploitation_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1392</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_rep_financieres" model="account.report.line">
+                <field name="name">Reprises financières (2)</field>
+                <field name="code">ESG_CAF_REP_FINANCIERES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">48</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_rep_financieres_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1379</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_rep_financieres_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1393</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_rep_non_courantes" model="account.report.line">
+                <field name="name">Reprises non courantes (2) (3)</field>
+                <field name="code">ESG_CAF_REP_NON_COURANTES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">49</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_rep_non_courantes_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1380</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_rep_non_courantes_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1394</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_cesions_immob" model="account.report.line">
+                <field name="name">Produits des cessions d'immobilisations (1)</field>
+                <field name="code">ESG_CAF_CESIONS_IMMOB</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_cesions_immob_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1381</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_cesions_immob_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1395</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_vna_immob" model="account.report.line">
+                <field name="name">Valeurs nettes d'amort.des imm.cédées</field>
+                <field name="code">ESG_CAF_VNA_IMMOB</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">51</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_vna_immob_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1382</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_vna_immob_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1396</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_caf" model="account.report.line">
+                <field name="name">I. CAPACITE D'AUTOFINANCEMENT (C.A.F.)</field>
+                <field name="code">ESG_CAF_CAF</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">52</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_caf_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1383</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_caf_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1397</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_distribution_benefices" model="account.report.line">
+                <field name="name">Distribution de bénéfices</field>
+                <field name="code">ESG_CAF_DISTRIBUTION_BENEFICES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">53</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_distribution_benefices_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1384</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_distribution_benefices_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1398</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+            <record id="bilan_esg_line_caf_autofinancement" model="account.report.line">
+                <field name="name">II. AUTOFINANCEMENT</field>
+                <field name="code">ESG_CAF_AUTOFINANCEMENT</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">54</field>
+                <field name="parent_id" eval="False"/>
+                <field name="expression_ids">
+                    <record id="bilan_esg_line_caf_autofinancement_exercice" model="account.report.expression">
+                        <field name="label">exercice</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1385</field>
+                        <field name="date_scope">strict_range</field>
+                    </record>
+                    <record id="bilan_esg_line_caf_autofinancement_exercice_prev" model="account.report.expression">
+                        <field name="label">exercice_prev</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1399</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+    <record id="action_ma_bilan_esg_report" model="ir.actions.client">
+        <field name="name">E.S.G</field>
+        <field name="tag">account_report</field>
+        <field name="path">ma-bilan-esg</field>
+        <field name="context" eval="{'report_id': ref('bilan_esg_report')}"/>
+    </record>
+    <menuitem id="menu_ma_bilan_esg_report" name="E.S.G" action="action_ma_bilan_esg_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

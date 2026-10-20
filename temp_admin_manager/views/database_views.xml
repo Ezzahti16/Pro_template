@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tam_database_view_list" model="ir.ui.view">
+        <field name="name">tam.database.list</field>
+        <field name="model">tam.database</field>
+        <field name="arch" type="xml">
+            <list string="Databases" decoration-success="state == 'active'"
+                  decoration-muted="state == 'deleted'">
+                <field name="server_id" optional="show"/>
+                <field name="instance_id"/>
+                <field name="name"/>
+                <field name="url" widget="url" optional="show"/>
+                <field name="temp_login" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-danger="state == 'conflict'"
+                       decoration-info="state == 'not_created'"/>
+                <field name="expires_at"/>
+                <button name="action_create_temp_user" type="object"
+                        string="Create temp admin" icon="fa-user-plus"
+                        invisible="state == 'active'"/>
+                <button name="action_delete_temp_user" type="object"
+                        string="Delete now" icon="fa-trash"
+                        invisible="state != 'active'"
+                        confirm="Delete the temporary admin from this database now?"/>
+                <button name="action_refresh_state" type="object"
+                        string="Refresh" icon="fa-refresh"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="tam_database_view_form" model="ir.ui.view">
+        <field name="name">tam.database.form</field>
+        <field name="model">tam.database</field>
+        <field name="arch" type="xml">
+            <form string="Database">
+                <header>
+                    <button name="action_create_temp_user" type="object"
+                            string="Create Temp Admin" class="btn-primary"
+                            invisible="state == 'active'"/>
+                    <button name="action_delete_temp_user" type="object"
+                            string="Delete Now" invisible="state != 'active'"
+                            confirm="Delete the temporary admin from this database now?"/>
+                    <button name="action_refresh_state" type="object" string="Refresh State"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="not_created,active,deleted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Instance">
+                            <field name="instance_id" options="{'no_create': True}"/>
+                            <field name="server_id"/>
+                            <field name="url" widget="url"/>
+                        </group>
+                        <group string="Temporary admin">
+                            <field name="temp_name"/>
+                            <field name="temp_login"/>
+                            <field name="temp_password" password="True"/>
+                            <field name="duration_hours"/>
+                            <field name="access_model"/>
+                            <field name="source_user_id"
+                                   invisible="access_model != 'user'"
+                                   required="access_model == 'user'"/>
+                        </group>
+                    </group>
+                    <group string="Lifecycle">
+                        <group>
+                            <field name="remote_user_id"/>
+                            <field name="cloned_from"/>
+                            <field name="granted_access"/>
+                            <field name="created_at"/>
+                        </group>
+                        <group>
+                            <field name="expires_at"/>
+                            <field name="shortened"/>
+                            <field name="publisher_state"/>
+                            <field name="guard_cron_id" invisible="not guard_cron_id"/>
+                            <field name="deleted_at"/>
+                        </group>
+                    </group>
+                    <group invisible="not last_error">
+                        <field name="last_error" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tam_database_view_search" model="ir.ui.view">
+        <field name="name">tam.database.search</field>
+        <field name="model">tam.database</field>
+        <field name="arch" type="xml">
+            <search string="Databases">
+                <field name="name"/>
+                <field name="instance_id"/>
+                <field name="server_id"/>
+                <filter name="active_temp" string="Active temp admin"
+                        domain="[('state', '=', 'active')]"/>
+                <filter name="conflict" string="Already exists"
+                        domain="[('state', '=', 'conflict')]"/>
+                <filter name="expired" string="Expired"
+                        domain="[('state', '=', 'active'),
+                                 ('expires_at', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                <separator/>
+                <group name="group_by">
+                    <filter name="group_server" string="Server" context="{'group_by': 'server_id'}"/>
+                    <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="tam_database_action" model="ir.actions.act_window">
+        <field name="name">Databases</field>
+        <field name="res_model">tam.database</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_instance': 1}</field>
+    </record>
+</odoo>

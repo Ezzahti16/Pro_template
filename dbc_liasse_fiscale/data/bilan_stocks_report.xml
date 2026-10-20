@@ -1,0 +1,1736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="bilan_stocks_report" model="account.report">
+    <field name="name">Etat Détaillé des Stocks</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_stocks_report_column_brut_fin" model="account.report.column">
+            <field name="name">Stock Final: Montant brut</field>
+            <field name="expression_label">brut_fin</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_stocks_report_column_prov_fin" model="account.report.column">
+            <field name="name">Stock Final: Provision pour dépréciation</field>
+            <field name="expression_label">prov_fin</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_stocks_report_column_net_fin" model="account.report.column">
+            <field name="name">Stock Final: Montant net</field>
+            <field name="expression_label">net_fin</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_stocks_report_column_brut_init" model="account.report.column">
+            <field name="name">Stock Initial: Montant brut</field>
+            <field name="expression_label">brut_init</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_stocks_report_column_prov_init" model="account.report.column">
+            <field name="name">Stock Initial: Provision pour dépréciation</field>
+            <field name="expression_label">prov_init</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_stocks_report_column_net_init" model="account.report.column">
+            <field name="name">Stock Initial: Montant net</field>
+            <field name="expression_label">net_init</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_stocks_report_column_variation" model="account.report.column">
+            <field name="name">Variation de stock en valeur (+ ou -)</field>
+            <field name="expression_label">variation</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+        <record id="bilan_stocks_report_line_STOCK_SECTION_APPRO" model="account.report.line">
+                <field name="name">I. Stocks Approvisionnement</field>
+                <field name="code">STOCK_SECTION_APPRO</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1401</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1402</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1403</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1404</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1405</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1406</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1407</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_BIENS_REVENTE" model="account.report.line">
+                <field name="name">1 Biens et produits destinés à la revente en l'état</field>
+                <field name="code">STOCK_BIENS_REVENTE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1409</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1410</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1411</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1412</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1413</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1414</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1415</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_BIENS_IMMEUBLES" model="account.report.line">
+                <field name="name">* Biens immeubles</field>
+                <field name="code">STOCK_BIENS_IMMEUBLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_stocks_report_line_STOCK_BIENS_REVENTE"/>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1417</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1418</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1419</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1420</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1421</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1422</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1423</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_BIENS_MEUBLES" model="account.report.line">
+                <field name="name">* Biens meubles</field>
+                <field name="code">STOCK_BIENS_MEUBLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_stocks_report_line_STOCK_BIENS_REVENTE"/>
+                <field name="sequence">40</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1425</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1426</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1427</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1428</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1429</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1430</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1431</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_BIENS_MATIERES_PRODUCTION" model="account.report.line">
+                <field name="name">2 Biens et Matières Premières destinés aux activités de production et transformation</field>
+                <field name="code">STOCK_BIENS_MATIERES_PRODUCTION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">50</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1433</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1434</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1435</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1436</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1437</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1438</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1439</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_MATIERES_PREMIERES" model="account.report.line">
+                <field name="name">3 Matières premières</field>
+                <field name="code">STOCK_MATIERES_PREMIERES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">60</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1449</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1450</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1451</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1452</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1453</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1454</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1455</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_MATIERES_CONSOMMABLES" model="account.report.line">
+                <field name="name">4 Matières consommables</field>
+                <field name="code">STOCK_MATIERES_CONSOMMABLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">70</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1457</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1458</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1459</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1460</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1461</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1462</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1463</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_PIECES_DETACHEES" model="account.report.line">
+                <field name="name">5 Pièces détachées</field>
+                <field name="code">STOCK_PIECES_DETACHEES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">80</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1465</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1466</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1467</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1468</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1469</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1470</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1471</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_EMBALLAGE" model="account.report.line">
+                <field name="name">Emballage</field>
+                <field name="code">STOCK_EMBALLAGE</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">90</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1481</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1482</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1483</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1484</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1485</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1486</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1487</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_EMBALLAGE_RECUPERABLES" model="account.report.line">
+                <field name="name">* Récupérables</field>
+                <field name="code">STOCK_EMBALLAGE_RECUPERABLES</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_stocks_report_line_STOCK_EMBALLAGE"/>
+                <field name="sequence">100</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1555</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1556</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1557</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1558</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1559</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1560</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1561</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_EMBALLAGE_VENDUS" model="account.report.line">
+                <field name="name">* Vendus</field>
+                <field name="code">STOCK_EMBALLAGE_VENDUS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_stocks_report_line_STOCK_EMBALLAGE"/>
+                <field name="sequence">110</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1596</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1597</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1598</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1599</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1600</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1601</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1602</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_EMBALLAGE_PERDUS" model="account.report.line">
+                <field name="name">* Perdus</field>
+                <field name="code">STOCK_EMBALLAGE_PERDUS</field>
+                <field name="hierarchy_level">2</field>
+                <field name="parent_id" ref="bilan_stocks_report_line_STOCK_EMBALLAGE"/>
+                <field name="sequence">120</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1604</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1605</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1606</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1607</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1608</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1609</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1610</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_TOTAL_APPRO" model="account.report.line">
+                <field name="name">Total Stocks Approvisionnements</field>
+                <field name="code">STOCK_TOTAL_APPRO</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">130</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1612</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1613</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1614</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1615</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1616</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1617</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1618</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_SECTION_ENCQ" model="account.report.line">
+                <field name="name">II. Stock en cours Production de biens et service</field>
+                <field name="code">STOCK_SECTION_ENCQ</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">140</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1635</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1636</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1637</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1638</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1639</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1640</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1641</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_PRODUITS_EN_COURS" model="account.report.line">
+                <field name="name">11 Produits en cours</field>
+                <field name="code">STOCK_PRODUITS_EN_COURS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">150</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1643</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1644</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1645</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1646</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1647</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1648</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1649</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_ETUDES_EN_COURS" model="account.report.line">
+                <field name="name">12 Etudes en cours</field>
+                <field name="code">STOCK_ETUDES_EN_COURS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">160</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1656</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1657</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1658</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1659</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1660</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1661</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1662</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_TRAVAUX_EN_COURS" model="account.report.line">
+                <field name="name">13 Travaux en cours</field>
+                <field name="code">STOCK_TRAVAUX_EN_COURS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">170</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1664</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1665</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1666</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1667</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1668</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1669</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1670</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_SERVICES_EN_COURS" model="account.report.line">
+                <field name="name">14 Services en cours</field>
+                <field name="code">STOCK_SERVICES_EN_COURS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">180</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1672</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1673</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1674</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1675</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1676</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1677</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1678</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_TOTAL_ENCQ" model="account.report.line">
+                <field name="name">Total Stocks des Encours</field>
+                <field name="code">STOCK_TOTAL_ENCQ</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">190</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1685</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1686</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1687</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1688</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1689</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1690</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1691</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_SECTION_PRODUITS_FINIS" model="account.report.line">
+                <field name="name">III. Stock Produits finis</field>
+                <field name="code">STOCK_SECTION_PRODUITS_FINIS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">200</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1736</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1737</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1738</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1739</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1740</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1741</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1742</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_PRODUITS_FINIS" model="account.report.line">
+                <field name="name">16 Produits finis</field>
+                <field name="code">STOCK_PRODUITS_FINIS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">210</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1757</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1758</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1759</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1760</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1761</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1762</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1763</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_BIENS_FINIS" model="account.report.line">
+                <field name="name">17 Biens finis</field>
+                <field name="code">STOCK_BIENS_FINIS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">220</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1769</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1770</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1771</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1772</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1773</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1774</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1775</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_TOTAL_PRODUITS_FINIS" model="account.report.line">
+                <field name="name">Total Stocks Produits et Biens finis</field>
+                <field name="code">STOCK_TOTAL_PRODUITS_FINIS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">230</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1800</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1801</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1802</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1803</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1804</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1805</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1806</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_SECTION_RESIDUELS" model="account.report.line">
+                <field name="name">IV. Stock Produits résiduels</field>
+                <field name="code">STOCK_SECTION_RESIDUELS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">240</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1819</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1820</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1821</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1822</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1823</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1824</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1825</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_DECHETS" model="account.report.line">
+                <field name="name">19 Déchets</field>
+                <field name="code">STOCK_DECHETS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">250</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1836</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1837</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1838</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1839</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1840</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1841</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_DECHETS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1842</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_REBUTS" model="account.report.line">
+                <field name="name">20 Rebuts</field>
+                <field name="code">STOCK_REBUTS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">260</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1853</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1854</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1855</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1856</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1857</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1858</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_REBUTS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1859</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_MATIERES_RECUPERATION" model="account.report.line">
+                <field name="name">21 Matières de récupération</field>
+                <field name="code">STOCK_MATIERES_RECUPERATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">270</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1861</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1862</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1863</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1864</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1865</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1866</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1867</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_TOTAL_RESIDUELS" model="account.report.line">
+                <field name="name">Total Stocks Produits résiduels</field>
+                <field name="code">STOCK_TOTAL_RESIDUELS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">280</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1869</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1870</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1871</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1872</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1873</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1874</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1875</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_stocks_report_line_STOCK_TOTAL_GENERAL" model="account.report.line">
+                <field name="name">TOTAL GENERAL (ligne 10 + 15 + 18 + 22)</field>
+                <field name="code">STOCK_TOTAL_GENERAL</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">290</field>
+                <field name="expression_ids">
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_brut_fin" model="account.report.expression">
+                        <field name="label">brut_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1886</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_prov_fin" model="account.report.expression">
+                        <field name="label">prov_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1887</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_net_fin" model="account.report.expression">
+                        <field name="label">net_fin</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1888</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_brut_init" model="account.report.expression">
+                        <field name="label">brut_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1889</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_prov_init" model="account.report.expression">
+                        <field name="label">prov_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1890</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_net_init" model="account.report.expression">
+                        <field name="label">net_init</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1891</field>
+                        <field name="date_scope">to_beginning_of_period</field>
+                    </record>
+                    <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_variation" model="account.report.expression">
+                        <field name="label">variation</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_1892</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_bilan_stocks_report" model="ir.actions.client">
+    <field name="name">Etat Détaillé des Stocks</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-stocks</field>
+    <field name="context" eval="{'report_id': ref('bilan_stocks_report')}"/>
+</record>
+
+<menuitem id="menu_bilan_stocks_report"
+          name="Etat Détaillé des Stocks"
+          action="action_bilan_stocks_report"
+          parent="account.account_reports_legal_statements_menu"
+          groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

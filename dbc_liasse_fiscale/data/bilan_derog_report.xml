@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<record id="bilan_derog_report" model="account.report">
+    <field name="name">Etat des Dérogations</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="True"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="allow_account_audit_status_on_lines" eval="True"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+    <field name="column_ids">
+        <record id="bilan_derog_report_column_justification" model="account.report.column">
+            <field name="name">JUSTIFICATION DES DEROGATIONS</field>
+            <field name="expression_label">justification</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="bilan_derog_report_column_influence" model="account.report.column">
+            <field name="name">INFLUENCE DES DEROGATIONS SUR LE PATRIMOINE, LA SITUATION FINANCIERE ET LES RESULTATS</field>
+            <field name="expression_label">influence</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+    <field name="line_ids">
+        <record id="bilan_derog_report_line_DEROG_PRINCIPES_COMPTABLES" model="account.report.line">
+                <field name="name">I. Dérogations aux principes comptables fondamentaux</field>
+                <field name="code">DEROG_PRINCIPES_COMPTABLES</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">10</field>
+                <field name="expression_ids">
+                    <record id="bilan_derog_report_expr_DEROG_PRINCIPES_COMPTABLES_justification" model="account.report.expression">
+                        <field name="label">justification</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14098</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_derog_report_expr_DEROG_PRINCIPES_COMPTABLES_influence" model="account.report.expression">
+                        <field name="label">influence</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14099</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_derog_report_line_DEROG_METHODES_EVALUATION" model="account.report.line">
+                <field name="name">II. Dérogations aux méthodes d'évaluation</field>
+                <field name="code">DEROG_METHODES_EVALUATION</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">20</field>
+                <field name="expression_ids">
+                    <record id="bilan_derog_report_expr_DEROG_METHODES_EVALUATION_justification" model="account.report.expression">
+                        <field name="label">justification</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14101</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_derog_report_expr_DEROG_METHODES_EVALUATION_influence" model="account.report.expression">
+                        <field name="label">influence</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14102</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+        <record id="bilan_derog_report_line_DEROG_REGLES_ETATS" model="account.report.line">
+                <field name="name">III. Dérogations aux règles d'établissement et de présentation des états de synthèse</field>
+                <field name="code">DEROG_REGLES_ETATS</field>
+                <field name="hierarchy_level">1</field>
+                <field name="sequence">30</field>
+                <field name="expression_ids">
+                    <record id="bilan_derog_report_expr_DEROG_REGLES_ETATS_justification" model="account.report.expression">
+                        <field name="label">justification</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14104</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                    <record id="bilan_derog_report_expr_DEROG_REGLES_ETATS_influence" model="account.report.expression">
+                        <field name="label">influence</field>
+                        <field name="engine">custom</field>
+                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="subformula">edi_14105</field>
+                        <field name="date_scope">from_beginning</field>
+                    </record>
+                </field>
+            </record>
+    </field>
+</record>
+
+<record id="action_bilan_derog_report" model="ir.actions.client">
+    <field name="name">Etat des Dérogations</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-derog</field>
+    <field name="context" eval="{'report_id': ref('bilan_derog_report')}"/>
+</record>
+
+<menuitem id="menu_bilan_derog_report" name="Etat des Dérogations" action="action_bilan_derog_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+</odoo>

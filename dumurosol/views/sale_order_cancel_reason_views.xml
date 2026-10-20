@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dumurosol_cancel_reason_list" model="ir.ui.view">
+        <field name="name">dumurosol.sale.order.cancel.reason.list</field>
+        <field name="model">dumurosol.sale.order.cancel.reason</field>
+        <field name="arch" type="xml">
+            <list string="Motifs d'annulation" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="requires_precision"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dumurosol_cancel_reason" model="ir.actions.act_window">
+        <field name="name">Motifs d'annulation de devis</field>
+        <field name="res_model">dumurosol.sale.order.cancel.reason</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_dumurosol_cancel_reason"
+              name="Motifs d'annulation"
+              parent="sale.menu_sale_config"
+              action="action_dumurosol_cancel_reason"
+              sequence="60"
+              groups="sales_team.group_sale_manager"/>
+</odoo>

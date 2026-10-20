@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tam_server_system,tam.server system,model_tam_server,base.group_system,1,1,1,1
+access_tam_instance_system,tam.instance system,model_tam_instance,base.group_system,1,1,1,1
+access_tam_database_system,tam.database system,model_tam_database,base.group_system,1,1,1,1

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ma_fiscal_setting_search" model="ir.ui.view">
+            <field name="name">ma.fiscal.setting.search</field>
+            <field name="model">ma.fiscal.setting</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" filter_domain="[('name','ilike', self)]" string="Name"/>
+                    <field name="edi" string="EDI Code"/>
+                    <field name="libelle" string="Label"/>
+                    <field name="client_id" string="Client"/>
+                    <field name="year" string="Fiscal Year"/>
+                    <filter name="group_formule" string="Group by Formula" context="{'group_by': 'table_'}"/>
+                    <filter name="with_formula" string="Has a formula"
+                            domain="[('formule','not in',[False,'0',''])]"/>
+                    <filter name="empty_formula" string="Empty formula"
+                            domain="[('formule','in',[False,'0',''])]"/>
+                    <filter name="master_rows" string="Master (template)"
+                            domain="[('client_id','=',False),('year','=',False)]"/>
+                    <filter name="grp_table" string="Table" context="{'group_by':'table_'}"/>
+                    <filter name="grp_modele" string="Modèle" context="{'group_by':'modele'}"/>
+                    <filter name="grp_client" string="Client" context="{'group_by':'client_id'}"/>
+                    <filter name="grp_year" string="Fiscal Year" context="{'group_by':'year'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="ma_fiscal_setting_list" model="ir.ui.view">
+            <field name="name">ma.fiscal.setting.list</field>
+            <field name="model">ma.fiscal.setting</field>
+            <field name="arch" type="xml">
+                <list string="Fiscal Formulas" editable="bottom" sample="1">
+                    <field name="name"/>
+                    <field name="edi" readonly="1"/>
+                    <field name="libelle" optional="show"/>
+                    <field name="formule"/>
+                    <field name="table_" optional="hide" readonly="1"/>
+                    <field name="modele" optional="hide" readonly="1"/>
+                    <field name="code_comptable" optional="hide" readonly="1"/>
+                    <field name="client_id" optional="hide" readonly="1"/>
+                    <field name="year" optional="hide" readonly="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ma_fiscal_setting_form" model="ir.ui.view">
+            <field name="name">ma.fiscal.setting.form</field>
+            <field name="model">ma.fiscal.setting</field>
+            <field name="arch" type="xml">
+                <form string="Fiscal Formula">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="edi"/>
+                                <field name="libelle"/>
+                            </group>
+                            <group>
+                                <field name="table_"/>
+                                <field name="modele"/>
+                                <field name="code_comptable"/>
+                            </group>
+                            <group>
+                                <field name="client_id" readonly="1"/>
+                                <field name="year" readonly="1"/>
+                            </group>
+                        </group>
+                        <field name="formule" colspan="2"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="ma_fiscal_setting_action" model="ir.actions.act_window">
+            <field name="name">Fiscal Formulas</field>
+            <field name="res_model">ma.fiscal.setting</field>
+            <field name="view_mode">list,form</field>
+            <field name="context" eval="{}"/>
+        </record>
+
+        <record id="ma_fiscal_client_list" model="ir.ui.view">
+            <field name="name">ma.fiscal.client.list</field>
+            <field name="model">ma.fiscal.client</field>
+            <field name="arch" type="xml">
+                <list string="Clients">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ma_fiscal_client_action" model="ir.actions.act_window">
+            <field name="name">Clients</field>
+            <field name="res_model">ma.fiscal.client</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>
