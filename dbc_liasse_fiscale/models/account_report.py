@@ -26,6 +26,27 @@ _API_TIMEOUT = 10
 # instance are picked up quickly. Raise via system param if your API is slow.
 _API_CACHE = {}
 
+# --------------------------------------------------------------------------- #
+# "Répartition du Capital Social" - a pure data-entry report (no EDI code or
+# formula behind any value). (field, type) drives both the report's columns
+# and the add/edit popup's inputs - see AccountReportHandlerMaCapital and
+# action_modify_capital_line below.
+# --------------------------------------------------------------------------- #
+_MA_CAPITAL_FIELDS = [
+    ('nom_prenom', 'char'),
+    ('raison_sociale', 'char'),
+    ('num_if', 'char'),
+    ('num_cin', 'char'),
+    ('num_ce', 'char'),
+    ('adresse', 'char'),
+    ('titres_precedent', 'integer'),
+    ('titres_actuel', 'integer'),
+    ('valeur_nominale', 'float'),
+    ('montant_souscrit', 'float'),
+    ('montant_appele', 'float'),
+    ('montant_libere', 'float'),
+]
+
 
 def _get_cache_ttl(icp):
     try:
@@ -372,7 +393,8 @@ class AccountReport_MaFiscal(models.Model):
         """
         icp = self.env['ir.config_parameter'].sudo()
         base_url = icp.get_param('ma_formules.api_url', _DEFAULT_API_URL) or _DEFAULT_API_URL
-        client_id = icp.get_param('ma_formules.client_id')
+        reports_enabled = icp.get_param('ma_formules.reports_enabled')
+        client_id = icp.get_param('ma_formules.client_id') if reports_enabled else False
         cache_ttl = _get_cache_ttl(icp)
 
         if client_id:
@@ -380,8 +402,10 @@ class AccountReport_MaFiscal(models.Model):
             url = f"{base_url}?{query}"
         else:
             # No client_id configured yet (e.g. before the "Enregistrer ce
-            # client" setup step has been run): fall back to the plain,
-            # unscoped URL — same behaviour as before this feature existed.
+            # client" setup step has been run), or "Activer les formules
+            # modifiables" is off: fall back to the plain, unscoped URL,
+            # i.e. the shared master formulas — same behaviour as before
+            # this feature existed.
             url = base_url
 
         # 1. Check process-level cache
@@ -463,6 +487,105 @@ class AccountReport_MaFiscal(models.Model):
         if not client_id:
             raise UserError(_("Réponse inattendue de l'instance des formules : %s") % data)
         return str(client_id)
+
+    def _unregister_client_with_formules_api(self, client_id):
+        """One-time call to the formules instance's unregistration route:
+        deletes this client and every formula row it owns (every fiscal
+        year) — never the master/template rows.
+
+        Raises UserError on any failure, same shape as
+        _register_client_with_formules_api.
+        """
+        icp = self.env['ir.config_parameter'].sudo()
+        base_url = icp.get_param('ma_formules.api_url', _DEFAULT_API_URL) or _DEFAULT_API_URL
+        secret = icp.get_param('ma_formules.register_secret')
+        if not secret:
+            raise UserError(_(
+                "Le paramètre système 'ma_formules.register_secret' n'est pas configuré "
+                "(Paramètres > Rapports fiscaux)."
+            ))
+
+        parsed = urllib.parse.urlparse(base_url)
+        unregister_url = urllib.parse.urlunparse(
+            (parsed.scheme, parsed.netloc, '/api/ma/clients/unregister', '', '', '')
+        )
+
+        req = urllib.request.Request(
+            unregister_url,
+            data=json.dumps({'client_id': client_id}).encode('utf-8'),
+            method='POST',
+            headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Register-Secret': secret,
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=_API_TIMEOUT) as resp:
+                json.loads(resp.read().decode('utf-8'))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode('utf-8', errors='replace')
+            raise UserError(_(
+                "L'instance des formules a refusé la suppression (HTTP %s) : %s"
+            ) % (exc.code, body)) from exc
+        except (OSError, json.JSONDecodeError) as exc:
+            raise UserError(_(
+                "Impossible de contacter l'instance des formules pour la suppression : %s"
+            ) % exc) from exc
+
+    def _update_formula_on_api(self, client_id, year, edi_code, new_formula):
+        """Set one EDI code's formula for this client's one fiscal year on
+        the remote formules instance — never the master/template rows, so
+        this can never leak into any other client's reports.
+
+        Raises UserError on any failure, same shape as
+        _register_client_with_formules_api.
+        """
+        icp = self.env['ir.config_parameter'].sudo()
+        base_url = icp.get_param('ma_formules.api_url', _DEFAULT_API_URL) or _DEFAULT_API_URL
+        secret = icp.get_param('ma_formules.register_secret')
+        if not secret:
+            raise UserError(_(
+                "Le paramètre système 'ma_formules.register_secret' n'est pas configuré "
+                "(Paramètres > Rapports fiscaux)."
+            ))
+
+        parsed = urllib.parse.urlparse(base_url)
+        update_url = urllib.parse.urlunparse(
+            (parsed.scheme, parsed.netloc, '/api/ma/clients/formules/update', '', '', '')
+        )
+
+        req = urllib.request.Request(
+            update_url,
+            data=json.dumps({
+                'client_id': int(client_id),
+                'year': int(year),
+                'edi': edi_code,
+                'formule': new_formula,
+            }).encode('utf-8'),
+            method='POST',
+            headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Register-Secret': secret,
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=_API_TIMEOUT) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode('utf-8', errors='replace')
+            raise UserError(_(
+                "L'instance des formules a refusé la modification (HTTP %s) : %s"
+            ) % (exc.code, body)) from exc
+        except (OSError, json.JSONDecodeError) as exc:
+            raise UserError(_(
+                "Impossible de contacter l'instance des formules pour la modification : %s"
+            ) % exc) from exc
+
+        if not data.get('ok'):
+            raise UserError(_("Réponse inattendue de l'instance des formules : %s") % data)
+        return data.get('formule', new_formula)
 
     def action_clear_formules_cache(self):
         """Button action: wipe the in-process formules cache for this worker.
@@ -645,6 +768,25 @@ class AccountReport_MaFiscal(models.Model):
                     rslt['class'] = ' '.join(classes)
         return rslt
 
+    def _can_edit_formulas(self, options):
+        """True if the current user may edit EDI formulas from the report
+        cells (the pin icon) — "Activer les formules modifiables" must be
+        on, this installation must be registered with a client_id (editing
+        before that would have no per-client row to write into), and the
+        current user must be in the stricter 'Editeur de formules' group.
+        Cached in *options* (a fresh dict per render), same pattern as
+        _get_saisie_codes.
+        """
+        cached = options.get('ma_can_edit_formulas')
+        if cached is None:
+            icp = self.env['ir.config_parameter'].sudo()
+            reports_enabled = icp.get_param('ma_formules.reports_enabled')
+            client_id = icp.get_param('ma_formules.client_id') if reports_enabled else False
+            cached = bool(client_id) and self.env.user.has_group(
+                'dbc_liasse_fiscale.group_ma_fiscal_formula_editor')
+            options['ma_can_edit_formulas'] = cached
+        return cached
+
     def _build_static_line_columns(self, line, options, all_column_groups_expression_totals, groupby_model=None):
         # The framework only creates edit_popup_data (the pencil button) for
         # engine='external' expressions in the XML.  Our expressions are all
@@ -656,6 +798,9 @@ class AccountReport_MaFiscal(models.Model):
         )
         if len(options.get('companies', [])) == 1:
             saisie_codes = self._get_saisie_codes(options)
+            can_edit_formulas = self._can_edit_formulas(options)
+            year = self._get_fiscal_year(options)
+            formules = self._get_formules_map(year) if can_edit_formulas else None
             line_expr_map = {expr.label: expr for expr in line.expression_ids}
             for col_dict, col_options in zip(columns, options['columns']):
                 column_expression = line_expr_map.get(col_options['expression_label'])
@@ -663,20 +808,34 @@ class AccountReport_MaFiscal(models.Model):
                     continue
                 subformula = column_expression.subformula or ''
                 match = re.fullmatch(r'\s*edi[_ ](\S+)\s*', subformula)
-                if not match or match.group(1) not in saisie_codes:
+                if not match:
                     continue
-                figure_type = column_expression.figure_type or col_options.get('figure_type', 'monetary')
-                rounding = None
-                if figure_type == 'integer':
-                    rounding = 0
-                elif figure_type == 'monetary':
-                    rounding = self.env.company.currency_id.decimal_places
-                col_dict['edit_popup_data'] = json.dumps({
-                    'column_group_key': col_options['column_group_key'],
-                    'target_expression_id': column_expression.id,
-                    'rounding': rounding,
-                    'figure_type': figure_type,
-                })
+                code = match.group(1)
+                if code in saisie_codes:
+                    figure_type = column_expression.figure_type or col_options.get('figure_type', 'monetary')
+                    rounding = None
+                    if figure_type == 'integer':
+                        rounding = 0
+                    elif figure_type == 'monetary':
+                        rounding = self.env.company.currency_id.decimal_places
+                    col_dict['edit_popup_data'] = json.dumps({
+                        'column_group_key': col_options['column_group_key'],
+                        'target_expression_id': column_expression.id,
+                        'rounding': rounding,
+                        'figure_type': figure_type,
+                    })
+                # Not `elif`: a Saisie column still has an underlying EDI
+                # formula (the one that makes it "Saisie" in the first
+                # place) and should get both icons — the pencil to key in
+                # a value, and the pin to rewrite that formula itself
+                # (e.g. to change it away from "Saisie").
+                if can_edit_formulas:
+                    col_dict['ma_formula_edit_data'] = json.dumps({
+                        'column_group_key': col_options['column_group_key'],
+                        'edi_code': code,
+                        'current_formula': formules.get(code, ''),
+                        'year': year,
+                    })
         return columns
 
     def action_modify_manual_value(self, line_id, options, column_group_key, new_value_str, target_expression_id, rounding, json_friendly_column_group_totals):
@@ -732,6 +891,116 @@ class AccountReport_MaFiscal(models.Model):
         return {
             'lines': self._get_lines(options, all_column_groups_expression_totals=recomputed_expression_totals),
             'column_groups_totals': self._get_json_friendly_column_group_totals(recomputed_expression_totals),
+        }
+
+    def action_modify_formula(self, line_id, options, column_group_key, edi_code, new_formula):
+        """Pin-icon counterpart of action_modify_manual_value: rewrites one
+        EDI code's formula for THIS client's one fiscal year on the remote
+        formules instance (never the master rows — see
+        _update_formula_on_api), logs the change, then recomputes every
+        'custom'/'aggregation' expression in the report (a formula change
+        can ripple through any nested EDI(...) reference, not just the
+        edited cell — same broad recompute set the Saisie branch above
+        already uses).
+        """
+        self.ensure_one()
+        if not self.env.user.has_group('dbc_liasse_fiscale.group_ma_fiscal_formula_editor'):
+            raise UserError(_("Vous n'avez pas le droit de modifier les formules."))
+
+        icp = self.env['ir.config_parameter'].sudo()
+        if not icp.get_param('ma_formules.reports_enabled'):
+            raise UserError(_(
+                "Les formules modifiables ne sont pas activées (Paramètres > Rapports fiscaux)."
+            ))
+        client_id = icp.get_param('ma_formules.client_id')
+        if not client_id:
+            raise UserError(_(
+                "Ce client n'est pas encore enregistré auprès de l'instance des formules "
+                "(Paramètres > Rapports fiscaux)."
+            ))
+
+        target_column_group_options = self._get_column_group_options(options, column_group_key)
+        self._init_currency_table(target_column_group_options)
+        year = self._get_fiscal_year(target_column_group_options)
+
+        try:
+            parse_formule(new_formula)
+        except ValueError as exc:
+            raise UserError(_("Formule invalide : %s") % exc) from exc
+
+        old_formula = self._get_formules_map(year).get(edi_code, '')
+        self._update_formula_on_api(client_id, year, edi_code, new_formula)
+
+        base_url = icp.get_param('ma_formules.api_url', _DEFAULT_API_URL) or _DEFAULT_API_URL
+        query = urllib.parse.urlencode({'client_id': client_id, 'year': year})
+        _invalidate_api_cache(f"{base_url}?{query}")
+
+        self.env['ma.fiscal.formula.log'].sudo().create({
+            'edi_code': edi_code,
+            'year': year,
+            'client_id': client_id,
+            'old_formula': old_formula,
+            'new_formula': new_formula,
+        })
+
+        expressions_to_recompute = self.line_ids.expression_ids.filtered(
+            lambda x: x.engine in ('external', 'custom', 'aggregation'))
+        recomputed_expression_totals = self._compute_expression_totals_for_each_column_group(
+            expressions_to_recompute, options)
+
+        return {
+            'lines': self._get_lines(options, all_column_groups_expression_totals=recomputed_expression_totals),
+            'column_groups_totals': self._get_json_friendly_column_group_totals(recomputed_expression_totals),
+        }
+
+    def _empty_column_groups_totals(self, options):
+        """The "Répartition du Capital Social" report has no expression to
+        aggregate (every row is a literal value, not a computed formula),
+        so there is never anything to put in the column-group totals the
+        add/edit/delete actions below have to return."""
+        return self._get_json_friendly_column_group_totals(
+            {column_group_key: {} for column_group_key in options['column_groups']}
+        )
+
+    def action_modify_capital_line(self, line_id, options, values):
+        """Create or update one associate row of the "Répartition du
+        Capital Social" report from its popup (pencil icon on an existing
+        row, or the trailing "+ Ajouter un associé" row). Every field here
+        is a plain value - there is no EDI code or formula involved, unlike
+        action_modify_formula above.
+
+        `line_id` is the generic id of the row being edited, or falsy for
+        the "add" row (-> create a new record for the current company).
+        Nothing here is scoped by the report's date filter - the rows are
+        a plain, always-current list of associates, not a fiscal-year
+        snapshot.
+        """
+        self.ensure_one()
+        record_id = self._get_res_id_from_line_id(line_id, 'ma.fiscal.capital.line') if line_id else None
+        clean_values = {name: values.get(name) for name, _type in _MA_CAPITAL_FIELDS if name in values}
+
+        if record_id:
+            self.env['ma.fiscal.capital.line'].browse(record_id).write(clean_values)
+        else:
+            clean_values['company_id'] = self.env.company.id
+            self.env['ma.fiscal.capital.line'].create(clean_values)
+
+        return {
+            'lines': self._get_lines(options),
+            'column_groups_totals': self._empty_column_groups_totals(options),
+        }
+
+    def action_delete_capital_line(self, line_id, options):
+        """Trash-icon counterpart of action_modify_capital_line: removes
+        one associate row for good."""
+        self.ensure_one()
+        record_id = self._get_res_id_from_line_id(line_id, 'ma.fiscal.capital.line')
+        if record_id:
+            self.env['ma.fiscal.capital.line'].browse(record_id).unlink()
+
+        return {
+            'lines': self._get_lines(options),
+            'column_groups_totals': self._empty_column_groups_totals(options),
         }
 
 
@@ -847,6 +1116,73 @@ class AccountReportHandlerMaFiscal(models.AbstractModel):
             )
 
         return results
+
+
+class AccountReportHandlerMaCapital(models.AbstractModel):
+    """Dynamic-lines handler for "Répartition du Capital Social": one line
+    per ma.fiscal.capital.line record of the current company, plus a
+    trailing "add" line - no account.report.line/expression records at
+    all (same pattern as Odoo's own Partner Ledger), since the rows are
+    created/edited/deleted by the user, not declared in XML. Deliberately
+    ignores the report's date filter entirely - these rows are a plain,
+    always-current list, not scoped to whatever period happens to be
+    selected.
+    """
+    _name = 'account.report.handler.ma_capital'
+    _inherit = 'account.report.custom.handler'
+    _description = "Répartition du Capital Social - Custom Handler"
+
+    def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals, warnings=None):
+        company_ids = report.get_report_company_ids(options)
+        associates = self.env['ma.fiscal.capital.line'].search([('company_id', 'in', company_ids)])
+
+        lines = [(0, self._get_capital_line_dict(report, options, associate)) for associate in associates]
+        lines.append((0, self._get_capital_add_line_dict(report, options)))
+        return lines
+
+    def _get_capital_line_dict(self, report, options, associate):
+        columns = []
+        for col_options in options['columns']:
+            label = col_options['expression_label']
+            if label == 'ma_actions':
+                col_dict = report._build_column_dict(None, col_options, options=options)
+                col_dict['ma_capital_edit_data'] = json.dumps({
+                    'values': {
+                        name: (associate[name] or ('' if field_type == 'char' else 0))
+                        for name, field_type in _MA_CAPITAL_FIELDS
+                    },
+                })
+                col_dict['ma_capital_delete_data'] = json.dumps({})
+            else:
+                col_dict = report._build_column_dict(associate[label], col_options, options=options)
+            columns.append(col_dict)
+
+        return {
+            'id': report._get_generic_line_id('ma.fiscal.capital.line', associate.id),
+            'name': '',
+            'level': 1,
+            'columns': columns,
+            'unfoldable': False,
+            'unfold': False,
+        }
+
+    def _get_capital_add_line_dict(self, report, options):
+        columns = []
+        for col_options in options['columns']:
+            label = col_options['expression_label']
+            col_dict = report._build_column_dict(None, col_options, options=options)
+            if label == 'ma_actions':
+                col_dict['ma_capital_add_data'] = json.dumps({})
+            columns.append(col_dict)
+
+        return {
+            'id': report._get_generic_line_id('', None, markup='ma_capital_add_line'),
+            'name': '',
+            'level': 1,
+            'columns': columns,
+            'unfoldable': False,
+            'unfold': False,
+        }
 
 
 # --------------------------------------------------------------------------- #

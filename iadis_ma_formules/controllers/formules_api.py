@@ -7,6 +7,8 @@ Routes (all return JSON, testable directly in a browser or with curl):
     GET  /api/ma/formules/<edi>             -> {"edi": "...", "table_": n, "formule": "..",
                                                 "modele": n, "code_comptable": "..", "libelle": ".."}
     POST /api/ma/clients/register           -> {"client_id": N} (register-or-return, see below)
+    POST /api/ma/clients/unregister          -> {"ok": true} (deletes a client and its formulas)
+    POST /api/ma/clients/formules/update     -> {"ok": true, "formule": ".."} (see below)
 """
 import json
 
@@ -90,3 +92,79 @@ class MaFormulesApi(http.Controller):
         # only fills in whatever is missing.
         Setting._clone_master_for_client(client)
         return request.make_json_response({'client_id': client.id})
+
+    @http.route('/api/ma/clients/unregister', type='http', auth='public',
+                methods=['POST'], csrf=False)
+    def unregister_client(self):
+        """Delete a client and every formula row it owns (every fiscal
+        year) — never the master/template rows, which stay untouched.
+
+        Body: {"client_id": N}
+        Header: X-Register-Secret: <ma_formules.register_secret> (same
+        shared secret as /api/ma/clients/register).
+        """
+        icp = request.env['ir.config_parameter'].sudo()
+        expected_secret = icp.get_param('ma_formules.register_secret')
+        provided_secret = request.httprequest.headers.get('X-Register-Secret')
+        if not expected_secret or provided_secret != expected_secret:
+            return request.make_json_response({'error': 'forbidden'}, status=403)
+
+        try:
+            payload = json.loads(request.httprequest.data or b'{}')
+        except json.JSONDecodeError:
+            return request.make_json_response({'error': 'invalid JSON body'}, status=400)
+
+        client_id = payload.get('client_id')
+        if not client_id:
+            return request.make_json_response({'error': 'missing "client_id"'}, status=400)
+
+        client = request.env['ma.fiscal.client'].sudo().browse(int(client_id)).exists()
+        if not client:
+            return request.make_json_response({'error': 'unknown client_id'}, status=404)
+
+        request.env['ma.fiscal.setting'].sudo().search(
+            [('client_id', '=', client.id)]
+        ).unlink()
+        client.unlink()
+        return request.make_json_response({'ok': True})
+
+    @http.route('/api/ma/clients/formules/update', type='http', auth='public',
+                methods=['POST'], csrf=False)
+    def update_client_formule(self):
+        """Set one EDI code's formula for one client's one fiscal year —
+        never the master/template rows, so an edit here can't leak into
+        any other client's reports.
+
+        Body: {"client_id": N, "year": N, "edi": "<code>", "formule": "<text>"}
+        Header: X-Register-Secret: <ma_formules.register_secret> (same
+        shared secret as /api/ma/clients/register — same trust level: a
+        legitimate dbc_liasse_fiscale installation, not a per-client key).
+        """
+        icp = request.env['ir.config_parameter'].sudo()
+        expected_secret = icp.get_param('ma_formules.register_secret')
+        provided_secret = request.httprequest.headers.get('X-Register-Secret')
+        if not expected_secret or provided_secret != expected_secret:
+            return request.make_json_response({'error': 'forbidden'}, status=403)
+
+        try:
+            payload = json.loads(request.httprequest.data or b'{}')
+        except json.JSONDecodeError:
+            return request.make_json_response({'error': 'invalid JSON body'}, status=400)
+
+        client_id = payload.get('client_id')
+        year = payload.get('year')
+        edi = (payload.get('edi') or '').strip()
+        formule = payload.get('formule')
+        if not client_id or not year or not edi or formule is None:
+            return request.make_json_response(
+                {'error': 'missing "client_id", "year", "edi" or "formule"'}, status=400,
+            )
+
+        try:
+            new_formule = request.env['ma.fiscal.setting'].sudo()._update_formula(
+                int(client_id), int(year), edi, str(formule),
+            )
+        except ValueError as exc:
+            return request.make_json_response({'error': str(exc)}, status=400)
+
+        return request.make_json_response({'ok': True, 'formule': new_formule})

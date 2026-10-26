@@ -9,12 +9,12 @@
             <block id="account_reports_settings" position="inside">
                 <setting id="ma_fiscal_reports_setting"
                          string="Rapports Fiscaux Maroc"
-                         help="Formules par exercice fiscal (2020 à aujourd'hui), par client">
+                         help="Formules personnalisées par exercice fiscal (2020 à aujourd'hui), par client">
                     <div class="o_setting_left_pane">
                         <field name="ma_fiscal_reports_enabled"/>
                     </div>
                     <div class="o_setting_right_pane">
-                        <label for="ma_fiscal_reports_enabled" string="Activer les rapports fiscal" class="fw-bold"/>
+                        <label for="ma_fiscal_reports_enabled" string="Activer les formules modifiables" class="fw-bold"/>
                         <div class="content-group" invisible="not ma_fiscal_reports_enabled">
                             <div class="mt8">
                                 <label for="ma_fiscal_api_url" class="o_light_label d-block mb-1 fw-bold" string="URL des formules"/>
@@ -28,7 +28,15 @@
                             <field name="ma_fiscal_client_id" invisible="1"/>
                             <div class="mt8" invisible="ma_fiscal_client_id">
                                 <button name="action_ma_register_client" type="object"
-                                        string="Enregistrer ce client" class="btn-primary"/>
+                                        string="Enregistrer ce client" class="btn-primary"
+                                        noSaveDialog="1"/>
+                            </div>
+                            <div class="mt8" invisible="not ma_fiscal_client_id">
+                                <button name="action_ma_unregister_client" type="object"
+                                        string="Supprimer ce client et ses formules"
+                                        class="btn-secondary"
+                                        noSaveDialog="1"
+                                        confirm="Supprimer ce client et toutes ses formules (tous les exercices) de l'instance des formules ? Cette action est irréversible."/>
                             </div>
                         </div>
                     </div>

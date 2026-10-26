@@ -7,10 +7,13 @@ class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
     ma_fiscal_reports_enabled = fields.Boolean(
-        string="Activer les rapports fiscal",
+        string="Activer les formules modifiables",
         config_parameter='ma_formules.reports_enabled',
-        help="Affiche les rapports fiscaux marocains dans le menu Comptabilité. "
-             "Désactivé, ces rapports restent masqués pour tous les utilisateurs.",
+        help="Les rapports fiscaux marocains sont toujours visibles dans le menu "
+             "Comptabilité et fonctionnent par défaut avec les formules communes. "
+             "Activer ce réglage permet en plus de personnaliser ces formules pour "
+             "cette société (URL/secret de l'instance des formules, enregistrement "
+             "du client, et le crayon d'édition des formules dans les rapports).",
     )
     ma_fiscal_api_url = fields.Char(
         string="URL de l'instance des formules",
@@ -52,8 +55,20 @@ class ResConfigSettings(models.TransientModel):
         fiscal year (2020 -> current). Guarded both in the view
         (invisible unless enabled and not yet registered) and here, so
         calling it twice is a no-op rather than a duplicate registration.
+
+        Saves the current screen's values first (same as clicking the page's
+        own "Save" button), so filling in the URL/secret and clicking this
+        button directly works without a separate Save-then-scroll-back step
+        — the API URL and secret this is about to use are always the ones
+        actually showing on screen, not whatever was saved last. The view's
+        `noSaveDialog` attribute on this button is what makes that single
+        click actually reach this method in the first place — without it,
+        Odoo's settings form shows its own "save changes?" dialog on a
+        dirty form and, confusingly, does NOT run this method afterwards
+        even if you click its "Save" (see web's SettingsFormController._confirmSave).
         """
         self.ensure_one()
+        self.set_values()
         icp = self.env['ir.config_parameter'].sudo()
         if icp.get_param('ma_formules.client_id'):
             raise UserError(_("Ce client est déjà enregistré auprès de l'instance des formules."))
@@ -75,3 +90,29 @@ class ResConfigSettings(models.TransientModel):
                 'type': 'success',
             },
         }
+
+    def action_ma_unregister_client(self):
+        """Delete this client and every formula row it owns on the formules
+        instance (every fiscal year — never the master/template rows),
+        then clear the locally stored client_id so "Enregistrer ce client"
+        can be used again from a clean state. Guarded in the view
+        (invisible unless a client_id is set) and here.
+
+        Saves the current screen's values first, same as
+        action_ma_register_client and for the same reason (so an edited
+        but unsaved URL/secret is the one actually used here, and the
+        settings form's own dirty-check dialog never short-circuits this
+        button — see the `noSaveDialog` attribute on it in the view).
+        """
+        self.ensure_one()
+        self.set_values()
+        icp = self.env['ir.config_parameter'].sudo()
+        client_id = icp.get_param('ma_formules.client_id')
+        if not client_id:
+            raise UserError(_("Aucun client enregistré auprès de l'instance des formules."))
+
+        self.env['account.report']._unregister_client_with_formules_api(client_id)
+        icp.set_param('ma_formules.client_id', False)
+        self.ma_fiscal_client_id = False
+
+        return {'type': 'ir.actions.client', 'tag': 'reload'}

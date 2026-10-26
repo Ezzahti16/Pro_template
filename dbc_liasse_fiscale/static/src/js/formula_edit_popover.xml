@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="dbc_liasse_fiscale.MaFormulaEditPopover">
+        <div class="account_report_popover_edit ma_formula_edit_popover">
+            <div class="mb-1 text-muted">
+                <t t-esc="editData.edi_code"/> — <t t-esc="editData.year"/>
+            </div>
+            <textarea class="ma_formula_edit_input" rows="3" t-ref="input">
+                <t t-esc="editData.current_formula"/>
+            </textarea>
+            <button class="btn btn-sm btn-primary mt-2" t-on-click="() => this.save()">
+                Enregistrer
+            </button>
+        </div>
+    </t>
+
+    <t t-inherit="account_reports.AccountReportLineCellCustomizable" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='props.cell.edit_popup_data']" position="after">
+            <t t-if="props.cell.ma_formula_edit_data">
+                <button
+                    class="btn btn_edit_formula me-auto"
+                    title="Modifier la formule"
+                    t-on-click="(ev) => this.formulaEditPopover(ev)"
+                >
+                    <i class="fa fa-pencil-square-o"/>
+                </button>
+            </t>
+        </xpath>
+    </t>
+</templates>

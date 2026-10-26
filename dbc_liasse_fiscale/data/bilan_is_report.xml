@@ -211,6 +211,6 @@
         <field name="path">dbc-bilan-is</field>
         <field name="context" eval="{'report_id': ref('bilan_is_report')}"/>
     </record>
-    <menuitem id="menu_dbc_bilan_is_report" name="État pour le Calcul de l'Impôt sur les Sociétés" parent="account.account_reports_legal_statements_menu" action="action_dbc_bilan_is_report" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+    <menuitem id="menu_dbc_bilan_is_report" name="État pour le Calcul de l'Impôt sur les Sociétés" parent="account.account_reports_legal_statements_menu" action="action_dbc_bilan_is_report"/>
 
 </odoo>

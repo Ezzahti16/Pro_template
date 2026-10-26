@@ -659,6 +659,6 @@
         <field name="path">ma-bilan-prov</field>
         <field name="context" eval="{'report_id': ref('bilan_prov_report')}"/>
     </record>
-    <menuitem id="menu_ma_bilan_prov_report" name="Tableau des Provisions" parent="account.account_reports_legal_statements_menu" action="action_ma_bilan_prov_report" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+    <menuitem id="menu_ma_bilan_prov_report" name="Tableau des Provisions" parent="account.account_reports_legal_statements_menu" action="action_ma_bilan_prov_report"/>
 
 </odoo>

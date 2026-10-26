@@ -12,15 +12,12 @@
                     <field name="libelle" string="Label"/>
                     <field name="client_id" string="Client"/>
                     <field name="year" string="Fiscal Year"/>
-                    <filter name="group_formule" string="Group by Formula" context="{'group_by': 'table_'}"/>
                     <filter name="with_formula" string="Has a formula"
                             domain="[('formule','not in',[False,'0',''])]"/>
                     <filter name="empty_formula" string="Empty formula"
                             domain="[('formule','in',[False,'0',''])]"/>
                     <filter name="master_rows" string="Master (template)"
                             domain="[('client_id','=',False),('year','=',False)]"/>
-                    <filter name="grp_table" string="Table" context="{'group_by':'table_'}"/>
-                    <filter name="grp_modele" string="Modèle" context="{'group_by':'modele'}"/>
                     <filter name="grp_client" string="Client" context="{'group_by':'client_id'}"/>
                     <filter name="grp_year" string="Fiscal Year" context="{'group_by':'year'}"/>
                 </search>
@@ -31,16 +28,14 @@
             <field name="name">ma.fiscal.setting.list</field>
             <field name="model">ma.fiscal.setting</field>
             <field name="arch" type="xml">
-                <list string="Fiscal Formulas" editable="bottom" sample="1">
-                    <field name="name"/>
+                <list string="Fiscal Formulas" editable="bottom" create="0" sample="1">
+                    <field name="name" readonly="1"/>
                     <field name="edi" readonly="1"/>
-                    <field name="libelle" optional="show"/>
+                    <field name="libelle" readonly="1" optional="show"/>
+                    <field name="client_id" readonly="1"/>
+                    <field name="year" readonly="1"/>
                     <field name="formule"/>
-                    <field name="table_" optional="hide" readonly="1"/>
-                    <field name="modele" optional="hide" readonly="1"/>
                     <field name="code_comptable" optional="hide" readonly="1"/>
-                    <field name="client_id" optional="hide" readonly="1"/>
-                    <field name="year" optional="hide" readonly="1"/>
                 </list>
             </field>
         </record>
@@ -49,17 +44,17 @@
             <field name="name">ma.fiscal.setting.form</field>
             <field name="model">ma.fiscal.setting</field>
             <field name="arch" type="xml">
-                <form string="Fiscal Formula">
+                <form string="Fiscal Formula" create="0">
                     <sheet>
                         <group>
                             <group>
-                                <field name="edi"/>
-                                <field name="libelle"/>
+                                <field name="edi" readonly="1"/>
+                                <field name="libelle" readonly="1"/>
                             </group>
                             <group>
-                                <field name="table_"/>
-                                <field name="modele"/>
-                                <field name="code_comptable"/>
+                                <field name="table_" readonly="1"/>
+                                <field name="modele" readonly="1"/>
+                                <field name="code_comptable" readonly="1"/>
                             </group>
                             <group>
                                 <field name="client_id" readonly="1"/>

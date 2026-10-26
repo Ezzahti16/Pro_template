@@ -1831,6 +1831,5 @@
 <menuitem id="menu_ma_bilan_detail_cpc_report"
           name="Détail des Postes du C.P.C"
           action="action_ma_bilan_detail_cpc_report"
-          parent="account.account_reports_legal_statements_menu"
-          groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+          parent="account.account_reports_legal_statements_menu"/>
 </odoo>

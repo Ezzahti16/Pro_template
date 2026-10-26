@@ -9,6 +9,7 @@ class MaFiscalClient(models.Model):
 
     name = fields.Char(string="Company Name", required=True, index=True)
 
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)', 'A client with this name is already registered.'),
-    ]
+    _name_uniq = models.Constraint(
+        'unique(name)',
+        'A client with this name is already registered.',
+    )

@@ -946,5 +946,5 @@
         <field name="path">ma-bilan-esg</field>
         <field name="context" eval="{'report_id': ref('bilan_esg_report')}"/>
     </record>
-    <menuitem id="menu_ma_bilan_esg_report" name="E.S.G" action="action_ma_bilan_esg_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+    <menuitem id="menu_ma_bilan_esg_report" name="E.S.G" action="action_ma_bilan_esg_report" parent="account.account_reports_legal_statements_menu"/>
 </odoo>

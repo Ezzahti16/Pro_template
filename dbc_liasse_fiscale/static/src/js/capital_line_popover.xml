@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="dbc_liasse_fiscale.MaCapitalLinePopover">
+        <div class="account_report_popover_edit ma_capital_line_popover" style="min-width: 520px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px;">
+                <t t-foreach="fields" t-as="field" t-key="field[0]">
+                    <div class="mb-2">
+                        <label class="o_light_label d-block mb-1" t-esc="field[1]"/>
+                        <input
+                            t-att-type="field[2]"
+                            t-att-step="field[2] === 'number' ? '0.01' : undefined"
+                            class="form-control form-control-sm"
+                            t-att-value="state[field[0]]"
+                            t-on-input="(ev) => state[field[0]] = ev.target.value"
+                        />
+                    </div>
+                </t>
+            </div>
+            <button class="btn btn-sm btn-primary mt-1" t-on-click="() => this.save()">
+                Enregistrer
+            </button>
+        </div>
+    </t>
+
+    <t t-inherit="account_reports.AccountReportLineCellCustomizable" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='props.cell.edit_popup_data']" position="after">
+            <t t-if="props.cell.ma_capital_edit_data">
+                <button
+                    class="btn btn_edit_capital_line me-auto"
+                    title="Modifier l'associé"
+                    t-on-click="(ev) => this.capitalLinePopover(ev)"
+                >
+                    <i class="fa fa-pencil"/>
+                </button>
+            </t>
+            <t t-if="props.cell.ma_capital_delete_data">
+                <button
+                    class="btn btn_delete_capital_line me-auto"
+                    title="Supprimer l'associé"
+                    t-on-click="() => this.capitalLineDelete()"
+                >
+                    <i class="fa fa-trash"/>
+                </button>
+            </t>
+            <t t-if="props.cell.ma_capital_add_data">
+                <button
+                    class="btn btn_add_capital_line me-auto"
+                    title="Ajouter un associé"
+                    t-on-click="(ev) => this.capitalLinePopover(ev)"
+                >
+                    <i class="fa fa-plus"/>
+                </button>
+            </t>
+        </xpath>
+    </t>
+</templates>

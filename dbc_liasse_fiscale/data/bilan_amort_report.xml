@@ -885,5 +885,5 @@
     <field name="context" eval="{'report_id': ref('bilan_amort_report')}"/>
 </record>
 
-<menuitem id="menu_ma_bilan_amort_report" name="Tableau des Amortissements" action="action_ma_bilan_amort_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+<menuitem id="menu_ma_bilan_amort_report" name="Tableau des Amortissements" action="action_ma_bilan_amort_report" parent="account.account_reports_legal_statements_menu"/>
 </odoo>

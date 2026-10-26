@@ -259,5 +259,5 @@
     <field name="context" eval="{'report_id': ref('bilan_devises_report')}"/>
 </record>
 
-<menuitem id="menu_bilan_devises_report" name="Opérations en Devises" action="action_bilan_devises_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+<menuitem id="menu_bilan_devises_report" name="Opérations en Devises" action="action_bilan_devises_report" parent="account.account_reports_legal_statements_menu"/>
 </odoo>

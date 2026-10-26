@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.iadis.ma.formules</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='general_settings']" position="inside">
+                <block title="Formules Maroc" name="ma_formules_setting_container">
+                    <setting id="ma_formules_register_secret_setting"
+                             string="Formules Maroc"
+                             help="Secret partagé requis par toute installation dbc_liasse_fiscale pour s'enregistrer ou modifier une formule">
+                        <div>
+                            <label for="ma_formules_register_secret" string="Secret d'enregistrement" class="fw-bold"/>
+                            <div class="content-group">
+                                <field name="ma_formules_register_secret" class="w-50" password="True"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

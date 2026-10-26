@@ -1342,5 +1342,5 @@
         <field name="path">ma-bilan-immob</field>
         <field name="context" eval="{'report_id': ref('bilan_immob_report')}"/>
     </record>
-    <menuitem id="menu_ma_bilan_immob_report" name="Immobilisations Autres que Financières" action="action_ma_bilan_immob_report" parent="account.account_reports_legal_statements_menu" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+    <menuitem id="menu_ma_bilan_immob_report" name="Immobilisations Autres que Financières" action="action_ma_bilan_immob_report" parent="account.account_reports_legal_statements_menu"/>
 </odoo>

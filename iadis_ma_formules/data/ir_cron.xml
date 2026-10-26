@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="ir_cron_fill_new_year" model="ir.cron">
+        <field name="name">Formules Maroc: clone new fiscal year for all clients</field>
+        <field name="model_id" ref="model_ma_fiscal_setting"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_fill_new_year()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">months</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

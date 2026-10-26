@@ -139,6 +139,6 @@
         <field name="path">dbc-bilan-cession-immob</field>
         <field name="context" eval="{'report_id': ref('bilan_cession_immob_report')}"/>
     </record>
-    <menuitem id="menu_dbc_bilan_cession_immob_report" name="Plus ou Moins Values sur Cessions d'Immobilisations" parent="account.account_reports_legal_statements_menu" action="action_dbc_bilan_cession_immob_report" groups="-account.group_account_readonly,dbc_liasse_fiscale.group_ma_fiscal_reports_enabled"/>
+    <menuitem id="menu_dbc_bilan_cession_immob_report" name="Plus ou Moins Values sur Cessions d'Immobilisations" parent="account.account_reports_legal_statements_menu" action="action_dbc_bilan_cession_immob_report"/>
 
 </odoo>
