@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.dbc.db.access.guard</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='general_settings']" position="inside">
+                <block title="Database Manager Protection" name="dbc_dbguard_container"
+                       groups="base.group_system">
+
+                    <setting id="dbc_dbguard_enabled_setting"
+                             string="Protect the database manager"
+                             help="Answer a 404 on /web/database/* and serve the database manager on a secret path instead. This setting applies to the whole Odoo server, for every database.">
+                        <field name="dbc_dbguard_enabled"/>
+                        <field name="dbc_dbguard_server_wide" invisible="1"/>
+                        <div class="alert alert-warning mt-2 mb-0" role="alert"
+                             invisible="dbc_dbguard_server_wide">
+                            This module is not loaded as a server-wide module. The
+                            guard only becomes active once a database registry has
+                            been loaded, so a freshly restarted server could still
+                            expose the database manager for a few requests. Add it to
+                            your <code>odoo.conf</code>:
+                            <code>server_wide_modules = base,rpc,web,dbc_db_access_guard</code>
+                            and restart Odoo.
+                        </div>
+                        <div class="content-group mt-2" invisible="not dbc_dbguard_enabled">
+                            <div class="row">
+                                <label for="dbc_dbguard_secret_path" class="col-lg-4 o_light_label"/>
+                                <field name="dbc_dbguard_secret_path"
+                                       placeholder="/database/technique-acces"
+                                       required="dbc_dbguard_enabled"/>
+                            </div>
+                            <div class="row">
+                                <label for="dbc_dbguard_allowed_ips" class="col-lg-4 o_light_label"/>
+                                <field name="dbc_dbguard_allowed_ips"
+                                       placeholder="e.g. 10.0.0.5, 192.168.1.0/24"/>
+                            </div>
+                            <div class="row mt-2">
+                                <label for="dbc_dbguard_manager_url" class="col-lg-4 o_light_label"/>
+                                <field name="dbc_dbguard_manager_url" readonly="1" class="text-break"/>
+                            </div>
+                            <div class="row">
+                                <label for="dbc_dbguard_selector_url" class="col-lg-4 o_light_label"/>
+                                <field name="dbc_dbguard_selector_url" readonly="1" class="text-break"/>
+                            </div>
+                            <div class="text-muted mt-2">
+                                Write down the secret path before saving: once saved,
+                                /web/database/manager answers a 404 for everybody.
+                            </div>
+                        </div>
+                    </setting>
+
+                    <setting id="dbc_dbguard_block_selector_setting"
+                             string="Block the database selector"
+                             help="Also answer a 404 on /web/database/selector."
+                             invisible="not dbc_dbguard_enabled">
+                        <field name="dbc_dbguard_block_selector"/>
+                        <div class="text-muted" invisible="not dbc_dbguard_block_selector">
+                            On a multi-database instance without dbfilter, users must
+                            then log in through /odoo?db=&lt;database&gt; or
+                            /web/login?db=&lt;database&gt;.
+                        </div>
+                    </setting>
+
+                    <setting id="dbc_dbguard_block_db_rpc_setting"
+                             string="Block the database RPC service"
+                             help="Refuse the 'db' RPC service (list, create, drop, dump, restore) over /jsonrpc and /xmlrpc. Without it, database names can still be listed remotely."
+                             invisible="not dbc_dbguard_enabled">
+                        <field name="dbc_dbguard_block_db_rpc"/>
+                        <div class="text-muted" invisible="not dbc_dbguard_block_db_rpc">
+                            Scripts that back up or create databases over RPC keep
+                            working from the allow-listed IP addresses above.
+                        </div>
+                    </setting>
+
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

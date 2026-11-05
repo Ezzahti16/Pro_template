@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'IADIS - Morocco Fiscal Formules (Data + API)',
-    'version': '19.0.4.5.0',
+    'name': 'DBC - Morocco Fiscal Formules (Data + API)',
+    'version': '19.0.4.7.0',
     'category': 'Accounting/Accounting',
     'summary': 'Editable list of the legacy EDI formules (ma.fiscal.setting) with a JSON API',
     'description': """
@@ -37,7 +37,7 @@ It provides:
   every formula row it owns, for every fiscal year — the master/template
   rows are never touched.
 """,
-    'author': '',
+    'author': 'DBC',
     'website': '',
     'license': 'LGPL-3',
     'depends': ['base', 'base_setup'],

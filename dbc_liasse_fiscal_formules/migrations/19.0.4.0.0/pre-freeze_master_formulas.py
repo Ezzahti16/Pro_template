@@ -15,7 +15,7 @@ def migrate(cr, version):
     cr.execute("""
         UPDATE ir_model_data
         SET noupdate = true
-        WHERE module = 'iadis_ma_formules'
+        WHERE module = 'dbc_liasse_fiscal_formules'
           AND model = 'ma.fiscal.setting'
           AND noupdate = false
     """)

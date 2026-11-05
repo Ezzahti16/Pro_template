@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 
+from .account_report import _ma_fiscal_year_selection
+
 
 class MaFiscalCapitalLine(models.Model):
     """One associate's row of the "État de Répartition du Capital Social"
@@ -23,6 +25,10 @@ class MaFiscalCapitalLine(models.Model):
         default=lambda self: self.env.company,
     )
     sequence = fields.Integer(default=10)
+    annee_fiscale = fields.Selection(
+        selection=lambda self: _ma_fiscal_year_selection(), string="Année fiscale", required=True,
+        default=lambda self: str(fields.Date.context_today(self).year),
+    )
     nom_prenom = fields.Char(string="Nom et prénom")
     raison_sociale = fields.Char(string="Raison sociale")
     num_if = fields.Char(string="N° IF")

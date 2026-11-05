@@ -1274,6 +1274,6 @@
         <field name="path">ma-bilan-financement</field>
         <field name="context" eval="{'report_id': ref('bilan_financement_report')}"/>
     </record>
-    <menuitem id="menu_ma_bilan_financement_report" name="Tableau de Financement de l'Exercice" parent="account.account_reports_legal_statements_menu" action="action_ma_bilan_financement_report"/>
+    <menuitem id="menu_ma_bilan_financement_report" name="Tableau de Financement de l'Exercice" parent="account.account_reports_legal_statements_menu" action="action_ma_bilan_financement_report" sequence="33"/>
 
 </odoo>

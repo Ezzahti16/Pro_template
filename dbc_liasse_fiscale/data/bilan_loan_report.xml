@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<!-- "État des Emprunts et Dettes Assimilées" - same concept as
+     bilan_capital_report.xml: no EDI code or formula behind any cell,
+     rows are entirely dynamic (see AccountReportHandlerMaLoan /
+     AccountReportHandlerMaDataEntry in models/account_report.py), and an
+     always-present "Totaux" line sums the summable=True columns
+     (montant_pret, charge_financiere_globale, remb_*). -->
+<record id="bilan_loan_report" model="account.report">
+    <field name="name">État des Emprunts et Dettes Assimilées</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="False"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="False"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_loan"/>
+    <field name="column_ids">
+        <!-- No "Type" column: rows are grouped under "A. Associés" /
+             "B. Tiers" section headers instead (see _ma_section_field on
+             AccountReportHandlerMaLoan in models/account_report.py). -->
+        <record id="bilan_loan_column_nom_prenom" model="account.report.column">
+            <field name="name">Nom et prénom</field>
+            <field name="expression_label">nom_prenom</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_loan_column_raison_sociale" model="account.report.column">
+            <field name="name">Raison sociale</field>
+            <field name="expression_label">raison_sociale</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_loan_column_adresse" model="account.report.column">
+            <field name="name">Adresse</field>
+            <field name="expression_label">adresse</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_loan_column_num_if" model="account.report.column">
+            <field name="name">IF</field>
+            <field name="expression_label">num_if</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_loan_column_num_cin" model="account.report.column">
+            <field name="name">N° CNI</field>
+            <field name="expression_label">num_cin</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_loan_column_montant_pret" model="account.report.column">
+            <field name="name">Montant du prêt</field>
+            <field name="expression_label">montant_pret</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_date_pret" model="account.report.column">
+            <field name="name">Date du prêt</field>
+            <field name="expression_label">date_pret</field>
+            <field name="sequence">80</field>
+            <field name="figure_type">date</field>
+        </record>
+        <record id="bilan_loan_column_duree_mois" model="account.report.column">
+            <field name="name">Durée (mois)</field>
+            <field name="expression_label">duree_mois</field>
+            <field name="sequence">90</field>
+            <field name="figure_type">integer</field>
+        </record>
+        <record id="bilan_loan_column_taux_interet" model="account.report.column">
+            <field name="name">Taux d'intérêts</field>
+            <field name="expression_label">taux_interet</field>
+            <field name="sequence">100</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_charge_financiere_globale" model="account.report.column">
+            <field name="name">Charge financière globale</field>
+            <field name="expression_label">charge_financiere_globale</field>
+            <field name="sequence">110</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_remb_anterieur_principal" model="account.report.column">
+            <field name="name">Remb. Ex antérieurs Principal</field>
+            <field name="expression_label">remb_anterieur_principal</field>
+            <field name="sequence">120</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_remb_anterieur_interet" model="account.report.column">
+            <field name="name">Remb. Ex antérieurs Intérêt</field>
+            <field name="expression_label">remb_anterieur_interet</field>
+            <field name="sequence">130</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_remb_actuel_principal" model="account.report.column">
+            <field name="name">Remb. Ex actuel Principal</field>
+            <field name="expression_label">remb_actuel_principal</field>
+            <field name="sequence">140</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_remb_actuel_interet" model="account.report.column">
+            <field name="name">Remb. Ex actuel Intérêt</field>
+            <field name="expression_label">remb_actuel_interet</field>
+            <field name="sequence">150</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_loan_column_observations" model="account.report.column">
+            <field name="name">Observations</field>
+            <field name="expression_label">observations</field>
+            <field name="sequence">160</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_loan_column_actions" model="account.report.column">
+            <field name="name"></field>
+            <field name="expression_label">ma_actions</field>
+            <field name="sequence">170</field>
+            <field name="figure_type">string</field>
+        </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_loan_report" model="ir.actions.client">
+    <field name="name">État des Emprunts et Dettes Assimilées</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-emprunts</field>
+    <field name="context" eval="{'report_id': ref('bilan_loan_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_loan_report" name="État des Emprunts et Dettes Assimilées" action="action_ma_bilan_loan_report" parent="account.account_reports_legal_statements_menu" sequence="14"/>
+</odoo>

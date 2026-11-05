@@ -2031,5 +2031,6 @@
     <menuitem id="menu_ma_bilan_cpc_report"
               name="C.P.C"
               action="action_ma_bilan_cpc_report"
-              parent="account.account_reports_legal_statements_menu"/>
+              parent="account.account_reports_legal_statements_menu"
+              sequence="19"/>
 </odoo>

@@ -27,24 +27,185 @@ _API_TIMEOUT = 10
 _API_CACHE = {}
 
 # --------------------------------------------------------------------------- #
-# "Répartition du Capital Social" - a pure data-entry report (no EDI code or
-# formula behind any value). (field, type) drives both the report's columns
-# and the add/edit popup's inputs - see AccountReportHandlerMaCapital and
-# action_modify_capital_line below.
+# "Data-entry" reports: no EDI code or formula behind any value - every
+# field is a plain value the user keys in through the report's header "+"
+# button (create) and per-row pencil/trash icons (edit/delete). Each field
+# spec dict drives BOTH the report's account.report.column and the
+# add/edit popup's inputs, so the two can never drift apart - see
+# AccountReportHandlerMaDataEntry and action_ma_data_entry_save/delete
+# below.
+#
+# dict keys: name (matches the model field and the column's
+# expression_label), label, type ('text'/'number'/'date'/'select'/
+# 'computed'), selection (required for type='select': [[value, label],
+# ...]), summable (if True, included in the report's always-present
+# "Totaux" line - only meaningful for 'number'/'computed' fields).
+#
+# A 'computed' field is read-only everywhere (report column AND the
+# create/edit popup, which recomputes it live as the user types using the
+# JS function named by its 'compute' key - see data_entry_popover.js). Its
+# actual stored value always comes from the model's own create/write
+# override (see ma_fiscal_dotation.py for an example), never from the
+# client - action_ma_data_entry_save below drops it from clean_values.
+#
+# 'format': 'percent' renders a numeric value as "20.00%" instead of a
+# plain number in the report column - independent of 'type', so it also
+# works on an ordinary editable 'number' field (the popup input itself
+# stays a plain number either way, only the report's own cell is
+# formatted).
+#
+# 'blank_if_field': the name of a boolean field on the record that, when
+# True, blanks THIS column's display (e.g. a legal-cap overflow) instead
+# of showing its (still real, summable) stored value. Only makes sense on
+# a 'computed' field.
+#
+# 'pair_field' + 'pair_formula': for two fields that are each other's
+# inverse (e.g. taux = 100/duree and duree = 100/taux) and both stay
+# freely editable - editing either one live-recomputes the other in the
+# popup via the named MA_PAIR_FNS entry (data_entry_popover.js); neither
+# field is 'computed', so both are saved as the user left them.
 # --------------------------------------------------------------------------- #
+
+# Every data-entry report's records now carry a plain "annee_fiscale"
+# Selection field (2023 up to the current year) the user picks in the
+# create/edit popup - it is what the report's date filter (re-enabled for
+# these reports in data_entry_popover.xml) actually filters rows on, see
+# AccountReportHandlerMaDataEntry._dynamic_lines_generator below. It is
+# deliberately left out of every _MA_*_FIELDS list's matching report
+# column, so it never shows up as a column in the table itself - only in
+# the popup.
+_MA_YEAR_START = 2023
+
+
+def _ma_fiscal_year_selection():
+    """Newest year first: the create popup's <select> defaults to
+    whichever option comes first in this list when no value is set yet
+    (see _defaultValue in data_entry_popover.js), and the current year is
+    by far the most common one to pick for a brand-new row.
+
+    Computed fresh on every call rather than once at import time, so next
+    year's option appears the moment it starts, with no module update or
+    server restart needed - both the 6 ma.fiscal.*.line models' own
+    annee_fiscale field (selection=lambda self: ...) and
+    _init_options_ma_add_line_button (which rebuilds the popup's field
+    spec on every report render) call this instead of reading a frozen
+    module-level list.
+    """
+    return [(str(y), str(y)) for y in range(fields.Date.today().year, _MA_YEAR_START - 1, -1)]
+
+
+_MA_ANNEE_FISCALE_FIELD = {'name': 'annee_fiscale', 'label': "Année fiscale", 'type': 'select', 'selection': _ma_fiscal_year_selection()}
+
 _MA_CAPITAL_FIELDS = [
-    ('nom_prenom', 'char'),
-    ('raison_sociale', 'char'),
-    ('num_if', 'char'),
-    ('num_cin', 'char'),
-    ('num_ce', 'char'),
-    ('adresse', 'char'),
-    ('titres_precedent', 'integer'),
-    ('titres_actuel', 'integer'),
-    ('valeur_nominale', 'float'),
-    ('montant_souscrit', 'float'),
-    ('montant_appele', 'float'),
-    ('montant_libere', 'float'),
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'nom_prenom', 'label': "Nom et prénom", 'type': 'text'},
+    {'name': 'raison_sociale', 'label': "Raison sociale", 'type': 'text'},
+    {'name': 'num_if', 'label': "N° IF", 'type': 'text'},
+    {'name': 'num_cin', 'label': "N° CIN", 'type': 'text'},
+    {'name': 'num_ce', 'label': "N° Carte d'étranger", 'type': 'text'},
+    {'name': 'adresse', 'label': "Adresse", 'type': 'text'},
+    {'name': 'titres_precedent', 'label': "Nombre de titres (exercice précédent)", 'type': 'number'},
+    {'name': 'titres_actuel', 'label': "Nombre de titres (exercice actuel)", 'type': 'number'},
+    {'name': 'valeur_nominale', 'label': "Valeur nominale", 'type': 'number'},
+    {'name': 'montant_souscrit', 'label': "Montant du capital - Souscrit", 'type': 'number'},
+    {'name': 'montant_appele', 'label': "Montant du capital - Appelé", 'type': 'number'},
+    {'name': 'montant_libere', 'label': "Montant du capital - Libéré", 'type': 'number'},
+]
+
+_MA_LOAN_TYPE_SELECTION = [('associe', "A. Associés"), ('tiers', "B. Tiers")]
+
+_MA_LOAN_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'type', 'label': "Type", 'type': 'select', 'selection': _MA_LOAN_TYPE_SELECTION},
+    {'name': 'nom_prenom', 'label': "Nom et prénom", 'type': 'text'},
+    {'name': 'raison_sociale', 'label': "Raison sociale", 'type': 'text'},
+    {'name': 'adresse', 'label': "Adresse", 'type': 'text'},
+    {'name': 'num_if', 'label': "IF", 'type': 'text'},
+    {'name': 'num_cin', 'label': "N° CNI", 'type': 'text'},
+    {'name': 'montant_pret', 'label': "Montant du prêt", 'type': 'number', 'summable': True},
+    {'name': 'date_pret', 'label': "Date du prêt", 'type': 'date'},
+    {'name': 'duree_mois', 'label': "Durée du prêt (en mois)", 'type': 'number'},
+    {'name': 'taux_interet', 'label': "Taux d'intérêts", 'type': 'number'},
+    {'name': 'charge_financiere_globale', 'label': "Charge financière globale", 'type': 'number', 'summable': True},
+    {'name': 'remb_anterieur_principal', 'label': "Remb. Ex antérieurs Principal", 'type': 'number', 'summable': True},
+    {'name': 'remb_anterieur_interet', 'label': "Remb. Ex antérieurs Intérêt", 'type': 'number', 'summable': True},
+    {'name': 'remb_actuel_principal', 'label': "Remb. Ex actuel Principal", 'type': 'number', 'summable': True},
+    {'name': 'remb_actuel_interet', 'label': "Remb. Ex actuel Intérêt", 'type': 'number', 'summable': True},
+    {'name': 'observations', 'label': "Observations", 'type': 'text'},
+]
+
+_MA_LEASING_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'rubrique', 'label': "Rubriques", 'type': 'text'},
+    {'name': 'date_premiere_echeance', 'label': "Date de la 1ère échéance", 'type': 'date'},
+    {'name': 'duree_contrat_mois', 'label': "Durée du contrat (mois)", 'type': 'number'},
+    {'name': 'valeur_estimee', 'label': "Valeur estimée du bien à la date du contrat", 'type': 'number'},
+    {'name': 'duree_theorique_amortissement', 'label': "Durée théorique d'amortissement du bien", 'type': 'number'},
+    {'name': 'cumul_redevances_anterieures', 'label': "Cumul des redevances des exercices précédents", 'type': 'number'},
+    {'name': 'montant_redevances_exercice', 'label': "Montant des redevances de l'exercice", 'type': 'number'},
+    {'name': 'redevances_restant_moins_un_an', 'label': "Redevances restant à payer à moins d'un an", 'type': 'number'},
+    {'name': 'redevances_restant_plus_un_an', 'label': "Redevances restant à payer à plus d'un an", 'type': 'number'},
+    {'name': 'prix_achat_residuel', 'label': "Prix d'achat résiduel en fin de contrat", 'type': 'number'},
+    {'name': 'observations', 'label': "Observations", 'type': 'text'},
+]
+
+_MA_RENTAL_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'nature_bien', 'label': "Nature du bien loué", 'type': 'text'},
+    {'name': 'lieu_situation', 'label': "Lieu de situation", 'type': 'text'},
+    {'name': 'nom_prenom', 'label': "Nom et prénoms du propriétaire", 'type': 'text'},
+    {'name': 'raison_sociale', 'label': "Raison sociale du propriétaire", 'type': 'text'},
+    {'name': 'adresse', 'label': "Adresse du propriétaire", 'type': 'text'},
+    {'name': 'num_if', 'label': "N° IF du propriétaire", 'type': 'text'},
+    {'name': 'num_cin', 'label': "N° CNI du propriétaire", 'type': 'text'},
+    {'name': 'num_ce', 'label': "N° Carte d'étranger du propriétaire", 'type': 'text'},
+    {'name': 'date_conclusion', 'label': "Date de conclusion de l'acte de location", 'type': 'date'},
+    {'name': 'montant_annuel', 'label': "Montant annuel de location", 'type': 'number', 'summable': True},
+    {'name': 'montant_loyer_charges', 'label': "Montant du loyer compris dans les charges de l'exercice", 'type': 'number', 'summable': True},
+    {'name': 'bail_ordinaire', 'label': "Nature du contrat : Bail-ordinaire", 'type': 'text'},
+    {'name': 'leasing_nieme_periode', 'label': "Nature du contrat : Leasing (Nème période)", 'type': 'text'},
+]
+
+# "taux"/"amort_normal"/"total_amort" are 'computed': read-only in both the
+# report and the popup, recomputed live client-side (data_entry_popover.js,
+# MA_COMPUTE_FNS) and authoritatively server-side on save (see
+# MaFiscalDotationLine._ma_compute_amort_values):
+#   taux and duree are each other's inverse (100/x) and both stay freely
+#       editable - editing either one live-updates the other in the popup
+#       (pair_field/pair_formula below); whichever value the user actually
+#       left in place is what gets saved, no server-side override.
+#   amort_normal = prix_acquisition - amort_anterieurs, forced to 0 (and
+#       flagged via depassement_plafond, which blanks it on screen) if that
+#       would exceed the legal cap valeur_comptable / duree
+#   total_amort = amort_anterieurs + amort_normal  (= "col.4 + col.7" per
+#       the legacy sheet's own column-9 header)
+_MA_AMORT_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'immobilisation', 'label': "Immobilisations concernées", 'type': 'text'},
+    {'name': 'date_entree', 'label': "Date d'entrée", 'type': 'date'},
+    {'name': 'prix_acquisition', 'label': "Valeur à amortir - Prix d'acquisition", 'type': 'number', 'summable': True},
+    {'name': 'valeur_comptable', 'label': "Valeur à amortir - Valeur comptable après réévaluation", 'type': 'number', 'summable': True},
+    {'name': 'amort_anterieurs', 'label': "Amortissements antérieurs", 'type': 'number', 'summable': True},
+    {'name': 'taux', 'label': "Taux", 'type': 'number', 'format': 'percent', 'pair_field': 'duree', 'pair_formula': 'ma_duration_from_rate'},
+    {'name': 'duree', 'label': "Durée", 'type': 'number', 'pair_field': 'taux', 'pair_formula': 'ma_rate_from_duration'},
+    {'name': 'amort_normal', 'label': "Amortissements normaux ou accélérés de l'exercice", 'type': 'computed', 'compute': 'ma_amort_normal', 'summable': True, 'blank_if_field': 'depassement_plafond'},
+    {'name': 'total_amort', 'label': "Total des amortissements à la fin de l'exercice", 'type': 'computed', 'compute': 'ma_amort_total', 'summable': True},
+    {'name': 'observations', 'label': "Observations", 'type': 'text'},
+]
+
+_MA_TITRES_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'raison_sociale', 'label': "Raison sociale de la société émettrice", 'type': 'text'},
+    {'name': 'num_if', 'label': "N° IF", 'type': 'text'},
+    {'name': 'secteur_activite', 'label': "Secteur d'activité", 'type': 'text'},
+    {'name': 'capital_social', 'label': "Capital social", 'type': 'number', 'summable': True},
+    {'name': 'participation_capital', 'label': "Participation au capital %", 'type': 'number', 'summable': True},
+    {'name': 'prix_acquisition_global', 'label': "Prix d'acquisition global", 'type': 'number', 'summable': True},
+    {'name': 'valeur_comptable_nette', 'label': "Valeur comptable nette", 'type': 'number', 'summable': True},
+    {'name': 'date_cloture', 'label': "Date de clôture", 'type': 'date'},
+    {'name': 'situation_nette', 'label': "Situation nette", 'type': 'number', 'summable': True},
+    {'name': 'resultat_net', 'label': "Résultat net", 'type': 'number', 'summable': True},
+    {'name': 'produits_cpc', 'label': "Produits inscrits au C.P.C de l'exercice", 'type': 'number', 'summable': True},
 ]
 
 
@@ -954,54 +1115,128 @@ class AccountReport_MaFiscal(models.Model):
         }
 
     def _empty_column_groups_totals(self, options):
-        """The "Répartition du Capital Social" report has no expression to
-        aggregate (every row is a literal value, not a computed formula),
-        so there is never anything to put in the column-group totals the
-        add/edit/delete actions below have to return."""
+        """The data-entry reports (Répartition du Capital Social, État des
+        Emprunts, ...) have no expression to aggregate - every row is a
+        literal value, not a computed formula - so there is never anything
+        to put in the column-group totals the add/edit/delete actions
+        below have to return."""
         return self._get_json_friendly_column_group_totals(
             {column_group_key: {} for column_group_key in options['column_groups']}
         )
 
-    def action_modify_capital_line(self, line_id, options, values):
-        """Create or update one associate row of the "Répartition du
-        Capital Social" report from its popup (pencil icon on an existing
-        row, or the trailing "+ Ajouter un associé" row). Every field here
-        is a plain value - there is no EDI code or formula involved, unlike
-        action_modify_formula above.
-
-        `line_id` is the generic id of the row being edited, or falsy for
-        the "add" row (-> create a new record for the current company).
-        Nothing here is scoped by the report's date filter - the rows are
-        a plain, always-current list of associates, not a fiscal-year
-        snapshot.
-        """
+    def _ma_data_entry_handler(self):
+        """Resolve the current report's data-entry handler (model/fields
+        it manages), or raise - defence in depth so action_ma_data_entry_*
+        below can never be pointed, via a tampered client call, at a
+        report that isn't one of ours."""
         self.ensure_one()
-        record_id = self._get_res_id_from_line_id(line_id, 'ma.fiscal.capital.line') if line_id else None
-        clean_values = {name: values.get(name) for name, _type in _MA_CAPITAL_FIELDS if name in values}
+        handler_model = self.custom_handler_model_id.model
+        # `self.env[model]` is a recordset, falsy when empty - which it
+        # always is here, since a handler is an AbstractModel with no
+        # records - so it can never be used in a plain truthiness check.
+        handler = self.env[handler_model] if handler_model in self.env.registry else None
+        if handler is None or not getattr(handler, '_ma_model', None):
+            raise UserError(_("Ce rapport ne supporte pas cette action."))
+        return handler
+
+    def action_ma_data_entry_save(self, line_id, options, values):
+        """Create or update one row of a data-entry report (Répartition du
+        Capital Social, État des Emprunts, ...) from its popup - the
+        header "+" button for a new row, or a row's pencil icon to edit
+        it. Every field here is a plain value - there is no EDI code or
+        formula involved, unlike action_modify_formula above. The row's
+        own "annee_fiscale" field (part of handler._ma_fields like any
+        other) is what the report's date filter later matches against -
+        see AccountReportHandlerMaDataEntry._dynamic_lines_generator.
+
+        `line_id` is the generic id of the row being edited, or falsy to
+        create a new record for the current company.
+        """
+        handler = self._ma_data_entry_handler()
+        record_id = self._get_res_id_from_line_id(line_id, handler._ma_model) if line_id else None
+        clean_values = {
+            field['name']: (values.get(field['name']) or False if field['type'] == 'date' else values.get(field['name']))
+            for field in handler._ma_fields
+            # A 'computed' field is never client-writable - whatever the
+            # popup displayed is only a live preview, the model's own
+            # create/write override is the one source of truth for it.
+            if field['name'] in values and field['type'] != 'computed'
+        }
 
         if record_id:
-            self.env['ma.fiscal.capital.line'].browse(record_id).write(clean_values)
+            self.env[handler._ma_model].browse(record_id).write(clean_values)
         else:
             clean_values['company_id'] = self.env.company.id
-            self.env['ma.fiscal.capital.line'].create(clean_values)
+            self.env[handler._ma_model].create(clean_values)
 
         return {
             'lines': self._get_lines(options),
             'column_groups_totals': self._empty_column_groups_totals(options),
         }
 
-    def action_delete_capital_line(self, line_id, options):
-        """Trash-icon counterpart of action_modify_capital_line: removes
-        one associate row for good."""
-        self.ensure_one()
-        record_id = self._get_res_id_from_line_id(line_id, 'ma.fiscal.capital.line')
+    def action_ma_data_entry_delete(self, line_id, options):
+        """Trash-icon counterpart of action_ma_data_entry_save: removes
+        one row of a data-entry report for good."""
+        handler = self._ma_data_entry_handler()
+        record_id = self._get_res_id_from_line_id(line_id, handler._ma_model)
         if record_id:
-            self.env['ma.fiscal.capital.line'].browse(record_id).unlink()
+            self.env[handler._ma_model].browse(record_id).unlink()
 
         return {
             'lines': self._get_lines(options),
             'column_groups_totals': self._empty_column_groups_totals(options),
         }
+
+    def _ma_is_data_entry_report(self):
+        """True for a pure data-entry report (Répartition du Capital
+        Social, État des Emprunts, ...) - same falsy-empty-recordset trap
+        as _ma_data_entry_handler above, but silent (returns a bool,
+        raises nothing) since callers like _generate_common_warnings below
+        need to just skip their own logic for these reports, not error
+        out."""
+        handler_model = self.custom_handler_model_id.model
+        handler = self.env[handler_model] if handler_model in self.env.registry else None
+        return handler is not None and bool(getattr(handler, '_ma_model', None))
+
+    def _generate_common_warnings(self, options, warnings):
+        if self._ma_is_data_entry_report():
+            # These reports have no account.move behind them at all - the
+            # "unposted Journal Entries" warning (and everything else this
+            # generates) is meaningless noise here.
+            return
+        return super()._generate_common_warnings(options, warnings)
+
+    def _init_options_ma_add_line_button(self, options, previous_options):
+        """Expose the current report's "+" header-button config (label and
+        field specs for the create/edit popup) to the web client, if this
+        report is one of our data-entry reports. Auto-discovered and run
+        for every report by the framework's _get_options_initializers_in_
+        sequence (it scans `dir(self)` for every `_init_options_*`
+        method) - a no-op for every other report, since
+        'ma_add_line_button' is simply left unset.
+        """
+        handler_model = self.custom_handler_model_id.model
+        # Same falsy-empty-recordset trap as _ma_data_entry_handler above -
+        # `handler is None`, never a plain `not handler`.
+        handler = self.env[handler_model] if handler_model in self.env.registry else None
+        if handler is not None and getattr(handler, '_ma_model', None):
+            date_to = options.get('date', {}).get('date_to')
+            filter_year = str(fields.Date.from_string(date_to).year) if date_to else str(fields.Date.today().year)
+            # _ma_fields is a shared module-level list (same object for
+            # every render/company) - never mutate it in place. The
+            # annee_fiscale field spec needs a per-render 'default' so a
+            # brand-new row defaults to whichever year the report's date
+            # filter is currently showing (not always the current year),
+            # and a freshly recomputed 'selection' so next year's option
+            # shows up the moment it starts, without needing a restart.
+            fields_specs = [
+                dict(f, default=filter_year, selection=_ma_fiscal_year_selection()) if f['name'] == 'annee_fiscale' else f
+                for f in handler._ma_fields
+            ]
+            options['ma_add_line_button'] = {
+                'label': handler._ma_add_button_label,
+                'fields': fields_specs,
+            }
 
 
 # --------------------------------------------------------------------------- #
@@ -1118,47 +1353,138 @@ class AccountReportHandlerMaFiscal(models.AbstractModel):
         return results
 
 
-class AccountReportHandlerMaCapital(models.AbstractModel):
-    """Dynamic-lines handler for "Répartition du Capital Social": one line
-    per ma.fiscal.capital.line record of the current company, plus a
-    trailing "add" line - no account.report.line/expression records at
-    all (same pattern as Odoo's own Partner Ledger), since the rows are
-    created/edited/deleted by the user, not declared in XML. Deliberately
-    ignores the report's date filter entirely - these rows are a plain,
-    always-current list, not scoped to whatever period happens to be
-    selected.
+class AccountReportHandlerMaDataEntry(models.AbstractModel):
+    """Shared dynamic-lines base for every "data-entry" report (no EDI
+    code or formula behind any cell): one line per record of the
+    subclass's model, for the current company, plus an always-present
+    "Totaux" line summing whichever fields are marked summable=True - no
+    account.report.line/expression records at all (same pattern as
+    Odoo's own Partner Ledger), since the rows are created/edited/deleted
+    by the user through the report's header "+" button and per-row
+    pencil/trash icons, not declared in XML. Rows are scoped to a fiscal
+    year via their own "annee_fiscale" Selection field (picked in the
+    create/edit popup, see _MA_ANNEE_FISCALE_FIELD above) - the report's
+    date filter (re-enabled for these reports, see data_entry_popover.xml)
+    is what drives which year's rows get shown: the selected date's year
+    is matched against annee_fiscale, not any accounting-period logic.
+
+    A subclass just sets _ma_model (the model it manages),
+    _ma_fields (one of the _MA_*_FIELDS specs above) and
+    _ma_add_button_label (the report's header "+" button).
+
+    A subclass can also set _ma_section_field to the name of a Selection
+    field on _ma_model (e.g. 'type') to have its rows grouped under a bold
+    section-header line per selection value - same look as the section
+    lines (hierarchy_level 0) the static bilan_* reports use - instead of
+    showing that field as an ordinary column. The field stays in
+    _ma_fields (and so in the create/edit popup) either way; it is simply
+    left out of the report's own account.report.column records.
     """
-    _name = 'account.report.handler.ma_capital'
+    _name = 'account.report.handler.ma_data_entry'
     _inherit = 'account.report.custom.handler'
-    _description = "Répartition du Capital Social - Custom Handler"
+    _description = "Moroccan Data-Entry Report - Shared Custom Handler"
+
+    _ma_model = None
+    _ma_fields = []
+    _ma_add_button_label = ""
+    _ma_section_field = None
 
     def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals, warnings=None):
         company_ids = report.get_report_company_ids(options)
-        associates = self.env['ma.fiscal.capital.line'].search([('company_id', 'in', company_ids)])
+        domain = [('company_id', 'in', company_ids)]
+        date_to = options.get('date', {}).get('date_to')
+        if date_to and 'annee_fiscale' in self.env[self._ma_model]._fields:
+            domain.append(('annee_fiscale', '=', str(fields.Date.from_string(date_to).year)))
+        records = self.env[self._ma_model].search(domain)
 
-        lines = [(0, self._get_capital_line_dict(report, options, associate)) for associate in associates]
-        lines.append((0, self._get_capital_add_line_dict(report, options)))
+        if self._ma_section_field:
+            lines = []
+            selection = dict(records._fields[self._ma_section_field].selection)
+            for value, label in selection.items():
+                section_records = records.filtered(lambda r, v=value: r[self._ma_section_field] == v)
+                lines.append((0, self._ma_get_section_header_dict(report, options, value, label)))
+                lines += [(0, self._ma_get_record_line_dict(report, options, record)) for record in section_records]
+        else:
+            lines = [(0, self._ma_get_record_line_dict(report, options, record)) for record in records]
+
+        totals_line = self._ma_get_totals_line_dict(report, options, records)
+        if totals_line:
+            lines.append((0, totals_line))
+        if not lines:
+            # With zero rows and no Totaux/section line to keep this
+            # non-empty, account_reports' own template swaps the whole
+            # table - headers included - for its generic "nothing to
+            # display" placeholder the moment controller.lines.length is
+            # 0. A single blank line keeps the real header (and the "+"
+            # button) visible with an empty body instead, which is what
+            # we actually want for an otherwise-empty data-entry table.
+            lines.append((0, self._ma_get_empty_line_dict(report, options)))
         return lines
 
-    def _get_capital_line_dict(self, report, options, associate):
+    def _ma_get_empty_line_dict(self, report, options):
+        columns = [report._build_column_dict(None, col_options, options=options) for col_options in options['columns']]
+        return {
+            'id': report._get_generic_line_id('', None, markup='ma_empty_line'),
+            'name': '',
+            'level': 1,
+            'columns': columns,
+            'unfoldable': False,
+            'unfold': False,
+        }
+
+    def _ma_get_section_header_dict(self, report, options, value, label):
+        columns = [report._build_column_dict(None, col_options, options=options) for col_options in options['columns']]
+        return {
+            'id': report._get_generic_line_id('', None, markup=f'ma_section_{value}'),
+            'name': label,
+            'level': 0,
+            'columns': columns,
+            'unfoldable': False,
+            'unfold': False,
+            'class': 'o_bold_tr',
+        }
+
+    @staticmethod
+    def _ma_json_safe_value(value, field_type):
+        """A record's raw field value isn't always JSON-serialisable as-is
+        (a Date field is a `datetime.date`, not a string) - this is what
+        the create/edit popup's `<input type="date">` expects anyway, so
+        converting it also doubles as the right format for that input."""
+        if field_type == 'date' and value:
+            return fields.Date.to_string(value)
+        if value:
+            return value
+        return 0 if field_type == 'number' else ''
+
+    def _ma_get_record_line_dict(self, report, options, record):
+        fields_by_name = {field['name']: field for field in self._ma_fields}
         columns = []
         for col_options in options['columns']:
             label = col_options['expression_label']
             if label == 'ma_actions':
                 col_dict = report._build_column_dict(None, col_options, options=options)
-                col_dict['ma_capital_edit_data'] = json.dumps({
+                col_dict['ma_edit_data'] = json.dumps({
                     'values': {
-                        name: (associate[name] or ('' if field_type == 'char' else 0))
-                        for name, field_type in _MA_CAPITAL_FIELDS
+                        field['name']: self._ma_json_safe_value(record[field['name']], field['type'])
+                        for field in self._ma_fields
                     },
                 })
-                col_dict['ma_capital_delete_data'] = json.dumps({})
+                col_dict['ma_delete_data'] = json.dumps({})
             else:
-                col_dict = report._build_column_dict(associate[label], col_options, options=options)
+                value = record[label]
+                field_def = record._fields.get(label)
+                if field_def and field_def.type == 'selection':
+                    value = dict(field_def.selection).get(value, value)
+                field_spec = fields_by_name.get(label)
+                if field_spec and field_spec.get('blank_if_field') and record[field_spec['blank_if_field']]:
+                    value = None
+                elif field_spec and field_spec.get('format') == 'percent' and value not in (None, False):
+                    value = f"{value:.2f}%"
+                col_dict = report._build_column_dict(value, col_options, options=options)
             columns.append(col_dict)
 
         return {
-            'id': report._get_generic_line_id('ma.fiscal.capital.line', associate.id),
+            'id': report._get_generic_line_id(self._ma_model, record.id),
             'name': '',
             'level': 1,
             'columns': columns,
@@ -1166,23 +1492,87 @@ class AccountReportHandlerMaCapital(models.AbstractModel):
             'unfold': False,
         }
 
-    def _get_capital_add_line_dict(self, report, options):
+    def _ma_get_totals_line_dict(self, report, options, records):
+        summable_names = [field['name'] for field in self._ma_fields if field.get('summable')]
+        if not summable_names:
+            return None
+
         columns = []
         for col_options in options['columns']:
             label = col_options['expression_label']
-            col_dict = report._build_column_dict(None, col_options, options=options)
-            if label == 'ma_actions':
-                col_dict['ma_capital_add_data'] = json.dumps({})
-            columns.append(col_dict)
+            value = sum(records.mapped(label)) if label in summable_names else None
+            columns.append(report._build_column_dict(value, col_options, options=options))
 
         return {
-            'id': report._get_generic_line_id('', None, markup='ma_capital_add_line'),
-            'name': '',
+            'id': report._get_generic_line_id('', None, markup='ma_totals_line'),
+            'name': _("Totaux"),
             'level': 1,
             'columns': columns,
             'unfoldable': False,
             'unfold': False,
+            'class': 'o_bold_tr',
         }
+
+
+class AccountReportHandlerMaCapital(models.AbstractModel):
+    _name = 'account.report.handler.ma_capital'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "Répartition du Capital Social - Custom Handler"
+
+    _ma_model = 'ma.fiscal.capital.line'
+    _ma_fields = _MA_CAPITAL_FIELDS
+    _ma_add_button_label = "Ajouter un associé"
+
+
+class AccountReportHandlerMaLoan(models.AbstractModel):
+    _name = 'account.report.handler.ma_loan'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "État des Emprunts et Dettes Assimilées - Custom Handler"
+
+    _ma_model = 'ma.fiscal.loan.line'
+    _ma_fields = _MA_LOAN_FIELDS
+    _ma_add_button_label = "Ajouter un prêt"
+    _ma_section_field = 'type'
+
+
+class AccountReportHandlerMaLeasing(models.AbstractModel):
+    _name = 'account.report.handler.ma_leasing'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "Tableau des Biens en Crédit-Bail - Custom Handler"
+
+    _ma_model = 'ma.fiscal.leasing.line'
+    _ma_fields = _MA_LEASING_FIELDS
+    _ma_add_button_label = "Ajouter un bien"
+
+
+class AccountReportHandlerMaRental(models.AbstractModel):
+    _name = 'account.report.handler.ma_rental'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "Tableau des Locations et Baux autres que le Crédit-Bail - Custom Handler"
+
+    _ma_model = 'ma.fiscal.rental.line'
+    _ma_fields = _MA_RENTAL_FIELDS
+    _ma_add_button_label = "Ajouter une location"
+
+
+class AccountReportHandlerMaDotation(models.AbstractModel):
+    _name = 'account.report.handler.ma_dotation'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "État des Dotations aux Amortissements - Custom Handler"
+
+    _ma_model = 'ma.fiscal.dotation.line'
+    _ma_fields = _MA_AMORT_FIELDS
+    _ma_add_button_label = "Ajouter une immobilisation"
+
+
+class AccountReportHandlerMaTitres(models.AbstractModel):
+    _name = 'account.report.handler.ma_titres'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "Tableau des Titres de Participation - Custom Handler"
+
+    _ma_model = 'ma.fiscal.titres.line'
+    _ma_fields = _MA_TITRES_FIELDS
+    _ma_add_button_label = "Ajouter un titre de participation"
 
 
 # --------------------------------------------------------------------------- #

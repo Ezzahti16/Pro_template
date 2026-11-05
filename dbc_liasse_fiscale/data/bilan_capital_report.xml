@@ -118,5 +118,5 @@
     <field name="context" eval="{'report_id': ref('bilan_capital_report')}"/>
 </record>
 
-<menuitem id="menu_ma_bilan_capital_report" name="Répartition du Capital Social" action="action_ma_bilan_capital_report" parent="account.account_reports_legal_statements_menu"/>
+<menuitem id="menu_ma_bilan_capital_report" name="Répartition du Capital Social" action="action_ma_bilan_capital_report" parent="account.account_reports_legal_statements_menu" sequence="13"/>
 </odoo>

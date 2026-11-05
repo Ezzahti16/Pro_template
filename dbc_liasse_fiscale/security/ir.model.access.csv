@@ -3,3 +3,8 @@ access_ma_fiscal_setting_user,ma.fiscal.setting user,model_ma_fiscal_setting,acc
 access_ma_fiscal_setting_manager,ma.fiscal.setting manager,model_ma_fiscal_setting,account.group_account_manager,1,1,1,1
 access_ma_fiscal_formula_log,ma.fiscal.formula.log viewer,model_ma_fiscal_formula_log,group_ma_fiscal_reports_enabled,1,0,0,0
 access_ma_fiscal_capital_line,ma.fiscal.capital.line user,model_ma_fiscal_capital_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_loan_line,ma.fiscal.loan.line user,model_ma_fiscal_loan_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_leasing_line,ma.fiscal.leasing.line user,model_ma_fiscal_leasing_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_rental_line,ma.fiscal.rental.line user,model_ma_fiscal_rental_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_dotation_line,ma.fiscal.dotation.line user,model_ma_fiscal_dotation_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_titres_line,ma.fiscal.titres.line user,model_ma_fiscal_titres_line,account.group_account_readonly,1,1,1,1

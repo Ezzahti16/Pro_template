@@ -885,5 +885,5 @@
     <field name="context" eval="{'report_id': ref('bilan_amort_report')}"/>
 </record>
 
-<menuitem id="menu_ma_bilan_amort_report" name="Tableau des Amortissements" action="action_ma_bilan_amort_report" parent="account.account_reports_legal_statements_menu"/>
+<menuitem id="menu_ma_bilan_amort_report" name="Tableau des Amortissements" action="action_ma_bilan_amort_report" parent="account.account_reports_legal_statements_menu" sequence="25"/>
 </odoo>

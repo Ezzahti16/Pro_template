@@ -28,7 +28,7 @@
             <field name="name">ma.fiscal.setting.list</field>
             <field name="model">ma.fiscal.setting</field>
             <field name="arch" type="xml">
-                <list string="Fiscal Formulas" editable="bottom" create="0" sample="1">
+                <list string="Fiscal Formulas" editable="bottom" sample="1">
                     <field name="name" readonly="1"/>
                     <field name="edi" readonly="1"/>
                     <field name="libelle" readonly="1" optional="show"/>
@@ -44,7 +44,7 @@
             <field name="name">ma.fiscal.setting.form</field>
             <field name="model">ma.fiscal.setting</field>
             <field name="arch" type="xml">
-                <form string="Fiscal Formula" create="0">
+                <form string="Fiscal Formula">
                     <sheet>
                         <group>
                             <group>

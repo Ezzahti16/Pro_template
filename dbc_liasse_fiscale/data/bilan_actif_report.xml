@@ -1854,5 +1854,6 @@
     <menuitem id="menu_ma_bilan_actif_report"
               name="Bilan (Actif)"
               action="action_ma_bilan_actif_report"
-              parent="account.account_reports_legal_statements_menu"/>
+              parent="account.account_reports_legal_statements_menu"
+              sequence="11"/>
 </odoo>

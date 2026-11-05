@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale (Maroc)',
-    'version': '19.0.2.9.0',
+    'version': '19.0.4.2.0',
     'category': 'Accounting/Accounting',
     'summary': 'Moroccan CGNC "Bilan (Actif)" statement computed from legacy EDI codes and formules',
     'description': """
@@ -28,13 +28,18 @@ layout of the legacy fiscal software:
     'license': 'LGPL-3',
     'depends': ['account_reports'],
     'data': [
-        'security/ir.model.access.csv',
         'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/res_config_settings_views.xml',
         'views/ma_fiscal_formula_log_views.xml',
         'data/ma.fiscal.setting.csv',
         'data/bilan_actif_report.xml',
         'data/bilan_capital_report.xml',
+        'data/bilan_loan_report.xml',
+        'data/bilan_leasing_report.xml',
+        'data/bilan_rental_report.xml',
+        'data/bilan_dotation_report.xml',
+        'data/bilan_titres_report.xml',
         'data/bilan_passif_report.xml',
         'data/bilan_cpc_report.xml',
         'data/bilan_prov_report.xml',

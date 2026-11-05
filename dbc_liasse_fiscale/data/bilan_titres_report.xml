@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<!-- "Tableau des Titres de Participation" - same concept as
+     bilan_capital_report.xml / bilan_rental_report.xml: no EDI code or
+     formula behind any cell, rows are entirely dynamic (see
+     AccountReportHandlerMaTitres / AccountReportHandlerMaDataEntry in
+     models/account_report.py). Every numeric column except the date is
+     marked "Sum" on the legacy sheet's own TOTAL row (even "Participation
+     au capital %", despite being a percentage), so all of them are
+     summable=True here too - an always-present "Totaux" line sums them. -->
+<record id="bilan_titres_report" model="account.report">
+    <field name="name">Tableau des Titres de Participation</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="False"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="False"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_titres"/>
+    <field name="column_ids">
+        <record id="bilan_titres_column_raison_sociale" model="account.report.column">
+            <field name="name">Raison sociale de la société émettrice</field>
+            <field name="expression_label">raison_sociale</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_titres_column_num_if" model="account.report.column">
+            <field name="name">N° IF</field>
+            <field name="expression_label">num_if</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_titres_column_secteur_activite" model="account.report.column">
+            <field name="name">Secteur d'activité</field>
+            <field name="expression_label">secteur_activite</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_titres_column_capital_social" model="account.report.column">
+            <field name="name">Capital social</field>
+            <field name="expression_label">capital_social</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_participation_capital" model="account.report.column">
+            <field name="name">Participation au capital %</field>
+            <field name="expression_label">participation_capital</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_prix_acquisition_global" model="account.report.column">
+            <field name="name">Prix d'acquisition global</field>
+            <field name="expression_label">prix_acquisition_global</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_valeur_comptable_nette" model="account.report.column">
+            <field name="name">Valeur comptable nette</field>
+            <field name="expression_label">valeur_comptable_nette</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_date_cloture" model="account.report.column">
+            <field name="name">Date de clôture</field>
+            <field name="expression_label">date_cloture</field>
+            <field name="sequence">80</field>
+            <field name="figure_type">date</field>
+        </record>
+        <record id="bilan_titres_column_situation_nette" model="account.report.column">
+            <field name="name">Situation nette</field>
+            <field name="expression_label">situation_nette</field>
+            <field name="sequence">90</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_resultat_net" model="account.report.column">
+            <field name="name">Résultat net</field>
+            <field name="expression_label">resultat_net</field>
+            <field name="sequence">100</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_produits_cpc" model="account.report.column">
+            <field name="name">Produits inscrits au C.P.C de l'exercice</field>
+            <field name="expression_label">produits_cpc</field>
+            <field name="sequence">110</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_titres_column_actions" model="account.report.column">
+            <field name="name"></field>
+            <field name="expression_label">ma_actions</field>
+            <field name="sequence">120</field>
+            <field name="figure_type">string</field>
+        </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_titres_report" model="ir.actions.client">
+    <field name="name">Tableau des Titres de Participation</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-titres</field>
+    <field name="context" eval="{'report_id': ref('bilan_titres_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_titres_report" name="Tableau des Titres de Participation" action="action_ma_bilan_titres_report" parent="account.account_reports_legal_statements_menu" sequence="18"/>
+</odoo>

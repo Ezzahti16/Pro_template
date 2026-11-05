@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_guard_console_root"
+              name="Instance Guard"
+              web_icon="dbc_db_guard_console,static/description/icon.png"
+              groups="dbc_db_guard_console.group_guard_viewer"
+              sequence="95"/>
+
+    <menuitem id="menu_guard_console_instances"
+              name="Managed Instances"
+              parent="menu_guard_console_root"
+              action="dbc_guard_instance_action"
+              sequence="10"/>
+
+    <menuitem id="menu_guard_console_logs"
+              name="History"
+              parent="menu_guard_console_root"
+              action="dbc_guard_instance_log_action"
+              sequence="20"/>
+
+</odoo>

@@ -138,7 +138,7 @@ class MaFiscalSetting(models.Model):
         import os
         from odoo.modules.module import get_module_path
 
-        module_path = get_module_path('iadis_ma_formules')
+        module_path = get_module_path('dbc_liasse_fiscal_formules')
         if not module_path:
             return 0
         csv_path = os.path.join(module_path, 'data', 'ma.fiscal.setting.csv')

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="dbc_guard_instance_log_view_list" model="ir.ui.view">
+        <field name="name">dbc.guard.instance.log.list</field>
+        <field name="model">dbc.guard.instance.log</field>
+        <field name="arch" type="xml">
+            <list string="History" create="false" decoration-danger="not success">
+                <field name="create_date" string="When"/>
+                <field name="instance_id"/>
+                <field name="action"/>
+                <field name="user_id"/>
+                <field name="success" widget="boolean_toggle"/>
+                <field name="message"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="dbc_guard_instance_log_view_form" model="ir.ui.view">
+        <field name="name">dbc.guard.instance.log.form</field>
+        <field name="model">dbc.guard.instance.log</field>
+        <field name="arch" type="xml">
+            <form string="History Entry" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <field name="instance_id"/>
+                        <field name="action"/>
+                        <field name="user_id"/>
+                        <field name="success"/>
+                        <field name="create_date" string="When"/>
+                    </group>
+                    <field name="message"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dbc_guard_instance_log_view_search" model="ir.ui.view">
+        <field name="name">dbc.guard.instance.log.search</field>
+        <field name="model">dbc.guard.instance.log</field>
+        <field name="arch" type="xml">
+            <search string="History">
+                <field name="instance_id"/>
+                <field name="message"/>
+                <filter name="failures" string="Failures" domain="[('success','=',False)]"/>
+                <group>
+                    <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
+                    <filter name="group_action" string="Action" context="{'group_by': 'action'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="dbc_guard_instance_log_action" model="ir.actions.act_window">
+        <field name="name">History</field>
+        <field name="res_model">dbc.guard.instance.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

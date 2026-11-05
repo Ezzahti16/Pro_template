@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="dbc_guard_instance_view_list" model="ir.ui.view">
+        <field name="name">dbc.guard.instance.list</field>
+        <field name="model">dbc.guard.instance</field>
+        <field name="arch" type="xml">
+            <list string="Managed Instances" decoration-danger="state in ['error','unreachable','drift']"
+                  decoration-muted="state == 'draft'" decoration-warning="state == 'not_installed'">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="base_url"/>
+                <field name="db_name"/>
+                <field name="remote_secret_path" string="Secret path"/>
+                <field name="server_wide" string="Server-wide" optional="show"/>
+                <field name="agent_version" optional="hide"/>
+                <field name="odoo_version" optional="hide"/>
+                <field name="used_transport" string="Transport" optional="hide"/>
+                <field name="last_sync"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-info="state == 'inactive'"
+                       decoration-warning="state in ['drift','not_installed']"
+                       decoration-danger="state in ['error','unreachable']"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="dbc_guard_instance_view_form" model="ir.ui.view">
+        <field name="name">dbc.guard.instance.form</field>
+        <field name="model">dbc.guard.instance</field>
+        <field name="arch" type="xml">
+            <form string="Managed Instance">
+                <header>
+                    <button name="action_apply" type="object" string="Apply &amp; Protect"
+                            class="btn-primary" invisible="not guard_enabled"
+                            confirm="This will change the database manager URL on the remote instance. Continue?"/>
+                    <button name="action_apply" type="object" string="Apply (no protection)"
+                            class="btn-primary" invisible="guard_enabled"
+                            confirm="This will give the stock /web/database URLs back on the remote instance. Continue?"/>
+                    <button name="action_test_connection" type="object" string="Test Connection"/>
+                    <button name="action_fetch" type="object" string="Fetch Configuration"/>
+                    <button name="action_deactivate" type="object" string="Deactivate"
+                            invisible="state not in ['active','drift']"
+                            confirm="The stock /web/database/manager URL will be reachable again on that instance. Continue?"/>
+                    <button name="action_open_manager" type="object" string="Open Manager"
+                            invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,inactive,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Client X - production"/></h1>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'not_installed'">
+                        The agent module <code>dbc_db_access_guard</code> is not installed on
+                        this instance. Install it there (and add it to
+                        <code>server_wide_modules</code>) before applying anything.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'drift'">
+                        <strong>Out of sync.</strong> The instance no longer serves what this
+                        console applied:
+                        <field name="drift_message" readonly="1" nolabel="1"/>
+                        Press <em>Apply</em> to push this record again, or
+                        <em>Fetch Configuration</em> and adjust.
+                    </div>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="state not in ['error','unreachable']">
+                        <field name="last_error" readonly="1" nolabel="1"/>
+                    </div>
+                    <div class="alert alert-info" role="alert"
+                         invisible="state == 'draft' or server_wide or not agent_installed">
+                        The agent is not listed in <code>server_wide_modules</code> on this
+                        instance: the database manager stays exposed for the first seconds
+                        after each restart. Add
+                        <code>server_wide_modules = base,rpc,web,dbc_db_access_guard</code>
+                        to its <code>odoo.conf</code>.
+                    </div>
+
+                    <group>
+                        <group string="Connection">
+                            <field name="base_url" placeholder="https://client.example.com"/>
+                            <field name="db_name"/>
+                            <field name="login"/>
+                            <field name="api_key" password="True"
+                                   groups="dbc_db_guard_console.group_guard_manager"/>
+                            <field name="transport"/>
+                            <field name="timeout"/>
+                            <field name="verify_ssl"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Observed on the instance">
+                            <field name="agent_installed"/>
+                            <field name="agent_version" invisible="not agent_installed"/>
+                            <field name="odoo_version"/>
+                            <field name="used_transport"/>
+                            <field name="server_wide" invisible="not agent_installed"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+
+                    <group string="Database Manager Protection">
+                        <group>
+                            <field name="guard_enabled"/>
+                            <field name="secret_path" invisible="not guard_enabled"
+                                   placeholder="/database/technique-acces"/>
+                            <field name="block_selector" invisible="not guard_enabled"/>
+                            <field name="block_db_rpc" invisible="not guard_enabled"/>
+                            <field name="allowed_ips" invisible="not guard_enabled"
+                                   placeholder="e.g. 10.0.0.5, 192.168.1.0/24"/>
+                        </group>
+                        <group>
+                            <field name="manager_url" widget="url" readonly="1"/>
+                            <field name="selector_url" widget="url" readonly="1"/>
+                            <label for="remote_secret_path" string="Currently served"/>
+                            <div>
+                                <field name="remote_secret_path" readonly="1" nolabel="1"
+                                       class="oe_inline" placeholder="unknown"/>
+                                <span invisible="remote_enabled" class="text-muted">
+                                    (protection off: the stock URLs answer)
+                                </span>
+                            </div>
+                            <field name="remote_enabled" invisible="1"/>
+                            <field name="remote_block_selector" invisible="not agent_installed"/>
+                            <field name="remote_block_db_rpc" invisible="not agent_installed"/>
+                            <field name="remote_allowed_ips" invisible="not remote_allowed_ips"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="History" name="history">
+                            <field name="log_ids" readonly="1">
+                                <list>
+                                    <field name="create_date" string="When"/>
+                                    <field name="action"/>
+                                    <field name="user_id"/>
+                                    <field name="success" widget="boolean_toggle"/>
+                                    <field name="message"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Anything the technical team should know about this instance."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="dbc_guard_instance_view_search" model="ir.ui.view">
+        <field name="name">dbc.guard.instance.search</field>
+        <field name="model">dbc.guard.instance</field>
+        <field name="arch" type="xml">
+            <search string="Managed Instances">
+                <field name="name"/>
+                <field name="base_url"/>
+                <field name="db_name"/>
+                <filter name="protected" string="Protected" domain="[('state','=','active')]"/>
+                <filter name="attention" string="Needs attention"
+                        domain="[('state','in',['drift','error','unreachable','not_installed'])]"/>
+                <filter name="not_server_wide" string="Not server-wide"
+                        domain="[('agent_installed','=',True),('server_wide','=',False)]"/>
+                <separator/>
+                <filter name="inactive" string="Archived" domain="[('active','=',False)]"/>
+                <group>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="dbc_guard_instance_action" model="ir.actions.act_window">
+        <field name="name">Managed Instances</field>
+        <field name="res_model">dbc.guard.instance</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Register your first instance</p>
+            <p>
+                Store the URL, database, login and API key of an instance where the
+                <code>dbc_db_access_guard</code> agent is installed, then push the
+                secret database-manager URL to it from here.
+            </p>
+        </field>
+    </record>
+
+</odoo>

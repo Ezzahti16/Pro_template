@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<!-- "Tableau des Locations et Baux autres que le Crédit-Bail" - same
+     concept as bilan_capital_report.xml / bilan_loan_report.xml /
+     bilan_leasing_report.xml: no EDI code or formula behind any cell,
+     rows are entirely dynamic (see AccountReportHandlerMaRental /
+     AccountReportHandlerMaDataEntry in models/account_report.py). The two
+     monetary columns (montant_annuel, montant_loyer_charges) are
+     summable=True, so an always-present "Totaux" line sums them - same
+     as the legacy sheet's own "Total" row on those two columns. -->
+<record id="bilan_rental_report" model="account.report">
+    <field name="name">Tableau des Locations et Baux autres que le Crédit-Bail</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="False"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="False"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_rental"/>
+    <field name="column_ids">
+        <record id="bilan_rental_column_nature_bien" model="account.report.column">
+            <field name="name">Nature du bien loué</field>
+            <field name="expression_label">nature_bien</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_lieu_situation" model="account.report.column">
+            <field name="name">Lieu de situation</field>
+            <field name="expression_label">lieu_situation</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_nom_prenom" model="account.report.column">
+            <field name="name">Nom et prénoms du propriétaire</field>
+            <field name="expression_label">nom_prenom</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_raison_sociale" model="account.report.column">
+            <field name="name">Raison sociale du propriétaire</field>
+            <field name="expression_label">raison_sociale</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_adresse" model="account.report.column">
+            <field name="name">Adresse du propriétaire</field>
+            <field name="expression_label">adresse</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_num_if" model="account.report.column">
+            <field name="name">N° IF du propriétaire</field>
+            <field name="expression_label">num_if</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_num_cin" model="account.report.column">
+            <field name="name">N° CNI du propriétaire</field>
+            <field name="expression_label">num_cin</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_num_ce" model="account.report.column">
+            <field name="name">N° Carte d'étranger du propriétaire</field>
+            <field name="expression_label">num_ce</field>
+            <field name="sequence">80</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_date_conclusion" model="account.report.column">
+            <field name="name">Date de conclusion de l'acte</field>
+            <field name="expression_label">date_conclusion</field>
+            <field name="sequence">90</field>
+            <field name="figure_type">date</field>
+        </record>
+        <record id="bilan_rental_column_montant_annuel" model="account.report.column">
+            <field name="name">Montant annuel de location</field>
+            <field name="expression_label">montant_annuel</field>
+            <field name="sequence">100</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_rental_column_montant_loyer_charges" model="account.report.column">
+            <field name="name">Montant loyer dans les charges</field>
+            <field name="expression_label">montant_loyer_charges</field>
+            <field name="sequence">110</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_rental_column_bail_ordinaire" model="account.report.column">
+            <field name="name">Nature contrat : Bail-ordinaire</field>
+            <field name="expression_label">bail_ordinaire</field>
+            <field name="sequence">120</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_leasing_nieme_periode" model="account.report.column">
+            <field name="name">Nature contrat : Leasing (Nème période)</field>
+            <field name="expression_label">leasing_nieme_periode</field>
+            <field name="sequence">130</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_rental_column_actions" model="account.report.column">
+            <field name="name"></field>
+            <field name="expression_label">ma_actions</field>
+            <field name="sequence">140</field>
+            <field name="figure_type">string</field>
+        </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_rental_report" model="ir.actions.client">
+    <field name="name">Tableau des Locations et Baux autres que le Crédit-Bail</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-locations</field>
+    <field name="context" eval="{'report_id': ref('bilan_rental_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_rental_report" name="Tableau des Locations et Baux autres que le Crédit-Bail" action="action_ma_bilan_rental_report" parent="account.account_reports_legal_statements_menu" sequence="16"/>
+</odoo>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<!-- "État des Dotations aux Amortissements Relatifs aux Immobilisations" -
+     same concept as bilan_capital_report.xml / bilan_loan_report.xml /
+     bilan_leasing_report.xml / bilan_rental_report.xml: no EDI code or
+     formula behind any cell, rows are entirely dynamic (see
+     AccountReportHandlerMaDotation / AccountReportHandlerMaDataEntry in
+     models/account_report.py). Three columns (taux, amort_normal,
+     total_amort) are read-only, computed server-side from the others -
+     see ma_fiscal_dotation.py - and summable (where meaningful), so an
+     always-present "Totaux" line sums prix_acquisition, valeur_comptable,
+     amort_anterieurs, amort_normal and total_amort. -->
+<record id="bilan_dotation_report" model="account.report">
+    <field name="name">État des Dotations aux Amortissements Relatifs aux Immobilisations</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="False"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="False"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_dotation"/>
+    <field name="column_ids">
+        <record id="bilan_dotation_column_immobilisation" model="account.report.column">
+            <field name="name">Immobilisations concernées</field>
+            <field name="expression_label">immobilisation</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_dotation_column_date_entree" model="account.report.column">
+            <field name="name">Date d'entrée</field>
+            <field name="expression_label">date_entree</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">date</field>
+        </record>
+        <record id="bilan_dotation_column_prix_acquisition" model="account.report.column">
+            <field name="name">Valeur à amortir - Prix d'acquisition</field>
+            <field name="expression_label">prix_acquisition</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_dotation_column_valeur_comptable" model="account.report.column">
+            <field name="name">Valeur à amortir - Valeur comptable après réévaluation</field>
+            <field name="expression_label">valeur_comptable</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_dotation_column_amort_anterieurs" model="account.report.column">
+            <field name="name">Amortissements antérieurs</field>
+            <field name="expression_label">amort_anterieurs</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_dotation_column_taux" model="account.report.column">
+            <field name="name">Taux</field>
+            <field name="expression_label">taux</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_dotation_column_duree" model="account.report.column">
+            <field name="name">Durée</field>
+            <field name="expression_label">duree</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">integer</field>
+        </record>
+        <record id="bilan_dotation_column_amort_normal" model="account.report.column">
+            <field name="name">Amortissements normaux ou accélérés de l'exercice</field>
+            <field name="expression_label">amort_normal</field>
+            <field name="sequence">80</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_dotation_column_total_amort" model="account.report.column">
+            <field name="name">Total des amortissements à la fin de l'exercice</field>
+            <field name="expression_label">total_amort</field>
+            <field name="sequence">90</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_dotation_column_observations" model="account.report.column">
+            <field name="name">Observations</field>
+            <field name="expression_label">observations</field>
+            <field name="sequence">100</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_dotation_column_actions" model="account.report.column">
+            <field name="name"></field>
+            <field name="expression_label">ma_actions</field>
+            <field name="sequence">110</field>
+            <field name="figure_type">string</field>
+        </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_dotation_report" model="ir.actions.client">
+    <field name="name">État des Dotations aux Amortissements Relatifs aux Immobilisations</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-dotation-amort</field>
+    <field name="context" eval="{'report_id': ref('bilan_dotation_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_dotation_report" name="État des Dotations aux Amortissements Relatifs aux Immobilisations" action="action_ma_bilan_dotation_report" parent="account.account_reports_legal_statements_menu" sequence="17"/>
+</odoo>

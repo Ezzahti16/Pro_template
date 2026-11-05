@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="dbc_liasse_fiscale.MaDataEntryPopover">
+        <div class="account_report_popover_edit ma_data_entry_popover" style="min-width: 560px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px;">
+                <t t-foreach="props.fields" t-as="field" t-key="field.name">
+                    <div class="mb-2">
+                        <label class="o_light_label d-block mb-1" t-esc="field.label"/>
+                        <select t-if="field.type === 'select'" class="form-select form-select-sm"
+                            t-on-change="(ev) => this.onFieldInput(field.name, ev.target.value)"
+                        >
+                            <t t-foreach="field.selection" t-as="opt" t-key="opt[0]">
+                                <option t-att-value="opt[0]" t-esc="opt[1]" t-att-selected="opt[0] === state[field.name]"/>
+                            </t>
+                        </select>
+                        <input t-elif="field.type === 'computed'"
+                            class="form-control form-control-sm"
+                            t-att-value="this._displayComputed(field)"
+                            disabled="disabled"
+                        />
+                        <input t-else=""
+                            t-att-type="field.type === 'number' ? 'number' : (field.type === 'date' ? 'date' : 'text')"
+                            t-att-step="field.type === 'number' ? '0.01' : undefined"
+                            class="form-control form-control-sm"
+                            t-att-value="state[field.name]"
+                            t-on-input="(ev) => this.onFieldInput(field.name, ev.target.value)"
+                        />
+                    </div>
+                </t>
+            </div>
+            <button class="btn btn-sm btn-primary mt-1" t-on-click="() => this.save()">
+                Enregistrer
+            </button>
+        </div>
+    </t>
+
+    <t t-inherit="account_reports.AccountReportLineCellCustomizable" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='props.cell.edit_popup_data']" position="after">
+            <t t-if="props.cell.ma_edit_data">
+                <button
+                    class="btn btn_edit_ma_line me-auto"
+                    title="Modifier"
+                    t-on-click="(ev) => this.maEditPopover(ev)"
+                >
+                    <i class="fa fa-pencil"/>
+                </button>
+            </t>
+            <t t-if="props.cell.ma_delete_data">
+                <button
+                    class="btn btn_delete_ma_line me-auto"
+                    title="Supprimer"
+                    t-on-click="() => this.maDeleteLine()"
+                >
+                    <i class="fa fa-trash"/>
+                </button>
+            </t>
+        </xpath>
+    </t>
+
+    <t t-inherit="account_reports.AccountReportCustomizable" t-inherit-mode="extension">
+        <xpath expr="//AccountReportButtonsBar" position="before">
+            <t t-if="controller.cachedFilterOptions.ma_add_line_button">
+                <button class="btn btn-primary me-2" t-on-click="(ev) => this.maAddLine(ev)">
+                    <i class="fa fa-plus me-1"/>
+                    <t t-esc="controller.cachedFilterOptions.ma_add_line_button.label"/>
+                </button>
+            </t>
+        </xpath>
+    </t>
+
+    <!-- A data-entry report's rows are scoped to a fiscal year through
+         their own "annee_fiscale" field (see _MA_ANNEE_FISCALE_FIELD and
+         AccountReportHandlerMaDataEntry._dynamic_lines_generator,
+         models/account_report.py), picked per-record in the create/edit
+         popup - so the date filter stays visible and is what the user
+         actually uses to switch which year's rows are shown. "Options"
+         and "En .DH" buttons and the date column-group header row above
+         the table remain meaningless leftovers of the framework's
+         options['date'] plumbing, so they stay hidden whenever
+         ma_add_line_button is set (i.e. for exactly these reports). -->
+    <t t-inherit="account_reports.AccountReportFiltersCustomizable" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='hasExtraOptionsFilter']" position="attributes">
+            <attribute name="t-if">hasExtraOptionsFilter and !controller.cachedFilterOptions.ma_add_line_button</attribute>
+        </xpath>
+        <xpath expr="//div[@id='filter_rounding_unit']" position="attributes">
+            <attribute name="t-if">!controller.cachedFilterOptions.ma_add_line_button</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="account_reports.AccountReportHeaderCustomizable" t-inherit-mode="extension">
+        <xpath expr="//t[@t-foreach='columnHeaders']" position="attributes">
+            <attribute name="t-if">!controller.cachedFilterOptions.ma_add_line_button</attribute>
+        </xpath>
+    </t>
+</templates>

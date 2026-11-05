@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dbc_guard_instance_viewer,dbc.guard.instance viewer,model_dbc_guard_instance,dbc_db_guard_console.group_guard_viewer,1,0,0,0
+access_dbc_guard_instance_manager,dbc.guard.instance manager,model_dbc_guard_instance,dbc_db_guard_console.group_guard_manager,1,1,1,1
+access_dbc_guard_instance_log_viewer,dbc.guard.instance.log viewer,model_dbc_guard_instance_log,dbc_db_guard_console.group_guard_viewer,1,0,0,0
+access_dbc_guard_instance_log_manager,dbc.guard.instance.log manager,model_dbc_guard_instance_log,dbc_db_guard_console.group_guard_manager,1,1,1,1

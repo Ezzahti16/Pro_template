@@ -258,5 +258,5 @@
     <field name="context" eval="{'report_id': ref('bilan_tva15_report')}"/>
 </record>
 
-<menuitem id="menu_ma_bilan_tva15_report" name="Détail T.V.A" action="action_ma_bilan_tva15_report" parent="account.account_reports_legal_statements_menu"/>
+<menuitem id="menu_ma_bilan_tva15_report" name="Détail T.V.A" action="action_ma_bilan_tva15_report" parent="account.account_reports_legal_statements_menu" sequence="26"/>
 </odoo>

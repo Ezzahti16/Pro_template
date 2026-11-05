@@ -1123,5 +1123,6 @@
     <menuitem id="menu_ma_bilan_passif_report"
               name="Bilan (Passif)"
               action="action_ma_bilan_passif_report"
-              parent="account.account_reports_legal_statements_menu"/>
+              parent="account.account_reports_legal_statements_menu"
+              sequence="12"/>
 </odoo>

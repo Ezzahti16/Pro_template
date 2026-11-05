@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<!-- "Tableau des Biens en Crédit-Bail" - same concept as
+     bilan_capital_report.xml / bilan_loan_report.xml: no EDI code or
+     formula behind any cell, rows are entirely dynamic (see
+     AccountReportHandlerMaLeasing / AccountReportHandlerMaDataEntry in
+     models/account_report.py). No column here is marked summable=True,
+     so - unlike bilan_loan_report.xml - there is no "Totaux" line. -->
+<record id="bilan_leasing_report" model="account.report">
+    <field name="name">Tableau des Biens en Crédit-Bail</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="filter_date_range" eval="False"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="False"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="False"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_leasing"/>
+    <field name="column_ids">
+        <record id="bilan_leasing_column_rubrique" model="account.report.column">
+            <field name="name">Rubriques</field>
+            <field name="expression_label">rubrique</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_leasing_column_date_premiere_echeance" model="account.report.column">
+            <field name="name">Date de la 1ère échéance</field>
+            <field name="expression_label">date_premiere_echeance</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">date</field>
+        </record>
+        <record id="bilan_leasing_column_duree_contrat_mois" model="account.report.column">
+            <field name="name">Durée du contrat (mois)</field>
+            <field name="expression_label">duree_contrat_mois</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">integer</field>
+        </record>
+        <record id="bilan_leasing_column_valeur_estimee" model="account.report.column">
+            <field name="name">Valeur estimée du bien</field>
+            <field name="expression_label">valeur_estimee</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_duree_theorique_amortissement" model="account.report.column">
+            <field name="name">Durée théorique d'amortissement</field>
+            <field name="expression_label">duree_theorique_amortissement</field>
+            <field name="sequence">50</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_cumul_redevances_anterieures" model="account.report.column">
+            <field name="name">Cumul redevances Ex antérieurs</field>
+            <field name="expression_label">cumul_redevances_anterieures</field>
+            <field name="sequence">60</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_montant_redevances_exercice" model="account.report.column">
+            <field name="name">Montant redevances de l'exercice</field>
+            <field name="expression_label">montant_redevances_exercice</field>
+            <field name="sequence">70</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_redevances_restant_moins_un_an" model="account.report.column">
+            <field name="name">Redevances restant (- d'un an)</field>
+            <field name="expression_label">redevances_restant_moins_un_an</field>
+            <field name="sequence">80</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_redevances_restant_plus_un_an" model="account.report.column">
+            <field name="name">Redevances restant (+ d'un an)</field>
+            <field name="expression_label">redevances_restant_plus_un_an</field>
+            <field name="sequence">90</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_prix_achat_residuel" model="account.report.column">
+            <field name="name">Prix d'achat résiduel</field>
+            <field name="expression_label">prix_achat_residuel</field>
+            <field name="sequence">100</field>
+            <field name="figure_type">float</field>
+        </record>
+        <record id="bilan_leasing_column_observations" model="account.report.column">
+            <field name="name">Observations</field>
+            <field name="expression_label">observations</field>
+            <field name="sequence">110</field>
+            <field name="figure_type">string</field>
+        </record>
+        <record id="bilan_leasing_column_actions" model="account.report.column">
+            <field name="name"></field>
+            <field name="expression_label">ma_actions</field>
+            <field name="sequence">120</field>
+            <field name="figure_type">string</field>
+        </record>
+    </field>
+</record>
+
+<record id="action_ma_bilan_leasing_report" model="ir.actions.client">
+    <field name="name">Tableau des Biens en Crédit-Bail</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-bilan-leasing</field>
+    <field name="context" eval="{'report_id': ref('bilan_leasing_report')}"/>
+</record>
+
+<menuitem id="menu_ma_bilan_leasing_report" name="Tableau des Biens en Crédit-Bail" action="action_ma_bilan_leasing_report" parent="account.account_reports_legal_statements_menu" sequence="15"/>
+</odoo>

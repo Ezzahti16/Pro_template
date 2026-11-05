@@ -568,5 +568,5 @@
         <field name="path">ma-bilan-fisc</field>
         <field name="context" eval="{'report_id': ref('bilan_fisc_report')}"/>
     </record>
-    <menuitem id="menu_ma_bilan_fisc_report" name="Passage du RNC au RNF" action="action_ma_bilan_fisc_report" parent="account.account_reports_legal_statements_menu"/>
+    <menuitem id="menu_ma_bilan_fisc_report" name="Passage du RNC au RNF" action="action_ma_bilan_fisc_report" parent="account.account_reports_legal_statements_menu" sequence="21"/>
 </odoo>

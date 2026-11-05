@@ -459,5 +459,5 @@
     <field name="context" eval="{'report_id': ref('bilan_eval_report')}"/>
 </record>
 
-<menuitem id="menu_bilan_eval_report" name="Principales Méthodes d'Evaluation" action="action_bilan_eval_report" parent="account.account_reports_legal_statements_menu"/>
+<menuitem id="menu_bilan_eval_report" name="Principales Méthodes d'Evaluation" action="action_bilan_eval_report" parent="account.account_reports_legal_statements_menu" sequence="30"/>
 </odoo>
