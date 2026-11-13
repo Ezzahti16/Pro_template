@@ -32,7 +32,7 @@ class MaFiscalCapitalLine(models.Model):
     nom_prenom = fields.Char(string="Nom et prénom")
     raison_sociale = fields.Char(string="Raison sociale")
     num_if = fields.Char(string="N° IF")
-    num_cin = fields.Char(string="N° CIN")
+    num_cin = fields.Char(string="N° C.N.I.")
     num_ce = fields.Char(string="N° Carte d'étranger")
     adresse = fields.Char(string="Adresse")
     titres_precedent = fields.Integer(string="Nombre de titres (exercice précédent)")

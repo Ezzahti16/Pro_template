@@ -9,4 +9,7 @@ from . import ma_fiscal_leasing
 from . import ma_fiscal_rental
 from . import ma_fiscal_dotation
 from . import ma_fiscal_titres
+from . import ma_fiscal_cession
+from . import ma_fiscal_passage
+from . import ma_fiscal_is
 from . import res_config_settings

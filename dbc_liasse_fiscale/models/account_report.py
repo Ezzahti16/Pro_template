@@ -26,6 +26,19 @@ _API_TIMEOUT = 10
 # instance are picked up quickly. Raise via system param if your API is slow.
 _API_CACHE = {}
 
+# {url: timestamp before which the API is not worth calling again}.
+#
+# A failed call costs a full _API_TIMEOUT, and _get_formules_map runs several
+# times per report render (the Saisie-code set, the editable-cell set, the
+# evaluator, ...). Without remembering the failure, one unreachable API turned
+# every render into a stack of 10s timeouts - measured at 31s to 84s per
+# report, against well under a second when the API answers or its failure is
+# already known. So a failure is cached like a success: the first call pays the
+# timeout, the rest of that window falls straight through to the stale cache or
+# the local ma.fiscal.setting table.
+_API_FAILURE_CACHE = {}
+_API_FAILURE_TTL = 60
+
 # --------------------------------------------------------------------------- #
 # "Data-entry" reports: no EDI code or formula behind any value - every
 # field is a plain value the user keys in through the report's header "+"
@@ -101,7 +114,7 @@ _MA_CAPITAL_FIELDS = [
     {'name': 'nom_prenom', 'label': "Nom et prénom", 'type': 'text'},
     {'name': 'raison_sociale', 'label': "Raison sociale", 'type': 'text'},
     {'name': 'num_if', 'label': "N° IF", 'type': 'text'},
-    {'name': 'num_cin', 'label': "N° CIN", 'type': 'text'},
+    {'name': 'num_cin', 'label': "N° C.N.I.", 'type': 'text'},
     {'name': 'num_ce', 'label': "N° Carte d'étranger", 'type': 'text'},
     {'name': 'adresse', 'label': "Adresse", 'type': 'text'},
     {'name': 'titres_precedent', 'label': "Nombre de titres (exercice précédent)", 'type': 'number'},
@@ -149,8 +162,12 @@ _MA_LEASING_FIELDS = [
     {'name': 'observations', 'label': "Observations", 'type': 'text'},
 ]
 
+# No _MA_ANNEE_FISCALE_FIELD here, like _MA_AMORT_FIELDS below: these rows are
+# scoped by their own "Date de conclusion de l'acte" instead, strictly inside
+# the selected period (see _ma_date_field/_ma_date_scope on
+# AccountReportHandlerMaRental) - the reference liasse dates every bail and
+# shows only the acts of the exercice being filed.
 _MA_RENTAL_FIELDS = [
-    _MA_ANNEE_FISCALE_FIELD,
     {'name': 'nature_bien', 'label': "Nature du bien loué", 'type': 'text'},
     {'name': 'lieu_situation', 'label': "Lieu de situation", 'type': 'text'},
     {'name': 'nom_prenom', 'label': "Nom et prénoms du propriétaire", 'type': 'text'},
@@ -161,9 +178,11 @@ _MA_RENTAL_FIELDS = [
     {'name': 'num_ce', 'label': "N° Carte d'étranger du propriétaire", 'type': 'text'},
     {'name': 'date_conclusion', 'label': "Date de conclusion de l'acte de location", 'type': 'date'},
     {'name': 'montant_annuel', 'label': "Montant annuel de location", 'type': 'number', 'summable': True},
-    {'name': 'montant_loyer_charges', 'label': "Montant du loyer compris dans les charges de l'exercice", 'type': 'number', 'summable': True},
-    {'name': 'bail_ordinaire', 'label': "Nature du contrat : Bail-ordinaire", 'type': 'text'},
-    {'name': 'leasing_nieme_periode', 'label': "Nature du contrat : Leasing (Nème période)", 'type': 'text'},
+    {'name': 'montant_loyer_charges', 'label': "Montant de location de l'exercice", 'type': 'number', 'summable': True},
+    # Column 12 of the reference sheet is a single free-text "Contrat" cell the
+    # filer writes the nature of the contract into ("Bail ordinaire", ...), not
+    # a pair of X-marked columns, so leasing_nieme_periode has no UI any more.
+    {'name': 'bail_ordinaire', 'label': "Contrat", 'type': 'text'},
 ]
 
 # "taux"/"amort_normal"/"total_amort" are 'computed': read-only in both the
@@ -174,13 +193,21 @@ _MA_RENTAL_FIELDS = [
 #       editable - editing either one live-updates the other in the popup
 #       (pair_field/pair_formula below); whichever value the user actually
 #       left in place is what gets saved, no server-side override.
-#   amort_normal = prix_acquisition - amort_anterieurs, forced to 0 (and
-#       flagged via depassement_plafond, which blanks it on screen) if that
-#       would exceed the legal cap valeur_comptable / duree
-#   total_amort = amort_anterieurs + amort_normal  (= "col.4 + col.7" per
-#       the legacy sheet's own column-9 header)
+#   amort_normal is EDITABLE; the model only fills it in when a row is
+#       created without it (annuity capped by what is left to amortise) -
+#       see MaFiscalDotationLine._ma_default_amort_normal
+#   total_amort = amort_anterieurs + amort_normal, computed and stored
+#       (= "col.4 + col.7" per the DGI sheet's own column-9 header)
+# No _MA_ANNEE_FISCALE_FIELD here, unlike every other data-entry table: this
+# one is scoped by its own "Date d'entrée" instead (see _ma_date_field on
+# AccountReportHandlerMaDotation). An immobilisation acquired in 2020 is still
+# being amortised in 2025 and has to stay on the 2025 état, so tying its row
+# to a single exercice would hide it the following year.
 _MA_AMORT_FIELDS = [
-    _MA_ANNEE_FISCALE_FIELD,
+    # Column 1 of the DGI grid ("Nature"), exported as codeEdi 10061. It had
+    # no field spec and no report column for a long time, so the model's
+    # `immobilisation` could never be filled and the column went out blank on
+    # every row - the reference liasse names every immobilisation there.
     {'name': 'immobilisation', 'label': "Immobilisations concernées", 'type': 'text'},
     {'name': 'date_entree', 'label': "Date d'entrée", 'type': 'date'},
     {'name': 'prix_acquisition', 'label': "Valeur à amortir - Prix d'acquisition", 'type': 'number', 'summable': True},
@@ -188,7 +215,13 @@ _MA_AMORT_FIELDS = [
     {'name': 'amort_anterieurs', 'label': "Amortissements antérieurs", 'type': 'number', 'summable': True},
     {'name': 'taux', 'label': "Taux", 'type': 'number', 'format': 'percent', 'pair_field': 'duree', 'pair_formula': 'ma_duration_from_rate'},
     {'name': 'duree', 'label': "Durée", 'type': 'number', 'pair_field': 'taux', 'pair_formula': 'ma_rate_from_duration'},
-    {'name': 'amort_normal', 'label': "Amortissements normaux ou accélérés de l'exercice", 'type': 'computed', 'compute': 'ma_amort_normal', 'summable': True, 'blank_if_field': 'depassement_plafond'},
+    # amort_normal is editable: no rule reproduces a real état, since the
+    # reference liasse prorates assets acquired during the year and not
+    # uniformly, so the accountant has the last word. The model only derives
+    # a default for a row created without one - see ma_fiscal_dotation.py.
+    {'name': 'amort_normal', 'label': "Amortissements normaux ou accélérés de l'exercice", 'type': 'number', 'summable': True},
+    # total_amort does have an obvious rule - the DGI sheet's column-9 header
+    # is literally "col.4 + col.7" - so it stays read-only and derived.
     {'name': 'total_amort', 'label': "Total des amortissements à la fin de l'exercice", 'type': 'computed', 'compute': 'ma_amort_total', 'summable': True},
     {'name': 'observations', 'label': "Observations", 'type': 'text'},
 ]
@@ -208,12 +241,130 @@ _MA_TITRES_FIELDS = [
     {'name': 'produits_cpc', 'label': "Produits inscrits au C.P.C de l'exercice", 'type': 'number', 'summable': True},
 ]
 
+# Tableau n° 10. Three of the eight columns are read-only 'computed' cells,
+# because the DGI's own reference grid derives them from the other five and
+# nothing else ('Liasse ExcelToXml V4.0 2026.xlsm', sheet T10, rows 10..19):
+# E =C-D, G =IF(F>E,F-E,""), H =IF(F<E,E-F,"") - see MaFiscalCessionLine.
+# They are declared AFTER the fields they read, because the popup recomputes
+# the computed fields in this very order (_recomputeComputedFields in
+# data_entry_popover.js), so valeur_nette has to be fresh before plus_values
+# and moins_values look at it.
+# Every numeric column carries the legacy sheet's own TOTAL row (T10!C20..H20
+# = SUM of its range), so all six are summable=True; "Date de cession" and
+# "Compte principal" are not summed - the DGI does publish a total code above
+# the latter (2037) but gives it the constant 0.
+_MA_CESSION_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'date_cession', 'label': "Date de cession ou de retrait", 'type': 'date'},
+    {'name': 'compte_principal', 'label': "Compte principal", 'type': 'text'},
+    {'name': 'montant_brut', 'label': "Montant brut", 'type': 'number', 'summable': True},
+    {'name': 'amort_cumules', 'label': "Amortissements cumulés", 'type': 'number', 'summable': True},
+    {'name': 'valeur_nette', 'label': "Valeur nette d'amortissements", 'type': 'computed', 'compute': 'ma_cession_valeur_nette', 'summable': True},
+    {'name': 'produit_cession', 'label': "Produit de cession", 'type': 'number', 'summable': True},
+    {'name': 'plus_values', 'label': "Plus values", 'type': 'computed', 'compute': 'ma_cession_plus_values', 'summable': True},
+    {'name': 'moins_values', 'label': "Moins values", 'type': 'computed', 'compute': 'ma_cession_moins_values', 'summable': True},
+]
+
+# The four free-text blocks of tableau 7. On the DGI grid each is a FIVE-row
+# range, not a single cell (C_822 is 'T3'!$B$13:$B$17, C_825 is
+# 'T3'!$B$19:$B$23), each paired with a label code (821/824/827/829, Texte)
+# and a "montant (-)" code; the "1- COURANTES"/"2- NON COURANTES" subtotal
+# cells the paper form draws between them carry no codeEdi at all.
+MA_PASSAGE_SECTIONS = [
+    ('reint_courante', "II- RÉINTÉGRATIONS FISCALES — 1. Courantes"),
+    ('reint_non_courante', "II- RÉINTÉGRATIONS FISCALES — 2. Non courantes"),
+    ('deduc_courante', "III- DÉDUCTIONS FISCALES — 1. Courantes"),
+    ('deduc_non_courante', "III- DÉDUCTIONS FISCALES — 2. Non Courantes"),
+]
+
+# The grid has exactly five slots per block, and numeroLigne has nowhere to
+# go beyond that, so a sixth row could not be declared in the XML at all.
+MA_PASSAGE_MAX_ROWS = 5
+
+# "Passage du Résultat Net Comptable au Résultat Net Fiscal" (tableau 7) is
+# NOT a data-entry report: it is a static report whose réintégrations and
+# déductions blocks host an editable table inline. The rows live in
+# ma.fiscal.passage.line, are shown under their own section line by
+# AccountReportHandlerMaPassage._custom_line_postprocessor, and feed the
+# subtotal cells through _INLINE_DETAIL_CODES below.
+_MA_PASSAGE_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'section', 'label': "Rubrique", 'type': 'select', 'selection': MA_PASSAGE_SECTIONS},
+    {'name': 'intitule', 'label': "Intitulé", 'type': 'text'},
+    {'name': 'montant_plus', 'label': "Montant (+)", 'type': 'number', 'summable': True},
+    {'name': 'montant_moins', 'label': "Montant (-)", 'type': 'number', 'summable': True},
+]
+
+# Which report line each block's rows hang under, by xml_id.
+_PASSAGE_SECTION_LINES = {
+    'dbc_liasse_fiscale.bilan_fisc_line_reint_courantes': 'reint_courante',
+    'dbc_liasse_fiscale.bilan_fisc_line_reint_non_courantes': 'reint_non_courante',
+    'dbc_liasse_fiscale.bilan_fisc_line_deduc_courantes': 'deduc_courante',
+    'dbc_liasse_fiscale.bilan_fisc_line_deduc_non_courantes': 'deduc_non_courante',
+}
+
+# --- Tableau 240, "État pour le Calcul de l'Impôt sur les Sociétés" ---------
+# Same shape as tableau 7: two free-text blocks whose libellé AND montant are
+# ranges on the DGI grid ('T15'!$A$13:$A$14 / $B$13:$B$14 and $A$20:$A$21 /
+# $B$20:$B$21), with no codeEdi on the subtotal rows above them. The rate a
+# line applies to ("... de 8,75%", "... de 10%") is part of the wording the
+# preparer types, not a fixed report line.
+MA_IS_SECTIONS = [
+    ('ca_taux_reduit', "3- CA soumis au taux réduit"),
+    ('autres_produits', "4- Autres produits taxables (ajout)"),
+]
+
+_MA_IS_FIELDS = [
+    _MA_ANNEE_FISCALE_FIELD,
+    {'name': 'section', 'label': "Rubrique", 'type': 'select', 'selection': MA_IS_SECTIONS},
+    {'name': 'intitule', 'label': "Intitulé", 'type': 'text'},
+    {'name': 'montant', 'label': "Montant", 'type': 'number', 'summable': True},
+]
+
+_IS_SECTION_LINES = {
+    'dbc_liasse_fiscale.bilan_is_line_ca_taux_reduit': 'ca_taux_reduit',
+    'dbc_liasse_fiscale.bilan_is_line_autres_produits_ajout': 'autres_produits',
+}
+
+# Every cell of the liasse whose value is the sum of rows the user keys in
+# INSIDE a report, as {codeEdi: (model, section, field)}. MaFiscalEvaluator
+# .evaluate_code resolves these here before it ever consults the formules
+# map: the DGI grid has no subtotal cell for any of them (C_822 and C_14353
+# are the detail RANGES, not totals), so there is no formula that could be
+# right, and a "Saisie" value keyed straight into the cell would disagree
+# with the rows shown underneath it the moment either changed.
+_INLINE_DETAIL_CODES = {
+    # tableau 7 - réintégrations / déductions
+    '822': ('ma.fiscal.passage.line', 'reint_courante', 'montant_plus'),
+    '823': ('ma.fiscal.passage.line', 'reint_courante', 'montant_moins'),
+    '825': ('ma.fiscal.passage.line', 'reint_non_courante', 'montant_plus'),
+    '826': ('ma.fiscal.passage.line', 'reint_non_courante', 'montant_moins'),
+    '828': ('ma.fiscal.passage.line', 'deduc_courante', 'montant_plus'),
+    '830': ('ma.fiscal.passage.line', 'deduc_courante', 'montant_moins'),
+    '831': ('ma.fiscal.passage.line', 'deduc_non_courante', 'montant_plus'),
+    '7830': ('ma.fiscal.passage.line', 'deduc_non_courante', 'montant_moins'),
+    # tableau 240 - IS
+    '14353': ('ma.fiscal.is.line', 'ca_taux_reduit', 'montant'),
+    '14356': ('ma.fiscal.is.line', 'autres_produits', 'montant'),
+}
+
 
 def _get_cache_ttl(icp):
     try:
         return int(icp.get_param('ma_formules.api_cache_ttl', '10') or '10')
     except ValueError:
         return 10
+
+
+def _get_failure_ttl(icp):
+    """How long an unreachable formules API is left alone, in seconds.
+    Override with the ``ma_formules.api_failure_ttl`` system parameter; the
+    "Vider le cache des formules" button clears it immediately either way."""
+    try:
+        return int(icp.get_param('ma_formules.api_failure_ttl', str(_API_FAILURE_TTL))
+                   or _API_FAILURE_TTL)
+    except ValueError:
+        return _API_FAILURE_TTL
 
 
 def _normalise_formule(formule):
@@ -229,8 +380,13 @@ def _invalidate_api_cache(url=None):
     """
     if url:
         _API_CACHE.pop(url, None)
+        _API_FAILURE_CACHE.pop(url, None)
     else:
         _API_CACHE.clear()
+        # Clearing the cache means "try again now", so a remembered failure has
+        # to go with it - otherwise the button would appear to do nothing while
+        # the back-off window is still open.
+        _API_FAILURE_CACHE.clear()
 
 
 # --------------------------------------------------------------------------- #
@@ -575,11 +731,17 @@ class AccountReport_MaFiscal(models.Model):
             _logger.debug("Formules: serving from cache (%s)", url)
             return cached['data']
 
-        # 2. Try the remote API
-        formules = self._fetch_formules_from_api(url)
-        if formules:
-            _API_CACHE[url] = {'fetched_at': time.time(), 'data': formules, 'ttl': cache_ttl}
-            return formules
+        # 2. Try the remote API, unless it just failed (see _API_FAILURE_CACHE)
+        if _API_FAILURE_CACHE.get(url, 0) <= time.time():
+            formules = self._fetch_formules_from_api(url)
+            if formules:
+                _API_FAILURE_CACHE.pop(url, None)
+                _API_CACHE[url] = {'fetched_at': time.time(), 'data': formules, 'ttl': cache_ttl}
+                return formules
+            retry_ttl = _get_failure_ttl(icp)
+            _API_FAILURE_CACHE[url] = time.time() + retry_ttl
+            _logger.warning(
+                "Formules API unreachable (%s); not retrying for %ss", url, retry_ttl)
 
         # 3. Fallback: local table
         # If we have a stale cache entry (API was reachable before but is now
@@ -921,7 +1083,7 @@ class AccountReport_MaFiscal(models.Model):
                 code = match.group(1)
                 classes = []
                 saisie_codes = self._get_saisie_codes(options or {})
-                if code in saisie_codes:
+                if code in saisie_codes and code not in _INLINE_DETAIL_CODES:
                     classes.append('ma-editable-cell')
                 if code in self._ALWAYS_RED_EDI_CODES:
                     classes.append('text-danger')
@@ -972,7 +1134,13 @@ class AccountReport_MaFiscal(models.Model):
                 if not match:
                     continue
                 code = match.group(1)
-                if code in saisie_codes:
+                # A subtotal of the inline table is computed from its rows,
+                # never keyed into the cell - whatever the formules map says
+                # about it (see _INLINE_DETAIL_CODES and
+                # MaFiscalEvaluator.evaluate_code). Offering the pencil here
+                # would silently write an account.report.external.value the
+                # evaluator no longer reads.
+                if code in saisie_codes and code not in _INLINE_DETAIL_CODES:
                     figure_type = column_expression.figure_type or col_options.get('figure_type', 'monetary')
                     rounding = None
                     if figure_type == 'integer':
@@ -1196,7 +1364,15 @@ class AccountReport_MaFiscal(models.Model):
         out."""
         handler_model = self.custom_handler_model_id.model
         handler = self.env[handler_model] if handler_model in self.env.registry else None
-        return handler is not None and bool(getattr(handler, '_ma_model', None))
+        return (
+            handler is not None
+            and bool(getattr(handler, '_ma_model', None))
+            # A report that only HOSTS an editable table inside its static
+            # lines (Passage du RNC au RNF) is not a pure data-entry report:
+            # it has real account.move data behind its other cells, so the
+            # warnings this gates still apply to it.
+            and not getattr(handler, '_ma_hosts_static_lines', False)
+        )
 
     def _generate_common_warnings(self, options, warnings):
         if self._ma_is_data_entry_report():
@@ -1236,6 +1412,13 @@ class AccountReport_MaFiscal(models.Model):
             options['ma_add_line_button'] = {
                 'label': handler._ma_add_button_label,
                 'fields': fields_specs,
+                # Only a PURE data-entry report wants the date column-group
+                # header, the "Options" filter and the "En .DH" button hidden
+                # (they are leftovers of the framework's options['date']
+                # plumbing there). A static report hosting the table inline
+                # has real columns and a real date filter - see the
+                # t-inherit blocks in static/src/js/data_entry_popover.xml.
+                'hide_date_header': not getattr(handler, '_ma_hosts_static_lines', False),
             }
 
 
@@ -1265,8 +1448,67 @@ class AccountReportHandlerMaFiscal(models.AbstractModel):
                     expr=expression.display_name, sub=subformula,
                 ))
             code = match.group(1)
-            if evaluator.is_saisie_code(code) and not evaluator.has_manual_value(code):
+            if expression.figure_type == 'string':
+                # Tableau 220's free-text cells: the manual value lives in
+                # text_value, not value, so it is read directly instead of
+                # going through evaluate_code (which is float arithmetic).
+                # An empty one stays None = blank cell, same rule as below.
+                results[subformula] = evaluator.manual_text(code) or None
+            elif evaluator.is_saisie_code(code) and not evaluator.has_manual_value(code):
                 # Not entered yet → blank cell (instead of showing 0).
+                results[subformula] = None
+            else:
+                results[subformula] = evaluator.evaluate_code(code)
+
+        return results
+
+    def _report_custom_engine_ma_fiscal_scoped(
+        self, expressions, options, date_scope,
+        current_groupby, next_groupby,
+        offset=0, limit=None, warnings=None,
+    ):
+        """_report_custom_engine_ma_fiscal, but a nested code that is a real
+        cell somewhere in the liasse is evaluated with the date_scope THAT
+        cell declares, instead of inheriting this one. See
+        MaFiscalEvaluator._evaluate_nested_code for the why and the exact
+        rule; only from_beginning cells are affected.
+
+        Used by the Tableau de Financement, and by it alone, because it is the
+        one report built entirely out of other reports' totals and out of
+        differences between two balance-sheet dates:
+
+          * its masses (Financement permanent, Actif immobilisé...) are the
+            Bilan's own totals, whose sub-cells do not all share one scope -
+            "Résultat net de l'exercice" is strict_range inside an otherwise
+            from_beginning Passif total;
+          * its flux (Capacité d'autofinancement, Acquisitions
+            d'immobilisations, Emplois en non valeurs) are cells the ESG and
+            the Tableau des Immobilisations declare strict_range, which
+            cumulate every exercice when re-read at from_beginning;
+          * its Variations columns are CMP(EDI(N-1 code) - EDI(N code)), i.e.
+            one term per balance-sheet date, which no single scope can
+            evaluate - both terms land on the same date and every variation
+            cancels to 0,00 (the same trap as the stocks variation column,
+            see _report_custom_engine_ma_stock_variation).
+
+        Switching this report to the ordinary engine again would silently
+        bring all three back.
+        """
+        report = self.env['account.report'].browse(options['report_id'])
+        evaluator = MaFiscalEvaluator(
+            report, self.env, options, date_scope, pin_declared_scopes=True)
+        results = {'has_sublines': False}
+
+        for expression in expressions:
+            subformula = expression.subformula or ''
+            match = re.fullmatch(r'\s*edi[_ ](\S+)\s*', subformula)
+            if not match:
+                raise UserError(_(
+                    "Invalid subformula on expression %(expr)s: %(sub)s",
+                    expr=expression.display_name, sub=subformula,
+                ))
+            code = match.group(1)
+            if evaluator.is_saisie_code(code) and not evaluator.has_manual_value(code):
                 results[subformula] = None
             else:
                 results[subformula] = evaluator.evaluate_code(code)
@@ -1353,6 +1595,88 @@ class AccountReportHandlerMaFiscal(models.AbstractModel):
         return results
 
 
+    def _report_custom_engine_ma_stock_variation(
+        self, expressions, options, date_scope,
+        current_groupby, next_groupby,
+        offset=0, limit=None, warnings=None,
+    ):
+        """"Variation de stock en valeur (+ ou -)" = stock initial net - stock
+        final net, each term evaluated with ITS OWN date_scope, read from that
+        same line's net_init / net_fin cells. Same fix, and for exactly the same
+        reason, as _report_custom_engine_ma_amort_cumul_fin above.
+
+        The master formula behind every one of these cells is
+        ``EDI('<net_init code>')-EDI('<net_fin code>')``, which matches the DGI
+        sheet's own column-7 header ("7 = 6 - 3"). Run through
+        _report_custom_engine_ma_fiscal it can only ever return 0: that engine
+        applies ONE date_scope to the whole formula tree, so the nested
+        EDI(net_init code) is re-evaluated at the variation cell's own scope
+        (from_beginning) instead of to_beginning_of_period - silently becoming
+        the period-END balance, i.e. the stock final again. initial - final then
+        cancels to 0.00 on every line, however much the stock actually moved.
+        Flipping the cell's date_scope to to_beginning_of_period just breaks it
+        the other way round (both terms become the opening balance).
+
+        Unlike the cumul-fin engine this one takes no codes of its own in the
+        subformula: it reads the two operands straight off the sibling
+        net_init / net_fin expressions, both of which this very line already
+        displays. So the subformula stays a plain "edi_<code>" naming the
+        variation's own codeEdi - which keeps the cell visible to the EDI
+        exporter (dbc_liasse_edi discovers cells by that subformula) and keeps
+        it impossible for this column to disagree with the two columns it is
+        the difference of.
+
+        Reading the operands from the line also sidesteps two mistakes in the
+        master formulas, which no date_scope could have rescued:
+          * 1610 (Emballages perdus) reads EDI('1609')+EDI('1606') - a "+"
+            where every other variation code has a "-".
+          * 1670 (Travaux en cours) reads EDI('1669')-EDI('1658'), and 1658 is
+            the net final of "Etudes en cours", the line above; the Travaux
+            line's own net final is 1666.
+        """
+        report = self.env['account.report'].browse(options['report_id'])
+        evaluators_by_scope = {}
+
+        def get_evaluator(scope):
+            if scope not in evaluators_by_scope:
+                evaluators_by_scope[scope] = MaFiscalEvaluator(report, self.env, options, scope)
+            return evaluators_by_scope[scope]
+
+        def term(expression, siblings, label, default_scope):
+            sibling = siblings.get(label)
+            if not sibling:
+                raise UserError(_(
+                    "Line %(line)s has no %(label)s cell for %(expr)s to take "
+                    "the variation de stock from.",
+                    line=expression.report_line_id.display_name,
+                    label=label, expr=expression.display_name,
+                ))
+            match = re.fullmatch(r'\s*edi[_ ](\S+)\s*', sibling.subformula or '')
+            if not match:
+                raise UserError(_(
+                    "Invalid subformula on expression %(expr)s: %(sub)s",
+                    expr=sibling.display_name, sub=sibling.subformula,
+                ))
+            return get_evaluator(sibling.date_scope or default_scope).evaluate_code(match.group(1))
+
+        results = {'has_sublines': False}
+
+        for expression in expressions:
+            subformula = expression.subformula or ''
+            if not re.fullmatch(r'\s*edi[_ ](\S+)\s*', subformula):
+                raise UserError(_(
+                    "Invalid subformula on expression %(expr)s: %(sub)s",
+                    expr=expression.display_name, sub=subformula,
+                ))
+            siblings = {s.label: s for s in expression.report_line_id.expression_ids}
+            results[subformula] = (
+                term(expression, siblings, 'net_init', 'to_beginning_of_period')
+                - term(expression, siblings, 'net_fin', 'from_beginning')
+            )
+
+        return results
+
+
 class AccountReportHandlerMaDataEntry(models.AbstractModel):
     """Shared dynamic-lines base for every "data-entry" report (no EDI
     code or formula behind any cell): one line per record of the
@@ -1388,13 +1712,22 @@ class AccountReportHandlerMaDataEntry(models.AbstractModel):
     _ma_fields = []
     _ma_add_button_label = ""
     _ma_section_field = None
+    # Name of a Date field on _ma_model to scope rows by, INSTEAD of matching
+    # their annee_fiscale against the filter's year, and how far back that
+    # scope reaches:
+    #   'to_period_end' (default) -> every row dated on or before the end of
+    #       the selected period, whatever exercice it belongs to. What an
+    #       état d'amortissements needs: an asset bought in 2020 is still being
+    #       amortised in 2025 and must stay on the 2025 sheet.
+    #   'strict_range'            -> only rows dated inside the selected
+    #       period. What a tableau des locations needs: it lists the actes of
+    #       the exercice being filed, nothing earlier.
+    _ma_date_field = None
+    _ma_date_scope = 'to_period_end'
 
     def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals, warnings=None):
         company_ids = report.get_report_company_ids(options)
-        domain = [('company_id', 'in', company_ids)]
-        date_to = options.get('date', {}).get('date_to')
-        if date_to and 'annee_fiscale' in self.env[self._ma_model]._fields:
-            domain.append(('annee_fiscale', '=', str(fields.Date.from_string(date_to).year)))
+        domain = self._ma_records_domain(report, options)
         records = self.env[self._ma_model].search(domain)
 
         if self._ma_section_field:
@@ -1420,6 +1753,47 @@ class AccountReportHandlerMaDataEntry(models.AbstractModel):
             # we actually want for an otherwise-empty data-entry table.
             lines.append((0, self._ma_get_empty_line_dict(report, options)))
         return lines
+
+    def _ma_records_domain(self, report, options):
+        """Which rows of _ma_model belong to the period *options* selects.
+
+        Two schemes, per handler:
+        * _ma_date_field set -> rows selected on that date field, as far back
+          as _ma_date_scope says: the whole history up to the end of the
+          period ('to_period_end', the état des dotations aux amortissements,
+          which lists every asset still being amortised whatever exercice it
+          was acquired in) or the period alone ('strict_range', the tableau
+          des locations et baux, which lists the actes of this exercice).
+        * otherwise -> rows whose own annee_fiscale equals the filter's year.
+        """
+        domain = [('company_id', 'in', report.get_report_company_ids(options))]
+        date_to = options.get('date', {}).get('date_to')
+        if not date_to:
+            return domain
+        model_fields = self.env[self._ma_model]._fields
+        if self._ma_date_field and self._ma_date_field in model_fields:
+            date_to = fields.Date.from_string(date_to)
+            domain.append((self._ma_date_field, '<=', date_to))
+            if self._ma_date_scope == 'strict_range':
+                domain.append((self._ma_date_field, '>=', self._ma_period_start(options, date_to)))
+        elif 'annee_fiscale' in model_fields:
+            domain.append(('annee_fiscale', '=', str(fields.Date.from_string(date_to).year)))
+        return domain
+
+    def _ma_period_start(self, options, date_to):
+        """Lower bound of the selected period, for _ma_date_scope='strict_range'.
+
+        options['date']['date_from'] can only be trusted in 'range' mode. These
+        reports declare filter_date_range=False, and for a single date
+        account_reports' own _init_options_date fills date_from with the start
+        of date_to's *month* - so reading it blindly would hide every acte but
+        December's. Fall back to the exercice date_to falls in, which is what
+        "the year in the filter" means on a liasse.
+        """
+        date_options = options.get('date', {})
+        if date_options.get('mode') == 'range' and date_options.get('date_from'):
+            return fields.Date.from_string(date_options['date_from'])
+        return self.env.company.compute_fiscalyear_dates(date_to)['date_from']
 
     def _ma_get_empty_line_dict(self, report, options):
         columns = [report._build_column_dict(None, col_options, options=options) for col_options in options['columns']]
@@ -1553,6 +1927,8 @@ class AccountReportHandlerMaRental(models.AbstractModel):
     _ma_model = 'ma.fiscal.rental.line'
     _ma_fields = _MA_RENTAL_FIELDS
     _ma_add_button_label = "Ajouter une location"
+    _ma_date_field = 'date_conclusion'
+    _ma_date_scope = 'strict_range'
 
 
 class AccountReportHandlerMaDotation(models.AbstractModel):
@@ -1563,6 +1939,7 @@ class AccountReportHandlerMaDotation(models.AbstractModel):
     _ma_model = 'ma.fiscal.dotation.line'
     _ma_fields = _MA_AMORT_FIELDS
     _ma_add_button_label = "Ajouter une immobilisation"
+    _ma_date_field = 'date_entree'
 
 
 class AccountReportHandlerMaTitres(models.AbstractModel):
@@ -1573,6 +1950,125 @@ class AccountReportHandlerMaTitres(models.AbstractModel):
     _ma_model = 'ma.fiscal.titres.line'
     _ma_fields = _MA_TITRES_FIELDS
     _ma_add_button_label = "Ajouter un titre de participation"
+
+
+class AccountReportHandlerMaCession(models.AbstractModel):
+    _name = 'account.report.handler.ma_cession'
+    _inherit = 'account.report.handler.ma_data_entry'
+    _description = "Tableau des Plus ou Moins Values sur Cessions ou Retraits d'Immobilisations - Custom Handler"
+
+    _ma_model = 'ma.fiscal.cession.line'
+    _ma_fields = _MA_CESSION_FIELDS
+    _ma_add_button_label = "Ajouter une cession"
+    # No _ma_date_field: scoped by annee_fiscale like the capital and titres
+    # tables. "Date de cession ou de retrait" is a column of the tableau
+    # (codeEdi 1929), and a cession belongs to the exercice it happened in -
+    # it must not carry over to the next one the way an asset still being
+    # amortised does (AccountReportHandlerMaDotation).
+
+
+class AccountReportHandlerMaInlineTable(models.AbstractModel):
+    """Shared base for a report that HOSTS an editable table inside its own
+    static lines, rather than being one (the six handlers above).
+
+    Such a report keeps every static line and every EDI-driven cell; a few
+    of those lines additionally own a block of rows the user keys in, shown
+    one level underneath them. So this inherits BOTH the fiscal engine
+    (every other cell is computed from the formules map) and the data-entry
+    base (the "+" button, the create/edit popup and the per-row pencil/trash
+    all come from there) - and then turns off the one piece of the
+    data-entry base that does not apply: its _dynamic_lines_generator, which
+    would append the rows at the bottom of the report instead of under the
+    line they belong to.
+
+    A subclass sets _ma_model / _ma_fields / _ma_add_button_label like any
+    data-entry handler, plus _ma_section_lines: {report.line xml_id: value of
+    the model's `section` field}.
+
+    _ma_hosts_static_lines is what tells the rest of the module this is the
+    hybrid case: the client keeps the date column header and the "En .DH"
+    button (_init_options_ma_add_line_button), and the report keeps the
+    common warnings (_ma_is_data_entry_report).
+    """
+    _name = 'account.report.handler.ma_inline_table'
+    _inherit = ['account.report.handler.ma_fiscal', 'account.report.handler.ma_data_entry']
+    _description = "Report Hosting an Inline Editable Table - Shared Custom Handler"
+
+    _ma_hosts_static_lines = True
+    _ma_section_lines = {}
+
+    def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals, warnings=None):
+        # The rows are not dynamic lines of their own: they are injected
+        # under their section's static line by _custom_line_postprocessor.
+        return []
+
+    def _custom_line_postprocessor(self, report, options, lines):
+        lines = super()._custom_line_postprocessor(report, options, lines)
+        if not self._ma_section_lines:
+            return lines
+
+        date_to = options.get('date', {}).get('date_to')
+        year = str(fields.Date.from_string(date_to).year) if date_to else str(fields.Date.today().year)
+        records = self.env[self._ma_model].search([
+            ('company_id', 'in', report.get_report_company_ids(options)),
+            ('annee_fiscale', '=', year),
+        ])
+
+        # {report.line id: section} for the lines that own a block.
+        section_by_line_id = {}
+        for xmlid, section in self._ma_section_lines.items():
+            section_line = self.env.ref(xmlid, raise_if_not_found=False)
+            if section_line:
+                section_by_line_id[section_line.id] = section
+
+        out = []
+        for line in lines:
+            out.append(line)
+            model, res_id = report._get_model_info_from_id(line['id'])
+            if model != 'account.report.line':
+                continue
+            section = section_by_line_id.get(res_id)
+            if not section:
+                continue
+            for record in records.filtered(lambda r, sec=section: r.section == sec):
+                out.append(self._ma_inline_row_line_dict(report, options, line, record))
+        return out
+
+    def _ma_inline_row_line_dict(self, report, options, section_line, record):
+        """One detail row, rendered one level under its section line.
+
+        The intitulé goes in the line's own name (the first column of these
+        reports is their label column, not an account.report.column), and the
+        amounts land in their columns by matching the model's field names to
+        the columns' expression labels - which is exactly what
+        _ma_get_record_line_dict already does.
+        """
+        rslt = self._ma_get_record_line_dict(report, options, record)
+        rslt['name'] = record.intitule or ''
+        rslt['level'] = (section_line.get('level') or 1) + 1
+        return rslt
+
+
+class AccountReportHandlerMaPassage(models.AbstractModel):
+    _name = 'account.report.handler.ma_passage'
+    _inherit = 'account.report.handler.ma_inline_table'
+    _description = "Passage du Résultat Net Comptable au Résultat Net Fiscal - Custom Handler"
+
+    _ma_model = 'ma.fiscal.passage.line'
+    _ma_fields = _MA_PASSAGE_FIELDS
+    _ma_add_button_label = "Ajouter une ligne de détail"
+    _ma_section_lines = _PASSAGE_SECTION_LINES
+
+
+class AccountReportHandlerMaIs(models.AbstractModel):
+    _name = 'account.report.handler.ma_is'
+    _inherit = 'account.report.handler.ma_inline_table'
+    _description = "État pour le Calcul de l'Impôt sur les Sociétés - Custom Handler"
+
+    _ma_model = 'ma.fiscal.is.line'
+    _ma_fields = _MA_IS_FIELDS
+    _ma_add_button_label = "Ajouter une ligne de détail"
+    _ma_section_lines = _IS_SECTION_LINES
 
 
 # --------------------------------------------------------------------------- #
@@ -1593,7 +2089,8 @@ class MaFiscalEvaluator:
         'dbc_liasse_fiscale.bilan_amort_report',
     )
 
-    def __init__(self, report, env, options, date_scope):
+    def __init__(self, report, env, options, date_scope,
+                 pin_declared_scopes=False, scope_pool=None):
         self.report = report
         self.env = env
         self.options = options
@@ -1612,7 +2109,16 @@ class MaFiscalEvaluator:
         self._code_cache = {}       # memo: code → float (value from evaluate_code)
         self._manual_cache = {}     # memo: code → float (sum of saved manual values)
         self._manual_exists = {}    # memo: code → bool (any saved value in scope?)
+        self._manual_text_cache = {}  # memo: code → str (tableau 220's text cells)
         self._prefix_sums = {}      # memo: prefix → (debit, credit)
+        self._inline_cache = {}     # memo: code → float (inline table subtotal)
+        # See _evaluate_nested_code: off by default, so every existing report
+        # keeps evaluating a whole formula tree at the cell's own date_scope.
+        self._pin_scopes = pin_declared_scopes
+        # Shared between an evaluator and the per-scope siblings it spawns, so
+        # the registry is built once and each scope's evaluator (with its own
+        # memo caches) is reused for the whole render.
+        self._scope_pool = scope_pool if scope_pool is not None else {}
 
         # Map every expression whose subformula is ``edi_<code>`` (with or
         # without the "editable " prefix) to the EDI code, so that
@@ -1634,6 +2140,55 @@ class MaFiscalEvaluator:
         the literal ``"Saisie"`` or ``"Somme"`` (see _get_saisie_codes)."""
         return self.formules.get(code, '').strip().strip('"').strip().lower() in ('saisie', 'somme')
 
+    def _manual_target_expressions(self):
+        """``{code: [expression ids]}`` for the expressions that ACTUALLY hold
+        a stored manual value, anywhere in the database.
+
+        _code_to_expressions, built in __init__, only knows the report being
+        rendered, which is right for everything it is used for except one case:
+        a formula that reaches a "Saisie" cell living on ANOTHER report. The
+        Tableau de financement is built that way throughout - 14235 is
+        EDI('10083'), whose terms are the "Acquisitions" cells keyed in on the
+        Immobilisations report - so the manual value was invisible from here
+        and the cell silently read 0 however much had been entered.
+
+        This is keyed off account.report.external.value and NOT off the
+        expression table, which matters for speed: there is one row per value
+        somebody has actually typed (tens of them), against ~1900 custom
+        expressions. A code nobody ever keyed a value for is therefore absent
+        from this map and short-circuits to 0.0 with no query at all - exactly
+        as the per-report map did before. Scanning every expression instead
+        made each nested code pay an external-value search and took a report
+        render from under a second to over a minute.
+
+        Cached on *options*, a fresh dict per render, so it is built once
+        however many evaluators (one per date_scope) a render constructs.
+        """
+        mapping = self.options.get('ma_manual_target_expressions')
+        if mapping is None:
+            mapping = {}
+            targets = self.env['account.report.external.value'].search_read(
+                [('company_id', 'in', self.report.get_report_company_ids(self.options))],
+                ['target_report_expression_id'],
+            )
+            expression_ids = {
+                row['target_report_expression_id'][0]
+                for row in targets if row.get('target_report_expression_id')
+            }
+            for expression in self.env['account.report.expression'].browse(
+                    sorted(expression_ids)).exists():
+                match = re.fullmatch(
+                    r'(?:editable\s+)?edi[_ ](\w+)', (expression.subformula or '').strip())
+                if match:
+                    mapping.setdefault(match.group(1), []).append(expression.id)
+            self.options['ma_manual_target_expressions'] = mapping
+        return mapping
+
+    def _expressions_for_manual(self, code):
+        """Expressions whose stored manual value is this code's, preferring the
+        report being rendered and falling back to wherever the value lives."""
+        return self._code_to_expressions.get(code) or self._manual_target_expressions().get(code)
+
     def _manual_domain(self, expression_ids):
         """Domain that scopes account.report.external.value to the current
         date range + companies of this evaluator instance."""
@@ -1652,7 +2207,7 @@ class MaFiscalEvaluator:
         current period/company scope (used to decide blank vs 0 display)."""
         if code in self._manual_exists:
             return self._manual_exists[code]
-        expression_ids = self._code_to_expressions.get(code)
+        expression_ids = self._expressions_for_manual(code)
         if not expression_ids:
             self._manual_exists[code] = False
             return False
@@ -1669,7 +2224,7 @@ class MaFiscalEvaluator:
         """
         if code in self._manual_cache:
             return self._manual_cache[code]
-        expression_ids = self._code_to_expressions.get(code)
+        expression_ids = self._expressions_for_manual(code)
         if not expression_ids:
             self._manual_cache[code] = 0.0
             return 0.0
@@ -1678,11 +2233,90 @@ class MaFiscalEvaluator:
         self._manual_cache[code] = value
         return value
 
+    def manual_text(self, code):
+        """The saved manual TEXT of *code* (account.report.external.value's
+        text_value), or '' when nothing was entered yet.
+
+        Tableau 220 (Principales Méthodes d'Evaluation) is the one tableau of
+        the liasse whose 23 cells are free text, not amounts: every one of its
+        codes is "Saisie" in the formules map, and no other cell's formula
+        ever references them.  Odoo stores a manual value in `value` or in
+        `text_value` depending on the target expression's figure_type, so
+        _manual_value's sum() reads 0.0 for these - which is why they are read
+        here instead, and why the engine (not evaluate_code) decides which of
+        the two to call: evaluate_code feeds arithmetic, and must keep
+        returning floats.
+
+        Several rows can exist for one code (one per date in scope); the most
+        recent non-empty one wins, which matches what the cell shows on
+        screen after an edit.
+        """
+        if code in self._manual_text_cache:
+            return self._manual_text_cache[code]
+        expression_ids = self._expressions_for_manual(code)
+        if not expression_ids:
+            self._manual_text_cache[code] = ''
+            return ''
+        records = self.env['account.report.external.value'].search(
+            self._manual_domain(expression_ids), order='date ASC, id ASC')
+        text = ''
+        for record in records:
+            if (record.text_value or '').strip():
+                text = record.text_value
+        self._manual_text_cache[code] = text
+        return text
+
+    # ------------------------------ Tableau 7 inline-table subtotals
+
+    def _inline_detail_total(self, code):
+        """Sum of the editable rows behind one of the inline-table subtotals
+        (tableau 7's réintégrations/déductions, tableau 240's taux réduit and
+        autres produits), or None if *code* is not one of them.
+
+        These eight codes are resolved here rather than through the formules
+        map on purpose. They are the only cells of the liasse whose value is
+        a sum of rows the user keys in INSIDE the report, and the DGI grid
+        has no subtotal cell for them at all (C_822 is the five-row range
+        'T3'!$B$13:$B$17, not a total) - so there is no formula that could
+        be right, and a "Saisie" value keyed straight into the cell would
+        disagree with the rows shown underneath it the moment either changed.
+
+        Scope note: the rows carry their own annee_fiscale, exactly like the
+        six data-entry annexes, so they follow the report's date filter and
+        not `date_scope` - an N-1 comparison column of this report shows the
+        same rows as its N column, which is also what the formules-driven
+        cells of a Saisie code do.
+        """
+        spec = _INLINE_DETAIL_CODES.get(code)
+        if not spec:
+            return None
+        if code in self._inline_cache:
+            return self._inline_cache[code]
+        model_name, section, field_name = spec
+        date_to = self.options.get('date', {}).get('date_to')
+        year = str(fields.Date.from_string(date_to).year) if date_to else str(fields.Date.today().year)
+        rows = self.env[model_name].search([
+            ('company_id', 'in', self.report.get_report_company_ids(self.options)),
+            ('annee_fiscale', '=', year),
+            ('section', '=', section),
+        ])
+        value = sum(rows.mapped(field_name))
+        self._inline_cache[code] = value
+        return value
+
     # ------------------------------------------------------------------ EDI
     def evaluate_code(self, code, stack=()):
         code = str(code).strip()
         if code in self._code_cache:
             return self._code_cache[code]
+
+        # Before anything else: a subtotal of an inline editable table is
+        # owned by that table, whatever (if anything) the formules map holds
+        # for it.
+        inline_total = self._inline_detail_total(code)
+        if inline_total is not None:
+            self._code_cache[code] = inline_total
+            return inline_total
         if code in stack:
             raise UserError(_(
                 "Circular EDI reference detected: %(chain)s → %(code)s",
@@ -1728,6 +2362,71 @@ class MaFiscalEvaluator:
         self._code_cache[code] = value
         return value
 
+    # ------------------------------------- nested codes and their scopes
+
+    def _evaluate_nested_code(self, code, stack):
+        """Resolve a code referenced from INSIDE another code's formula.
+
+        By default that is simply evaluate_code() on this same evaluator: the
+        nested code inherits the cell's date_scope, which is what every report
+        but the Tableau de Financement relies on.
+
+        When this evaluator was built with pin_declared_scopes=True, a nested
+        code that is ALSO a real cell somewhere in the liasse is instead
+        evaluated with the date_scope that cell declares. The Tableau de
+        Financement needs this because it is assembled out of other reports'
+        totals: EDI('13385') (Financement permanent) nests EDI('13409')
+        "Résultat net de l'exercice" = -SE('7')-SE('6'), which the Bilan
+        Passif declares strict_range precisely because Odoo never zeroes class
+        6/7 at year end. Re-evaluated at this cell's from_beginning it returns
+        every exercice's result added together, inflating Financement
+        permanent (and so the FDR and the Trésorerie nette under it).
+
+        Only from_beginning is corrected, and deliberately so: it is the scope
+        that silently cumulates a flux code, whereas to_beginning_of_period is
+        how the N-1 columns of this report shift a balance back one year, and
+        pinning there would turn their nested flux codes back into the current
+        exercice's, making column (b) repeat column (a).
+        """
+        if self._pin_scopes and self.date_scope == 'from_beginning':
+            declared = self._declared_scopes().get(code)
+            if declared and declared != self.date_scope:
+                return self._scoped_sibling(declared).evaluate_code(code, stack)
+        return self.evaluate_code(code, stack)
+
+    def _declared_scopes(self):
+        """{edi code: date_scope} over every cell of every Moroccan report.
+
+        A code's scope turns out to be a property of the CODE, not of the
+        report showing it: of the 1554 codes declared as a cell somewhere, not
+        one is declared with two different scopes. So this registry is
+        unambiguous, and it is read from the reports themselves rather than
+        hardcoded, so it cannot drift when a scope is changed in XML.
+        """
+        if self._scope_pool.get('scopes') is None:
+            scopes = {}
+            rows = self.env['account.report.expression'].search_read(
+                [('engine', '=', 'custom'), ('subformula', '!=', False)],
+                ['subformula', 'date_scope'],
+            )
+            for row in rows:
+                match = re.fullmatch(
+                    r'\s*-?\s*(?:editable\s+)?edi[_ ](\w+)\s*', row['subformula'] or '')
+                if match:
+                    scopes.setdefault(match.group(1), row['date_scope'])
+            self._scope_pool['scopes'] = scopes
+        return self._scope_pool['scopes']
+
+    def _scoped_sibling(self, scope):
+        """This evaluator's twin for another date_scope, created once."""
+        pool = self._scope_pool.setdefault('evaluators', {})
+        if scope not in pool:
+            pool[scope] = MaFiscalEvaluator(
+                self.report, self.env, self.options, scope,
+                pin_declared_scopes=True, scope_pool=self._scope_pool,
+            )
+        return pool[scope]
+
     def _eval_node(self, node, stack):
         kind = node[0]
         if kind == 'const':
@@ -1751,7 +2450,7 @@ class MaFiscalEvaluator:
                 raise UserError(_("Division by zero while evaluating an EDI formule"))
             return left / right
         if kind == 'edi':
-            return self.evaluate_code(node[1], stack)
+            return self._evaluate_nested_code(node[1], stack)
         if kind == 'se':
             debit, credit = self._get_prefix_sums(node[1])
             # # SE('xxx') → absolute balance (always positive)

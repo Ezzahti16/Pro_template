@@ -19,7 +19,7 @@
             <field name="name">DESCRIPTION</field>
             <field name="expression_label">description</field>
             <field name="sequence">10</field>
-            <field name="figure_type">monetary</field>
+            <field name="figure_type">string</field>
         </record>
     </field>
     <field name="line_ids">
@@ -49,6 +49,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14342</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -65,6 +66,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14343</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -81,6 +83,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14344</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -97,6 +100,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14345</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -120,6 +124,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14301</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -136,6 +141,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14303</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -152,6 +158,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14305</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -181,6 +188,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14307</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -197,6 +205,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14309</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -213,6 +222,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14311</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -236,6 +246,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14313</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -252,6 +263,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14315</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -274,6 +286,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14317</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -290,6 +303,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14319</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -306,6 +320,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14321</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -322,6 +337,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14323</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -338,6 +354,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14325</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -360,6 +377,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14327</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -376,6 +394,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14329</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -392,6 +411,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14331</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -414,6 +434,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14333</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -430,6 +451,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14335</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>
@@ -446,6 +468,7 @@
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14337</field>
                         <field name="date_scope">from_beginning</field>
+                        <field name="figure_type">string</field>
                     </record>
                 </field>
             </record>

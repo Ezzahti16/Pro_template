@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Bound to account.move.line so that the action shows up in the "Journal
+        Items" list (account.view_move_line_tree). It confirms the draft entries
+        owning the selected lines.
+    -->
+    <record id="action_confirm_draft_entries" model="ir.actions.server">
+        <field name="name">Confirm Draft Entries</field>
+        <field name="model_id" ref="account.model_account_move_line"/>
+        <field name="binding_model_id" ref="account.model_account_move_line"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice')])]"/>
+        <field name="code">targets = records or record
+if targets:
+    action = targets.action_dbc_bulk_confirm_entries()
+</field>
+    </record>
+
+</odoo>

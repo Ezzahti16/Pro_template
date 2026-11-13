@@ -1,0 +1,104 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dbc_bulk_confirm_entries
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "%s entry(ies) confirmed."
+msgstr "%s écriture(s) confirmée(s)."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "%s entry(ies) could not be confirmed:"
+msgstr "%s écriture(s) n'ont pas pu être confirmées :"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "%s entry(ies) skipped (not in draft state)."
+msgstr "%s écriture(s) ignorée(s) (pas à l'état brouillon)."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "- ... and %s more (see the entry's chatter)."
+msgstr "- ... et %s autre(s) (voir le journal de l'écriture)."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "Bulk confirmation failed"
+msgstr "Échec de la confirmation groupée"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "Bulk confirmation partially done"
+msgstr "Confirmation groupée partiellement effectuée"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "Bulk confirmation: this entry could not be posted."
+msgstr "Confirmation groupée : cette écriture n'a pas pu être comptabilisée."
+
+#. module: dbc_bulk_confirm_entries
+#: model:ir.actions.server,name:dbc_bulk_confirm_entries.action_confirm_draft_entries
+msgid "Confirm Draft Entries"
+msgstr "Confirmer les écritures brouillon"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "Entries confirmed"
+msgstr "Écritures confirmées"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "None of the selected entries is in draft state."
+msgstr "Aucune des écritures sélectionnées n'est à l'état brouillon."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "Nothing to confirm"
+msgstr "Rien à confirmer"
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "Please select at least one journal entry."
+msgstr "Veuillez sélectionner au moins une pièce comptable."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move_line.py:0
+msgid "Please select at least one journal item."
+msgstr "Veuillez sélectionner au moins une écriture comptable."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move_line.py:0
+msgid "The selected journal items are not linked to any journal entry."
+msgstr "Les écritures sélectionnées ne sont rattachées à aucune pièce comptable."
+
+#. module: dbc_bulk_confirm_entries
+#. odoo-python
+#: code:addons/dbc_bulk_confirm_entries/models/account_move.py:0
+msgid "You are not allowed to post journal entries."
+msgstr "Vous n'êtes pas autorisé à comptabiliser des écritures."

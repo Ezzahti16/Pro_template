@@ -8,3 +8,6 @@ access_ma_fiscal_leasing_line,ma.fiscal.leasing.line user,model_ma_fiscal_leasin
 access_ma_fiscal_rental_line,ma.fiscal.rental.line user,model_ma_fiscal_rental_line,account.group_account_readonly,1,1,1,1
 access_ma_fiscal_dotation_line,ma.fiscal.dotation.line user,model_ma_fiscal_dotation_line,account.group_account_readonly,1,1,1,1
 access_ma_fiscal_titres_line,ma.fiscal.titres.line user,model_ma_fiscal_titres_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_passage_line,ma.fiscal.passage.line user,model_ma_fiscal_passage_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_is_line,ma.fiscal.is.line user,model_ma_fiscal_is_line,account.group_account_readonly,1,1,1,1
+access_ma_fiscal_cession_line,ma.fiscal.cession.line user,model_ma_fiscal_cession_line,account.group_account_readonly,1,1,1,1

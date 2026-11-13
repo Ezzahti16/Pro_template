@@ -26,7 +26,7 @@
         <record id="bilan_dotation_column_immobilisation" model="account.report.column">
             <field name="name">Immobilisations concernées</field>
             <field name="expression_label">immobilisation</field>
-            <field name="sequence">10</field>
+            <field name="sequence">5</field>
             <field name="figure_type">string</field>
         </record>
         <record id="bilan_dotation_column_date_entree" model="account.report.column">

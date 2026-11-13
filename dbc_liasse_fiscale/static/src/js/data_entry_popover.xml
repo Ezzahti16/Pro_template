@@ -77,19 +77,27 @@
          and "En .DH" buttons and the date column-group header row above
          the table remain meaningless leftovers of the framework's
          options['date'] plumbing, so they stay hidden whenever
-         ma_add_line_button is set (i.e. for exactly these reports). -->
+         ma_add_line_button is set (i.e. for exactly these reports).
+
+         "Passage du Résultat Net Comptable au Résultat Net Fiscal" also
+         carries ma_add_line_button (its réintégrations/déductions blocks
+         host the same editable table inline) but is an ordinary static
+         report otherwise: real columns, a real date filter, real amounts
+         in .DH. It therefore sets hide_date_header=false and keeps all of
+         this chrome - see _init_options_ma_add_line_button in
+         models/account_report.py. -->
     <t t-inherit="account_reports.AccountReportFiltersCustomizable" t-inherit-mode="extension">
         <xpath expr="//t[@t-if='hasExtraOptionsFilter']" position="attributes">
-            <attribute name="t-if">hasExtraOptionsFilter and !controller.cachedFilterOptions.ma_add_line_button</attribute>
+            <attribute name="t-if">hasExtraOptionsFilter and !(controller.cachedFilterOptions.ma_add_line_button and controller.cachedFilterOptions.ma_add_line_button.hide_date_header)</attribute>
         </xpath>
         <xpath expr="//div[@id='filter_rounding_unit']" position="attributes">
-            <attribute name="t-if">!controller.cachedFilterOptions.ma_add_line_button</attribute>
+            <attribute name="t-if">!(controller.cachedFilterOptions.ma_add_line_button and controller.cachedFilterOptions.ma_add_line_button.hide_date_header)</attribute>
         </xpath>
     </t>
 
     <t t-inherit="account_reports.AccountReportHeaderCustomizable" t-inherit-mode="extension">
         <xpath expr="//t[@t-foreach='columnHeaders']" position="attributes">
-            <attribute name="t-if">!controller.cachedFilterOptions.ma_add_line_button</attribute>
+            <attribute name="t-if">!(controller.cachedFilterOptions.ma_add_line_button and controller.cachedFilterOptions.ma_add_line_button.hide_date_header)</attribute>
         </xpath>
     </t>
 </templates>

@@ -37,8 +37,11 @@ class MaFiscalRentalLine(models.Model):
     num_ce = fields.Char(string="N° Carte d'étranger du propriétaire")
     date_conclusion = fields.Date(string="Date de conclusion de l'acte de location")
     montant_annuel = fields.Float(string="Montant annuel de location")
-    montant_loyer_charges = fields.Float(string="Montant du loyer compris dans les charges de l'exercice")
-    # Legacy sheet marks whichever applies with an "X" rather than picking
-    # one of two options - two plain text columns, not a selection field.
-    bail_ordinaire = fields.Char(string="Nature du contrat : Bail-ordinaire")
+    montant_loyer_charges = fields.Float(string="Montant de location de l'exercice")
+    # Column 12 of the reference sheet is one free-text "Contrat" cell naming
+    # the nature of the contract ("Bail ordinaire", ...), not a pair of
+    # X-marked columns. leasing_nieme_periode is kept so its codeEdi (1274)
+    # still has a field to read, but it has no column and no popup input - see
+    # _MA_RENTAL_FIELDS in account_report.py.
+    bail_ordinaire = fields.Char(string="Contrat")
     leasing_nieme_periode = fields.Char(string="Nature du contrat : Leasing (Nème période)")

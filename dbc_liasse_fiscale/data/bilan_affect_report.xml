@@ -40,7 +40,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_471</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">to_beginning_of_period</field>
                     </record>
                 </field>
             </record>
@@ -55,7 +55,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_473</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">to_beginning_of_period</field>
                     </record>
                 </field>
             </record>
@@ -70,7 +70,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_475</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">to_beginning_of_period</field>
                     </record>
                 </field>
             </record>
@@ -85,7 +85,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_477</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">to_beginning_of_period</field>
                     </record>
                 </field>
             </record>
@@ -100,7 +100,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_479</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">to_beginning_of_period</field>
                     </record>
                 </field>
             </record>
@@ -115,7 +115,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_481</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">to_beginning_of_period</field>
                     </record>
                 </field>
             </record>

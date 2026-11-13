@@ -5,15 +5,22 @@
         encouragées". Single "Montant" column, no N/N-1 comparison - matches
         the source layout (sheet "18" of the legacy xlsx).
 
-        Two of the EDI codes used here ("ET_18A" and "ET_18B") have the
-        literal formule "Somme" instead of a real formula or "Saisie": the
-        legacy system treats them as a manually-entered total with no
-        further breakdown. account_report.py's is_saisie_code()/
-        _get_saisie_codes() now treat "Somme" exactly like "Saisie" (manual
-        entry, editable cell, blank until filled in) - see that file for
-        the change. The "TOTAL" row below binds directly to edi_17929
-        instead of edi_ET_18B though, since 17929 already computes the
-        exact same sum (14992+14994+14996) from a real formula.
+        Two of its lines host an inline editable table instead of a fixed
+        set of rows, because that is how the DGI grid is built: C_14990 /
+        C_14353 ('T15'!$A$13:$A$14 / $B$13:$B$14) and C_14355 / C_14356
+        ($A$20:$A$21 / $B$20:$B$21) are RANGES whose libellé the preparer
+        types - which is why a real liasse shows "CA soumis au taux réduit
+        de 8,75%", "... de 10%" and "CA soumis au barème plafonné" as three
+        separate rows rather than fixed report lines. The subtotal rows above
+        each block carry no codeEdi at all; they are the sum of what was
+        typed, resolved through _INLINE_DETAIL_CODES in account_report.py.
+
+        The legacy "Somme" placeholders ET_18A / ET_18B are therefore gone:
+        the taux-réduit subtotal now binds to the real DGI code 14353 (the
+        sum of its block), and the duplicate "TOTAL" row that re-declared
+        edi_17929 - already carried by the "4- Autres produits taxables"
+        header above it - is replaced by the "(ajout)" block the grid
+        actually has in that position.
     -->
     <record id="bilan_is_report" model="account.report">
         <field name="name">État pour le Calcul de l'Impôt sur les Sociétés</field>
@@ -28,13 +35,21 @@
         <field name="filter_period_comparison" eval="False"/>
         <field name="filter_growth_comparison" eval="False"/>
         <field name="allow_account_audit_status_on_lines" eval="True"/>
-        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_is"/>
         <field name="column_ids">
             <record id="bilan_is_column_montant" model="account.report.column">
                 <field name="name">Montant</field>
                 <field name="expression_label">montant</field>
                 <field name="sequence">10</field>
                 <field name="figure_type">monetary</field>
+            </record>
+            <!-- Pencil/trash of the inline editable table. Empty on every
+                 static line - see AccountReportHandlerMaIs. -->
+            <record id="bilan_is_column_actions" model="account.report.column">
+                <field name="name"></field>
+                <field name="expression_label">ma_actions</field>
+                <field name="sequence">20</field>
+                <field name="figure_type">string</field>
             </record>
         </field>
         <field name="line_ids">
@@ -78,7 +93,7 @@
                         <field name="label">montant</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_ET_18A</field>
+                        <field name="subformula">edi_14353</field>
                         <field name="date_scope">strict_range</field>
                     </record>
                 </field>
@@ -149,25 +164,25 @@
                     </record>
                 </field>
             </record>
-            <record id="bilan_is_line_autres_produits_total" model="account.report.line">
-                <field name="name">TOTAL</field>
-                <field name="code">IS_AUTRES_PRODUITS_TOTAL</field>
+            <record id="bilan_is_line_autres_produits_ajout" model="account.report.line">
+                <field name="name">- Autres produits taxables (ajout)</field>
+                <field name="code">IS_AUTRES_PRODUITS_AJOUT</field>
                 <field name="hierarchy_level">2</field>
                 <field name="sequence">80</field>
                 <field name="parent_id" ref="bilan_is_line_autres_produits"/>
                 <field name="foldable" eval="True"/>
                 <field name="expression_ids">
-                    <!-- Same value as the "4- Autres produits taxables" header
-                         above (edi_17929), matching the legacy layout where
-                         both the section header and this closing total line
-                         show the same figure. Bound directly to edi_17929
-                         rather than edi_ET_18B ("Somme") since 17929 already
-                         computes this exact sum from a real formula. -->
-                    <record id="bilan_is_expr_autres_produits_total_montant" model="account.report.expression">
+                    <!-- Row 19 of the grid: a subtotal with no codeEdi of its
+                         own, = SUM(B20:B21). edi_14356 is the detail range
+                         underneath it, resolved to the sum of this block's
+                         rows by _INLINE_DETAIL_CODES and kept out of the XML
+                         as a flat cell (it goes out as detail rows carrying a
+                         numeroLigne instead). -->
+                    <record id="bilan_is_expr_autres_produits_ajout_montant" model="account.report.expression">
                         <field name="label">montant</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_17929</field>
+                        <field name="subformula">edi_14356</field>
                         <field name="date_scope">strict_range</field>
                     </record>
                 </field>

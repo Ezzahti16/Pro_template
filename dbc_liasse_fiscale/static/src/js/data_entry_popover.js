@@ -8,29 +8,37 @@ import { AccountReportLineCell } from "@account_reports/components/account_repor
 
 import { Component, useState } from "@odoo/owl";
 
-/* Live-preview formulas for 'computed' field specs (see
- * _MA_AMORT_FIELDS/_ma_compute_amort_values in models/account_report.py
- * and ma_fiscal_dotation.py for the authoritative, server-side version of
- * the same 3 rules - this copy only drives what the popup shows while the
- * user is still typing, it is never what actually gets saved). Keyed by
- * each computed field's 'compute' spec key, so a future report can add
- * its own entry here without touching any other report's fields.
+/* Live-preview formulas for 'computed' field specs, keyed by each computed
+ * field's 'compute' spec key, so a report can add its own entry here
+ * without touching any other report's fields. A 'computed' field is shown
+ * read-only in the popup and recomputed live as the user types; the server
+ * is always the authority on what actually gets saved.
+ *
+ * amort_normal is NOT here: it is an ordinary editable number, because the
+ * accountant prorates assets acquired during the year and no formula
+ * reproduces that (see ma_fiscal_dotation.py). Its total does have a rule.
  */
 const MA_COMPUTE_FNS = {
-    ma_amort_normal: (state) => {
-        const prix = Number(state.prix_acquisition) || 0;
-        const anterieurs = Number(state.amort_anterieurs) || 0;
-        const valeurComptable = Number(state.valeur_comptable) || 0;
-        const duree = Number(state.duree) || 0;
-        const brut = prix - anterieurs;
-        const plafond = duree ? valeurComptable / duree : 0;
-        return brut > plafond ? null : brut;
-    },
-    ma_amort_total: (state) => {
-        const anterieurs = Number(state.amort_anterieurs) || 0;
-        const normal = MA_COMPUTE_FNS.ma_amort_normal(state);
-        return anterieurs + (normal === null ? 0 : normal);
-    },
+    // Column 8 of the DGI sheet, whose own header reads "col.4 + col.7".
+    ma_amort_total: (state) =>
+        (Number(state.amort_anterieurs) || 0) + (Number(state.amort_normal) || 0),
+
+    /* Tableau n° 10, "Plus ou moins values sur cessions ou retraits":
+     * the DGI grid's own three formulas (sheet T10, rows 10..19):
+     *     E =C-D, G =IF(F>E,F-E,""), H =IF(F<E,E-F,"")
+     * A disposal is either a plus value or a moins value, never both, so
+     * each column keeps 0 when the other one applies - which is what the
+     * reference sheet's "" sums to on its TOTAL row.
+     * _recomputeComputedFields walks the field specs in order, and
+     * _MA_CESSION_FIELDS declares valeur_nette BEFORE these two, so the
+     * value read here is always the freshly recomputed one.
+     */
+    ma_cession_valeur_nette: (state) =>
+        (Number(state.montant_brut) || 0) - (Number(state.amort_cumules) || 0),
+    ma_cession_plus_values: (state) =>
+        Math.max((Number(state.produit_cession) || 0) - (Number(state.valeur_nette) || 0), 0),
+    ma_cession_moins_values: (state) =>
+        Math.max((Number(state.valeur_nette) || 0) - (Number(state.produit_cession) || 0), 0),
 };
 
 /* Two-way links between a pair of freely-editable fields, keyed by each

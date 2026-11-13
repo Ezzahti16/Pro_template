@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="res_partner_form_view_inherit" model="ir.ui.view">
+        <field name="name">res.partner.view.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='vat']" position="replace">
+                <field name="supplier_rank" invisible="1"/>
+                <field name="cin" invisible="supplier_rank != 0" />
+                <field name="vat" invisible="1"/>
+
+            </xpath>
+
+            <xpath expr="//field[@name='company_registry']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//group[@name='misc']" position="replace">
+                <group name="misc" string="Divers">
+                    <field name="ref" string="Reference"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" readonly="parent_id" force_save="1"/>
+                    <field name="company_id" invisible="1"/> <!-- need to be able to to compute based on the company even without multi company groups -->
+                    <field name="industry_id" invisible="not is_company" options="{'no_create': True}"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//page[@name='contact_addresses']" position="after">
+
+                <page name="identifiants_fiscaux" string="Identifiants Fiscaux"
+                      >
+                    <group name="container_row_2">
+
+                        <group name="identifiant">
+                            <field name="rc" />
+                            <field name="tp" />
+                            <field name="iff" />
+
+                            <field name="cnss" />
+                            <field name="company_registry" string="ICE" />
+                            <field name="capital" />
+
+                        </group>
+                    </group>
+                </page>
+
+            </xpath>
+
+            
+
+
+
+        </field>
+    </record>
+
+
+    <record id="res_company_form_view_inherit" model="ir.ui.view">
+        <field name="name">res.company.view.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_info']" position="replace">
+                                        <page string="Informations Générales" name="general_info">
+                            <group>
+                                <group>
+                                    <field name="partner_id" string="Contact" readonly="1" required="0" groups="base.group_no_one"/>
+                                    <label for="street" string="Address"/>
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                        <field name="city" placeholder="City" class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}"/>
+                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                    </div>
+                                    <field name="vat"/>
+                                    <!-- <field name="company_registry"/> -->
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" id="company_currency" context="{'active_test': False}"/>
+                                </group>
+                                <group>
+                                    <field name="phone" class="o_force_ltr"/>
+                                    <!-- <field name="mobile" class="o_force_ltr"/> -->
+                                    <field name="email"/>
+                                    <field name="website" string="Website" widget="url" placeholder="e.g. https://www.odoo.com"/>
+                                    <field name="parent_id" groups="base.group_no_one"/>
+                                    <field name="color" widget="color_picker"/>
+                                </group>
+                                <group name="social_media"/>
+                            </group>
+                        </page>
+            </xpath>
+            <xpath expr="//page[@name='general_info']" position="after">
+
+                <page name="identifiants_fiscaux" string="Identifiants Fiscaux">
+                    <group name="container_row_2">
+
+                        <group name="identifiant">
+                            <field name="rc"/>
+                            <field name="tp"/>
+                            <field name="iff"/>
+                            <field name="cnss"/>
+                            <field name="company_registry" string="ICE"/>
+                            <field name="capital"/>
+                            <field name="rib"/>
+
+                        </group>
+                    </group>
+                </page>
+
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+</odoo>

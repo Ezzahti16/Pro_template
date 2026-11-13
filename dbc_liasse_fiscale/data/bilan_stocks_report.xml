@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+<!-- Etat Detaille des Stocks (tableau 20).
+
+     The "variation" cells deliberately run on a different engine from every
+     other cell here: _report_custom_engine_ma_stock_variation instead of
+     _report_custom_engine_ma_fiscal. Their master formula is
+     EDI(<net_init>)-EDI(<net_fin>) - the DGI sheet's own "7 = 6 - 3" - and no
+     single date_scope can evaluate it: the ma_fiscal engine applies one scope
+     to the whole formula tree, so the nested net_init term is recomputed at
+     this cell's scope and becomes the period-END balance, making every
+     variation cancel to 0.00. The stock_variation engine instead takes the two
+     operands off this same line's net_init / net_fin cells and evaluates each
+     with ITS OWN date_scope. The date_scope below is therefore unused on a
+     variation cell; the ones that matter are the net_init
+     (to_beginning_of_period) and net_fin (from_beginning) cells.
+     See the engine's docstring in models/account_report.py. -->
+
 <record id="bilan_stocks_report" model="account.report">
     <field name="name">Etat Détaillé des Stocks</field>
     <field name="country_id" ref="base.ma"/>
@@ -111,7 +127,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_SECTION_APPRO_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1407</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -168,7 +184,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_BIENS_REVENTE_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1415</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -226,7 +242,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_BIENS_IMMEUBLES_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1423</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -284,7 +300,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_BIENS_MEUBLES_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1431</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -341,7 +357,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_BIENS_MATIERES_PRODUCTION_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1439</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -398,7 +414,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_MATIERES_PREMIERES_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1455</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -455,7 +471,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_MATIERES_CONSOMMABLES_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1463</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -512,7 +528,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_PIECES_DETACHEES_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1471</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -569,7 +585,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1487</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -627,7 +643,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_RECUPERABLES_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1561</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -685,7 +701,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_VENDUS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1602</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -743,7 +759,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_EMBALLAGE_PERDUS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1610</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -800,7 +816,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_TOTAL_APPRO_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1618</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -857,7 +873,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_SECTION_ENCQ_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1641</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -914,7 +930,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_PRODUITS_EN_COURS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1649</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -971,7 +987,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_ETUDES_EN_COURS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1662</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1028,7 +1044,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_TRAVAUX_EN_COURS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1670</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1085,7 +1101,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_SERVICES_EN_COURS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1678</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1142,7 +1158,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_TOTAL_ENCQ_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1691</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1199,7 +1215,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_SECTION_PRODUITS_FINIS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1742</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1256,7 +1272,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_PRODUITS_FINIS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1763</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1313,7 +1329,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_BIENS_FINIS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1775</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1370,7 +1386,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_TOTAL_PRODUITS_FINIS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1806</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1427,7 +1443,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_SECTION_RESIDUELS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1825</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1484,7 +1500,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_DECHETS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1842</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1541,7 +1557,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_REBUTS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1859</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1598,7 +1614,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_MATIERES_RECUPERATION_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1867</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1655,7 +1671,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_TOTAL_RESIDUELS_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1875</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
@@ -1712,7 +1728,7 @@
                     <record id="bilan_stocks_report_expr_STOCK_TOTAL_GENERAL_variation" model="account.report.expression">
                         <field name="label">variation</field>
                         <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
+                        <field name="formula">_report_custom_engine_ma_stock_variation</field>
                         <field name="subformula">edi_1892</field>
                         <field name="date_scope">from_beginning</field>
                     </record>

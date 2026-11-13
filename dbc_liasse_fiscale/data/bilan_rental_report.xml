@@ -82,21 +82,15 @@
             <field name="figure_type">float</field>
         </record>
         <record id="bilan_rental_column_montant_loyer_charges" model="account.report.column">
-            <field name="name">Montant loyer dans les charges</field>
+            <field name="name">Montant de location de l'exercice</field>
             <field name="expression_label">montant_loyer_charges</field>
             <field name="sequence">110</field>
             <field name="figure_type">float</field>
         </record>
         <record id="bilan_rental_column_bail_ordinaire" model="account.report.column">
-            <field name="name">Nature contrat : Bail-ordinaire</field>
+            <field name="name">Contrat</field>
             <field name="expression_label">bail_ordinaire</field>
             <field name="sequence">120</field>
-            <field name="figure_type">string</field>
-        </record>
-        <record id="bilan_rental_column_leasing_nieme_periode" model="account.report.column">
-            <field name="name">Nature contrat : Leasing (Nème période)</field>
-            <field name="expression_label">leasing_nieme_periode</field>
-            <field name="sequence">130</field>
             <field name="figure_type">string</field>
         </record>
         <record id="bilan_rental_column_actions" model="account.report.column">

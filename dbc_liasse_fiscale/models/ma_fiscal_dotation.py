@@ -17,15 +17,27 @@ class MaFiscalDotationLine(models.Model):
     touched is already consistent with the other by the time this model
     ever sees them; nothing more to enforce here.
 
-    amort_normal/depassement_plafond/total_amort stay read-only and are
-    recomputed below on every create/write, mirroring EliteIS's own live
-    popup calculation:
-      - amort_normal = prix_acquisition - amort_anterieurs, forced to 0
-        (and flagged via depassement_plafond, which the report renders as
-        a blank cell) whenever that would exceed the legal cap
-        valeur_comptable / durée
-      - total_amort = amort_anterieurs + amort_normal (= "col.4 + col.7"
-        per the legacy sheet's own column-9 header)
+    The two amortisation columns are treated differently, because only one
+    of them has a rule:
+
+    * amort_normal is EDITABLE. It used to be recomputed on every
+      create/write and forced to 0 whenever prix_acquisition -
+      amort_anterieurs exceeded the annual cap valeur_comptable / durée -
+      which is almost always, since that difference is the whole remaining
+      value of the asset while the cap is one year of it, so the column came
+      out 0 on every asset not written off in a single year. It is now only
+      DERIVED WHEN A ROW IS CREATED WITHOUT IT, as
+      min(prix_acquisition - amort_anterieurs, valeur_comptable / durée),
+      never negative - the annuity, capped by what is left to amortise.
+      Whatever the accountant types wins, because no rule reproduces a real
+      état: the reference liasse prorates assets acquired during the year,
+      and not uniformly (one gets exactly half a year, another ~0.71,
+      another ~0.27 - none matching its own acquisition date).
+
+    * total_amort is COMPUTED and stored: amort_anterieurs + amort_normal,
+      which is the DGI sheet's own column-9 header ("col.4 + col.7") and
+      holds on every row of the reference liasse. Nothing to key in, and it
+      can never drift from the two columns it adds up.
     """
     _name = 'ma.fiscal.dotation.line'
     _description = "Ligne d'immobilisation - État des Dotations aux Amortissements"
@@ -48,44 +60,38 @@ class MaFiscalDotationLine(models.Model):
     amort_anterieurs = fields.Float(string="Amortissements antérieurs")
     taux = fields.Float(string="Taux")
     duree = fields.Integer(string="Durée")
-    amort_normal = fields.Float(string="Amortissements normaux ou accélérés de l'exercice", readonly=True)
-    depassement_plafond = fields.Boolean(string="Dépasse le plafond légal", readonly=True)
-    total_amort = fields.Float(string="Total des amortissements à la fin de l'exercice", readonly=True)
+    amort_normal = fields.Float(string="Amortissements normaux ou accélérés de l'exercice")
+    total_amort = fields.Float(
+        string="Total des amortissements à la fin de l'exercice",
+        compute='_compute_total_amort', store=True, readonly=True,
+    )
     observations = fields.Char(string="Observations")
 
+    @api.depends('amort_anterieurs', 'amort_normal')
+    def _compute_total_amort(self):
+        """Column 8 of the DGI sheet, whose own header reads "col.4 + col.7"."""
+        for line in self:
+            line.total_amort = line.amort_anterieurs + line.amort_normal
+
     @staticmethod
-    def _ma_compute_amort_values(prix_acquisition, amort_anterieurs, valeur_comptable, duree):
-        amort_normal_brut = prix_acquisition - amort_anterieurs
-        plafond = (valeur_comptable / duree) if duree else 0.0
-        depassement = amort_normal_brut > plafond
-        amort_normal = 0.0 if depassement else amort_normal_brut
-        return {
-            'amort_normal': amort_normal,
-            'depassement_plafond': depassement,
-            'total_amort': amort_anterieurs + amort_normal,
-        }
+    def _ma_default_amort_normal(prix_acquisition, amort_anterieurs, valeur_comptable, duree):
+        """Default annuity for a row created without one: one year of
+        amortisation (valeur_comptable / durée), capped by what is left to
+        amortise (prix_acquisition - amort_anterieurs) and never negative."""
+        reste = prix_acquisition - amort_anterieurs
+        annuite = (valeur_comptable / duree) if duree else 0.0
+        return max(0.0, min(reste, annuite))
 
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            vals.update(self._ma_compute_amort_values(
+            # Only fill what the caller left out - a typed value always wins,
+            # including a deliberate 0. Nothing is recomputed on write, so an
+            # edit to another column never silently rewrites amort_normal.
+            vals.setdefault('amort_normal', self._ma_default_amort_normal(
                 vals.get('prix_acquisition') or 0.0,
                 vals.get('amort_anterieurs') or 0.0,
                 vals.get('valeur_comptable') or 0.0,
                 vals.get('duree') or 0,
             ))
         return super().create(vals_list)
-
-    def write(self, vals):
-        if any(key in vals for key in ('prix_acquisition', 'amort_anterieurs', 'valeur_comptable', 'duree')):
-            for record in self:
-                record_vals = dict(vals)
-                record_vals.update(self._ma_compute_amort_values(
-                    vals.get('prix_acquisition', record.prix_acquisition) or 0.0,
-                    vals.get('amort_anterieurs', record.amort_anterieurs) or 0.0,
-                    vals.get('valeur_comptable', record.valeur_comptable) or 0.0,
-                    vals.get('duree', record.duree) or 0,
-                ))
-                super(MaFiscalDotationLine, record).write(record_vals)
-            return True
-        return super().write(vals)

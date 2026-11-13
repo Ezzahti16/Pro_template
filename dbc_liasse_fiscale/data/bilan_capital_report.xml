@@ -49,7 +49,7 @@
             <field name="figure_type">string</field>
         </record>
         <record id="bilan_capital_column_num_cin" model="account.report.column">
-            <field name="name">N° CIN</field>
+            <field name="name">N° C.N.I.</field>
             <field name="expression_label">num_cin</field>
             <field name="sequence">40</field>
             <field name="figure_type">string</field>

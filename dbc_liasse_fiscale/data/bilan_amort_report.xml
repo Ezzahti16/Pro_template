@@ -39,12 +39,6 @@
             <field name="sequence">40</field>
             <field name="figure_type">monetary</field>
         </record>
-        <record id="bilan_amort_column_ecart" model="account.report.column">
-            <field name="name">ECART</field>
-            <field name="expression_label">ecart</field>
-            <field name="sequence">50</field>
-            <field name="figure_type">monetary</field>
-        </record>
     </field>
     <field name="line_ids">
             <record id="bilan_amort_line_non_valeurs" model="account.report.line">
@@ -65,7 +59,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_1232</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_amort_expr_non_valeurs_amort_sorties" model="account.report.expression">
                         <field name="label">amort_sorties</field>
@@ -83,13 +77,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1231_1232_1233</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_non_valeurs_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1234</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -131,13 +118,6 @@
                         <field name="subformula">cf_1236_1237_1238</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_non_valeurs_1_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1239</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_non_valeurs_2" model="account.report.line">
                 <field name="name">Charges à répartir sur plusieurs exercices</field>
@@ -177,13 +157,6 @@
                         <field name="subformula">cf_1241_1242_1243</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_non_valeurs_2_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1244</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_non_valeurs_3" model="account.report.line">
                 <field name="name">Primes de remboursement des obligations</field>
@@ -203,7 +176,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_1247</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_amort_expr_non_valeurs_3_amort_sorties" model="account.report.expression">
                         <field name="label">amort_sorties</field>
@@ -221,13 +194,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1246_1247_1248</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_non_valeurs_3_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1249</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -249,7 +215,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_1629</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_amort_expr_incorporelles_amort_sorties" model="account.report.expression">
                         <field name="label">amort_sorties</field>
@@ -267,13 +233,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1624_1629_1650</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_incorporelles_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1679</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -315,13 +274,6 @@
                         <field name="subformula">cf_1625_1630_1651</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_incorporelles_1_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1680</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_incorporelles_2" model="account.report.line">
                 <field name="name">Brevets, marques, droits et valeurs similaires</field>
@@ -359,13 +311,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1626_1631_1652</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_incorporelles_2_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1681</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -407,13 +352,6 @@
                         <field name="subformula">cf_1627_1632_1653</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_incorporelles_3_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1682</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_incorporelles_4" model="account.report.line">
                 <field name="name">Autres immobilisations incorporelles</field>
@@ -453,13 +391,6 @@
                         <field name="subformula">cf_1628_1633_1654</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_incorporelles_4_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1683</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_corporelles" model="account.report.line">
                 <field name="name">IMMOBILISATIONS CORPORELLES</field>
@@ -479,7 +410,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_1708</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_amort_expr_corporelles_amort_sorties" model="account.report.expression">
                         <field name="label">amort_sorties</field>
@@ -497,13 +428,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1700_1708_1716</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_corporelles_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1724</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -545,13 +469,6 @@
                         <field name="subformula">cf_1701_1709_1717</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_corporelles_1_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1725</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_corporelles_2" model="account.report.line">
                 <field name="name">Constructions</field>
@@ -589,13 +506,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1702_1710_1718</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_corporelles_2_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1726</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -637,13 +547,6 @@
                         <field name="subformula">cf_1703_1711_1719</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_corporelles_3_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1727</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_corporelles_4" model="account.report.line">
                 <field name="name">Matériel de transport</field>
@@ -681,13 +584,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1704_1712_1720</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_corporelles_4_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1728</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -729,13 +625,6 @@
                         <field name="subformula">cf_1705_1713_1721</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_corporelles_5_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1729</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_corporelles_6" model="account.report.line">
                 <field name="name">Autres immobilisations corporelles</field>
@@ -775,13 +664,6 @@
                         <field name="subformula">cf_1706_1714_1722</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
-                    <record id="bilan_amort_expr_corporelles_6_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1730</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
                 </field>
             </record><record id="bilan_amort_line_corporelles_7" model="account.report.line">
                 <field name="name">Immobilisations corporelles en cours</field>
@@ -801,7 +683,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_1715</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_amort_expr_corporelles_7_amort_sorties" model="account.report.expression">
                         <field name="label">amort_sorties</field>
@@ -819,13 +701,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_1707_1715_1723</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_corporelles_7_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E1731</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>
@@ -847,7 +722,7 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_14062</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_amort_expr_total_amort_sorties" model="account.report.expression">
                         <field name="label">amort_sorties</field>
@@ -865,13 +740,6 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_amort_cumul_fin</field>
                         <field name="subformula">cf_14061_14062_14063</field>
-                        <field name="date_scope">from_beginning</field>
-                    </record>
-                    <record id="bilan_amort_expr_total_ecart" model="account.report.expression">
-                        <field name="label">ecart</field>
-                        <field name="engine">custom</field>
-                        <field name="formula">_report_custom_engine_ma_fiscal</field>
-                        <field name="subformula">edi_E14064</field>
                         <field name="date_scope">from_beginning</field>
                     </record>
                 </field>

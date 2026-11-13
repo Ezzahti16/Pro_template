@@ -1,0 +1,142 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* identifiants_fiscaux_maroc
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20241118\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-18 16:31+0000\n"
+"PO-Revision-Date: 2025-06-18 16:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Address"
+msgstr "Address"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__cin
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__cin
+msgid "CIN"
+msgstr "CIN"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_company__cnss
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__cnss
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__cnss
+msgid "CNSS"
+msgstr "CNSS"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_company__capital
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__capital
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__capital
+msgid "Capital"
+msgstr "Capital"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "City"
+msgstr "Ville"
+
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model,name:identifiants_fiscaux_maroc.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model,name:identifiants_fiscaux_maroc.model_res_partner
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Contact"
+msgstr "Contact"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Country"
+msgstr "Country"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_partner_form_view_inherit
+msgid "Divers"
+msgstr "Divers"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_company__ice
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__ice
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__ice
+msgid "ICE"
+msgstr "ICE"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_company__iff
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__iff
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__iff
+msgid "IF"
+msgstr "IF"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_partner_form_view_inherit
+msgid "Identifiants Fiscaux"
+msgstr "Identifiants Fiscaux"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Informations Générales"
+msgstr "Informations Générales"
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_company__rc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__rc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__rc
+msgid "RC"
+msgstr "RC"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_partner_form_view_inherit
+msgid "Reference"
+msgstr "Reference"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "State"
+msgstr "State"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Street 2..."
+msgstr "Rue 2..."
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Street..."
+msgstr "Rue..."
+
+#. module: identifiants_fiscaux_maroc
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_company__tp
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_partner__tp
+#: model:ir.model.fields,field_description:identifiants_fiscaux_maroc.field_res_users__tp
+msgid "TP"
+msgstr "TP"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "Website"
+msgstr "Website"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "ZIP"
+msgstr "ZIP"
+
+#. module: identifiants_fiscaux_maroc
+#: model_terms:ir.ui.view,arch_db:identifiants_fiscaux_maroc.res_company_form_view_inherit
+msgid "e.g. https://www.odoo.com"
+msgstr "e.g. https://www.odoo.com"

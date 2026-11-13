@@ -12,7 +12,7 @@
         <field name="filter_period_comparison" eval="True"/>
         <field name="filter_growth_comparison" eval="False"/>
         <field name="allow_account_audit_status_on_lines" eval="True"/>
-        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_fiscal"/>
+        <field name="custom_handler_model_id" ref="model_account_report_handler_ma_passage"/>
         <field name="column_ids">
             <record id="bilan_fisc_column_montant_plus" model="account.report.column">
                 <field name="name">MONTANT (+)</field>
@@ -25,6 +25,16 @@
                 <field name="expression_label">montant_moins</field>
                 <field name="sequence">20</field>
                 <field name="figure_type">monetary</field>
+            </record>
+            <!-- Pencil/trash of the inline editable table (réintégrations and
+                 déductions detail rows). Empty on every static line - same
+                 column the six data-entry reports use, see
+                 AccountReportHandlerMaPassage in models/account_report.py. -->
+            <record id="bilan_fisc_column_actions" model="account.report.column">
+                <field name="name"></field>
+                <field name="expression_label">ma_actions</field>
+                <field name="sequence">30</field>
+                <field name="figure_type">string</field>
             </record>
         </field>
         <field name="line_ids">
@@ -91,14 +101,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_18009</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_reintegrations_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_18010</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -114,14 +124,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_822</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_reint_courantes_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_823</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -137,14 +147,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_825</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_reint_non_courantes_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_826</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -159,14 +169,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_18012</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_deductions_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_18013</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -182,14 +192,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_828</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_deduc_courantes_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_830</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -205,14 +215,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_831</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_deduc_non_courantes_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_7830</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -227,14 +237,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_833</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_total_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_834</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -256,14 +266,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_837</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_benefice_brut_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_839</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -279,14 +289,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_838</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_deficit_brut_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_840</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -308,14 +318,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_845</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_report_n4_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_849</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -331,14 +341,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_846</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_report_n3_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_850</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -354,14 +364,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_847</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_report_n2_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_851</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -377,14 +387,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_848</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_report_n1_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_852</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -406,14 +416,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_6872</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_benefice_net_fiscal_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_6874</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
@@ -429,14 +439,14 @@
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_6873</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                     <record id="bilan_fisc_expr_deficit_net_fiscal_montant_moins" model="account.report.expression">
                         <field name="label">montant_moins</field>
                         <field name="engine">custom</field>
                         <field name="formula">_report_custom_engine_ma_fiscal</field>
                         <field name="subformula">edi_6875</field>
-                        <field name="date_scope">from_beginning</field>
+                        <field name="date_scope">strict_range</field>
                     </record>
                 </field>
             </record>
