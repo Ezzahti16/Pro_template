@@ -77,6 +77,8 @@
                         <group>
                             <field name="expires_at"/>
                             <field name="shortened"/>
+                            <field name="forced_publisher"
+                                   invisible="not forced_publisher"/>
                             <field name="publisher_state"/>
                             <field name="guard_cron_id" invisible="not guard_cron_id"/>
                             <field name="deleted_at"/>

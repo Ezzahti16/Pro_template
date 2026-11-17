@@ -341,8 +341,15 @@ def _tam(env, params):
             return {"status": "exists", "id": found.id, "active": found.active}
         # Before anything is created, so a refusal leaves the database as it was.
         life, pub, verdict = _tam_deadline(env, params)
-        if verdict == "too_late":
+        if verdict == "too_late" and not params.get("force"):
             return {"status": "too_late", "publisher": pub}
+        forced = verdict == "too_late"
+        if forced:
+            # Asked for anyway, with the warning accepted in the manager: the
+            # notification is no longer worked around, so the configured
+            # lifetime applies, as it would with the guard switched off.
+            life = float(params.get("duration_hours") or 6) * 3600.0
+            verdict = "forced"
         field = _tam_groups_field(Users)
         groups, extra, label, cloned_from = _tam_access_plan(env, params, field)
         # Born as a plain internal user, then given the planned access: one code
@@ -368,7 +375,7 @@ def _tam(env, params):
             _tam_flush(env)
         refused = _tam_apply(env, user, field, groups)
         guard_id, guard_error = 0, ""
-        if verdict == "short" and params.get("arm_guard"):
+        if verdict in ("short", "forced") and params.get("arm_guard"):
             try:
                 with env.cr.savepoint():
                     guard_id = _tam_arm_guard(env, params, user, life)
@@ -380,7 +387,7 @@ def _tam(env, params):
         env.cr.commit()
         return {"status": "created", "id": user.id, "cloned_from": cloned_from,
                 "granted": _tam_granted(env, user, field, groups, refused, label),
-                "life_seconds": life, "publisher": pub,
+                "life_seconds": life, "publisher": pub, "forced": forced,
                 "guard_cron_id": guard_id, "guard_error": guard_error}
     if action == "grant":
         # Re-apply the access model to the user already there, without
@@ -518,6 +525,11 @@ class TamDatabase(models.Model):
     shortened = fields.Boolean(
         string="Cut Short", readonly=True, copy=False,
         help="The lifetime was reduced to stay ahead of the publisher notification.")
+    forced_publisher = fields.Boolean(
+        string="Created Anyway", readonly=True, copy=False,
+        help="Created on the user's own responsibility although the publisher "
+             "notification was too close. The lifetime was not cut short, and the "
+             "expiry no longer follows that notification.")
     guard_cron_id = fields.Integer(
         string="Guard Cron ID", readonly=True, copy=False,
         help="The one-shot scheduled action armed on the client database as a "
@@ -617,6 +629,8 @@ class TamDatabase(models.Model):
             "guard_min_life": inst.guard_min_life,
             "arm_guard": inst.arm_client_guard,
             "guard_cron_id": self.guard_cron_id or 0,
+            # Only ever set by the confirmation dialog, never by default.
+            "force": bool(self.env.context.get("tam_force_publisher")),
         }
 
     # ------------------------------------------------------------------
@@ -624,13 +638,17 @@ class TamDatabase(models.Model):
     # ------------------------------------------------------------------
     def action_create_temp_user(self):
         conflicts = []
+        blocked = []
         for rec in self:
             if rec.state == "active":
                 raise UserError(_("A temporary admin is already active on %s.",
                                   rec._display_url()))
             res = rec._run("create")
             if res["status"] == "too_late":
-                raise UserError(rec._too_late_message(res.get("publisher") or {}))
+                # Nothing was created on the client, so the decision can go back
+                # to the user, who may take it on themselves and confirm.
+                blocked.append((rec, res.get("publisher") or {}))
+                continue
             if res["status"] == "exists":
                 # The login is taken by a user this module did not create: leave it alone.
                 rec.write({
@@ -659,6 +677,7 @@ class TamDatabase(models.Model):
                 "deleted_at": False,
                 "last_error": False,
                 "guard_cron_id": res.get("guard_cron_id") or 0,
+                "forced_publisher": bool(res.get("forced")),
             }
             vals.update(rec._publisher_vals(res.get("publisher") or {}, life < full))
             rec.write(vals)
@@ -675,6 +694,9 @@ class TamDatabase(models.Model):
                                    "could not be restarted:\n%s", problem))
             if notes:
                 rec.last_error = "\n\n".join(notes)
+        if blocked:
+            # The confirmation carries whatever else happened in this batch.
+            return self._force_create_wizard(blocked, conflicts)
         if conflicts:
             return {
                 "type": "ir.actions.client",
@@ -744,6 +766,35 @@ class TamDatabase(models.Model):
             db=self.name, when=when, margin=self.instance_id.guard_margin,
             inst=self.instance_id.display_name)
 
+    def _force_confirm_message(self, pub):
+        """The same refusal, followed by what confirming it would mean."""
+        return "%s\n\n%s" % (self._too_late_message(pub), _(
+            "You can create it anyway, on your own responsibility. It is then "
+            "created with its full lifetime of %(hours)s hours and is not cut "
+            "short, so the publisher notification may well run while the "
+            "temporary admin is still there and count it. This manager still "
+            "deletes the user when its time is up.",
+            hours=self.duration_hours or 6))
+
+    def _force_create_wizard(self, blocked, conflicts=()):
+        """Open the confirmation for the databases that refused to be created."""
+        parts = [rec._force_confirm_message(pub) for rec, pub in blocked]
+        if conflicts:
+            parts.append(_("Nothing was created on: %s either, where that login "
+                           "already belongs to another user.", ", ".join(conflicts)))
+        wizard = self.env["tam.force.create.wizard"].create({
+            "database_ids": [(6, 0, [rec.id for rec, _pub in blocked])],
+            "message": "\n\n".join(parts),
+        })
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("The publisher notification is too close"),
+            "res_model": "tam.force.create.wizard",
+            "res_id": wizard.id,
+            "view_mode": "form",
+            "target": "new",
+        }
+
     def action_delete_temp_user(self):
         for rec in self:
             rec._delete_temp_user()
@@ -782,6 +833,7 @@ class TamDatabase(models.Model):
             "cloned_from": False,
             "guard_cron_id": 0,
             "shortened": False,
+            "forced_publisher": False,
             "deleted_at": fields.Datetime.now(),
             "last_error": "\n\n".join(notes) if notes else False,
         })
@@ -838,7 +890,8 @@ class TamDatabase(models.Model):
             return
         ceiling = self.created_at + timedelta(hours=self.duration_hours or 6)
         expiry = ceiling
-        if pub.get("guarded") and pub.get("found") and pub.get("active"):
+        if (pub.get("guarded") and pub.get("found") and pub.get("active")
+                and not self.forced_publisher):
             margin = (self.instance_id.guard_margin or 15) * 60.0
             deadline = fields.Datetime.now() + timedelta(
                 seconds=(pub.get("seconds") or 0.0) - margin)

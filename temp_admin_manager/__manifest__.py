@@ -13,6 +13,7 @@
         "views/server_views.xml",
         "views/instance_views.xml",
         "views/database_views.xml",
+        "wizard/force_create_wizard_views.xml",
         "views/menus.xml",
     ],
     "installable": True,

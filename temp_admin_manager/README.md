@@ -111,8 +111,14 @@ So the temporary admin is given a life that ends **before** that cron, not six h
   nothing is written to the client.
 - Inside the lifetime → the expiry becomes *notification − margin*, the database shows
   **Cut Short** and *Publisher Notification* says when it runs.
-- Less than *Shortest useful life* left → **nothing is created**, and the message says
-  when the notification runs and how to override it.
+- Less than *Shortest useful life* left → **nothing is created yet**: the same message is
+  shown as a confirmation, with **Create Anyway** next to **Cancel**. Cancelling leaves
+  the client database exactly as it was. Confirming is the user's own decision: the
+  temporary admin is created with its **full lifetime**, is not cut short, its expiry no
+  longer follows the notification (the database shows **Created Anyway**), and the
+  notification may well run while the user is still there and count it. This manager
+  still deletes it when its time is up, and the client guard is armed for that moment if
+  the instance asks for one.
 
 With **Arm a guard on the client** on, a second guard is created in the client database
 itself: a one-shot scheduled action that archives the temporary admin at the same moment,
