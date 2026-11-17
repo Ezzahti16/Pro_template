@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale (Maroc)',
-    'version': '19.0.5.12.0',
+    'version': '19.0.5.15.0',
     'category': 'Accounting/Accounting',
     'summary': 'Moroccan CGNC "Bilan (Actif)" statement computed from legacy EDI codes and formules',
     'description': """

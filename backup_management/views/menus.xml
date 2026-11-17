@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_drive_backup_root"
+              name="Backup Management"
+              web_icon="backup_management,static/description/icon.png"
+              sequence="90"/>
+
+    <menuitem id="menu_backup_config"
+              name="Configurations"
+              parent="menu_drive_backup_root"
+              action="action_backup_config"
+              sequence="10"/>
+
+    <menuitem id="menu_backup_log"
+              name="Logs"
+              parent="menu_drive_backup_root"
+              action="action_backup_log"
+              sequence="20"/>
+</odoo>

@@ -6,6 +6,8 @@
         <field name="inherit_id" ref="dbc_liasse_edi.view_company_form_ma_edi"/>
         <field name="arch" type="xml">
             <field name="ma_identifiant_fiscal" position="after">
+                <field name="ma_raison_sociale"
+                       placeholder="Nom de la société si différent"/>
                 <field name="ma_date_decision_affectation"/>
             </field>
         </field>

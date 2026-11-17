@@ -365,6 +365,14 @@ class AccountReportCustomHandlerXlsx(models.AbstractModel):
             'exercice': _("Exercice du %(start)s au %(end)s",
                           start=date_from.strftime('%d/%m/%Y'),
                           end=date_to.strftime('%d/%m/%Y')),
+            # the cover page, out of the company record rather than out of the
+            # workbook the template was made from
+            'raison_sociale': company._dbc_liasse_raison_sociale(),
+            'adresse': company._dbc_liasse_adresse(),
+            'lieu_date': company._dbc_liasse_lieu_date(),
+            # no field holds the taxe professionnelle yet, so its line stays
+            # as blank as it is on an unfilled form
+            'taxe_professionnelle': None,
             # "Decision du ..." on the Tableau d'Affectation. The liasse has no
             # code for it, so it comes from the company rather than the
             # accounts; left blank when unset, as the form would be.

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- FORM -->
+    <record id="view_backup_config_form" model="ir.ui.view">
+        <field name="name">backup.config.form</field>
+        <field name="model">backup.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_oauth_authorize" type="object"
+                            string="Autoriser Google Drive" class="btn-primary"
+                            invisible="destination_type != 'google_drive' or auth_type != 'oauth' or oauth_authorized"/>
+                    <button name="action_oauth_authorize" type="object"
+                            string="Re-autoriser" class="btn-secondary"
+                            invisible="destination_type != 'google_drive' or auth_type != 'oauth' or not oauth_authorized"/>
+                    <button name="action_test_sftp_connection" type="object"
+                            string="Tester connexion SFTP" class="btn-primary"
+                            invisible="destination_type != 'sftp'"/>
+                    <button name="action_test_backup" type="object"
+                            string="Lancer un backup test" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom de la configuration"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Sauvegarde">
+                            <field name="destination_type" widget="radio"/>
+                            <field name="database_name"/>
+                            <field name="backup_format"/>
+                            <field name="retention_count"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Destination Google Drive"
+                               invisible="destination_type != 'google_drive'">
+                            <field name="drive_folder_id"
+                                   required="destination_type == 'google_drive'"/>
+                            <field name="auth_type" widget="radio"/>
+                        </group>
+                    </group>
+
+                    <group string="OAuth2"
+                           invisible="destination_type != 'google_drive' or auth_type != 'oauth'">
+                        <field name="oauth_client_id"/>
+                        <field name="oauth_client_secret" password="True"/>
+                        <field name="oauth_redirect_uri"/>
+                        <field name="oauth_authorized"/>
+                        <field name="oauth_refresh_token"/>
+                    </group>
+
+                    <group string="Service Account"
+                           invisible="destination_type != 'google_drive' or auth_type != 'service_account'">
+                        <field name="sa_key_file" filename="sa_key_filename"/>
+                        <field name="sa_key_filename" invisible="1"/>
+                        <field name="sa_shared_drive_id"/>
+                    </group>
+
+                    <group string="Serveur SFTP"
+                           invisible="destination_type != 'sftp'">
+                        <group>
+                            <field name="sftp_host"
+                                   required="destination_type == 'sftp'"/>
+                            <field name="sftp_port"/>
+                            <field name="sftp_username"
+                                   required="destination_type == 'sftp'"/>
+                            <field name="sftp_remote_path"/>
+                        </group>
+                        <group>
+                            <field name="sftp_auth_type" widget="radio"/>
+                            <field name="sftp_password" password="True"
+                                   invisible="sftp_auth_type != 'password'"
+                                   required="destination_type == 'sftp' and sftp_auth_type == 'password'"/>
+                            <field name="sftp_private_key"
+                                   invisible="sftp_auth_type != 'private_key'"
+                                   required="destination_type == 'sftp' and sftp_auth_type == 'private_key'"/>
+                            <field name="sftp_private_key_passphrase" password="True"
+                                   invisible="sftp_auth_type != 'private_key'"/>
+                        </group>
+                    </group>
+
+                    <group string="Securite SFTP"
+                           invisible="destination_type != 'sftp'">
+                        <field name="sftp_host_key_policy" widget="radio"/>
+                        <field name="sftp_host_key_fingerprint"
+                               invisible="sftp_host_key_policy != 'strict'"
+                               required="destination_type == 'sftp' and sftp_host_key_policy == 'strict'"
+                               placeholder="SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+                    </group>
+
+                    <group string="Dernier backup">
+                        <field name="last_backup_date"/>
+                        <field name="last_backup_status"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Logs">
+                            <field name="log_ids" readonly="1">
+                                <list>
+                                    <field name="create_date"/>
+                                    <field name="status"
+                                           decoration-success="status == 'success'"
+                                           decoration-danger="status == 'failed'"/>
+                                    <field name="file_size"/>
+                                    <field name="message"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- LIST -->
+    <record id="view_backup_config_list" model="ir.ui.view">
+        <field name="name">backup.config.list</field>
+        <field name="model">backup.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="destination_type"/>
+                <field name="database_name"/>
+                <field name="auth_type" column_invisible="1"/>
+                <field name="last_backup_date"/>
+                <field name="last_backup_status"
+                       decoration-success="last_backup_status == 'success'"
+                       decoration-danger="last_backup_status == 'failed'"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_backup_config" model="ir.actions.act_window">
+        <field name="name">Configurations Backup</field>
+        <field name="res_model">backup.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale XLSX (Maroc)',
-    'version': '19.0.3.1.0',
+    'version': '19.0.4.0.0',
     'category': 'Accounting/Accounting',
     'summary': "Export the Moroccan liasse fiscale as the DGI's own Excel workbook",
     'description': """
@@ -17,9 +17,13 @@ into the cell the form puts it in; the map was built by aligning every report
 line with its row on the form and was checked cell by cell against a real
 filed liasse.
 
-The four tableaux the DGI workbook prints over two pages - the Bilan, the
+The three tableaux the DGI workbook prints over two pages as one table - the
 CPC, the Detail des postes du CPC and the Principales methodes d'evaluation -
-are delivered as a single sheet each.
+are delivered as a single sheet each. The Bilan keeps its two sheets: actif
+and passif are two tables on different column grids.
+
+The cover page is filled from the company record - raison sociale, identifiant
+fiscal, address, and the city and date above the signature.
 
 Values come from the same engine as the EDI XML export, so the workbook and
 the XML always agree.

@@ -776,8 +776,12 @@ ANNEX = {
 }
 
 HEADER = {
-    # the cover page carries the identifiant fiscal on its own
-    'PageDeGarde': {'identifiant_bare': 'D12'},
+    # The cover page names the company in full rather than in a sheet
+    # header: raison sociale, taxe professionnelle, identifiant fiscal and
+    # address, then the place and date above the signature. The taxe
+    # professionnelle is left blank - nothing holds it yet.
+    'PageDeGarde': {'raison_sociale': 'D10', 'identifiant_bare': 'D12',
+                    'adresse': 'D13', 'lieu_date': 'E15'},
     'AffResultat': {'identifiant': 'E1', 'company': 'A5', 'exercice': 'E5',
                     'decision_affectation': 'B7'},
     'Amort': {'identifiant': 'D1', 'company': 'A5', 'exercice': 'D5'},
