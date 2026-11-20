@@ -734,6 +734,21 @@ class AccountReportCustomHandlerEdi(models.AbstractModel):
             f"      ecart  {ecart:>18,.2f}"
             for label, actif_code, actif, passif_code, passif, ecart in problems
         )
+        # The balance sheet is the only thing worth refusing a file over, but
+        # while we are refusing it, name everything else the coherence report
+        # would show - one trip instead of two. Computed here only, so the
+        # happy path costs nothing.
+        autres = self.env['account.report.handler.ma_coherence']._coh_ecarts(
+            values, company, date_from, date_to)
+        if autres:
+            details += _(
+                "\n\n  Autres contrôles en écart (sans effet sur le dépôt) :\n"
+            ) + '\n'.join(
+                f"  - {label_a} / {label_b}:\n"
+                f"      {valeur_a:>18,.2f}  /  {valeur_b:>18,.2f}"
+                f"      ecart {ecart:>14,.2f}"
+                for label_a, label_b, valeur_a, valeur_b, ecart in autres
+            )
         raise UserError(_(
             "The liasse of %(company)s for the exercice %(date_from)s - %(date_to)s "
             "does not balance, so no file was produced:\n\n%(details)s\n\n"
@@ -902,19 +917,28 @@ class AccountReportCustomHandlerEdi(models.AbstractModel):
             out.append((code, value))
         return out
 
-    # ----------------------------------------------------------- xml assembly
+    def _dbc_edi_all_values(self, date_from, date_to, all_entries, only_reports=None):
+        """(all_values, per_tableau) for the whole liasse over one exercice.
 
-    def _dbc_edi_build_xml(self, company, identifiant, date_from, date_to, all_entries):
-        year = str(date_to.year)
+        `all_values` is {codeEdi: value} merged across every tableau,
+        `per_tableau` is {tableau_id: {codeEdi: value}}.
+
+        Computing this up front is what lets an extraField point at a codeEdi
+        living in another tableau (code 18 of tableau 41 is the Passif's
+        Capital social). It is also what the coherence report reads, so that
+        the screen and the exported file can never disagree about a figure:
+        they come from the same rendered reports.
+
+        `only_reports` restricts the work to a set of dbc_liasse_fiscale report
+        xml_id names; None means the whole liasse.
+        """
         period_options = self._dbc_edi_period_options(date_from, date_to, all_entries)
-
-        # Pass 1 - compute every tableau's cells. Done up front because an
-        # extraField can point at a codeEdi living in another tableau (code 18
-        # of tableau 41 is the Passif's Capital social).
         per_tableau = {}
         all_values = {}
         seen_in = {}
         for xmlid, tableau_id in _REPORT_TABLEAU.items():
+            if only_reports is not None and xmlid not in only_reports:
+                continue
             target = self.env.ref(f'dbc_liasse_fiscale.{xmlid}', raise_if_not_found=False)
             if not target:
                 _logger.warning("EDI liasse: report %r not found, tableau %s skipped", xmlid, tableau_id)
@@ -932,6 +956,15 @@ class AccountReportCustomHandlerEdi(models.AbstractModel):
                     seen_in[code] = xmlid
             per_tableau[tableau_id] = values
             all_values.update(values)
+        return all_values, per_tableau
+
+    # ----------------------------------------------------------- xml assembly
+
+    def _dbc_edi_build_xml(self, company, identifiant, date_from, date_to, all_entries):
+        year = str(date_to.year)
+
+        # Pass 1 - compute every tableau's cells.
+        all_values, per_tableau = self._dbc_edi_all_values(date_from, date_to, all_entries)
 
         self._dbc_edi_check_coherence(all_values, company, date_from, date_to)
 

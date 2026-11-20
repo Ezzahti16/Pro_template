@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><odoo>
+
+<!-- "Incohérences" - the reference workbook's control sheet, in Odoo.
+     Same checks and same figures as coherence_report (both handlers share
+     _CHECKS and _coh_resultats); only the presentation differs, through the
+     custom screen template dbc_liasse_edi.AccountReportIncoherences.
+
+     The four columns are never shown on screen - the template renders the
+     payload instead - but the PDF and XLSX exports use them, so they stay
+     defined and filled. -->
+<record id="incoherences_report" model="account.report">
+    <field name="name">Incohérences</field>
+    <field name="country_id" ref="base.ma"/>
+    <field name="default_opening_date_filter">today</field>
+    <field name="filter_date_range" eval="True"/>
+    <field name="filter_analytic_groupby" eval="False"/>
+    <field name="filter_journals" eval="False"/>
+    <field name="filter_show_draft" eval="True"/>
+    <field name="filter_unfold_all" eval="False"/>
+    <field name="filter_multi_company">selector</field>
+    <field name="filter_period_comparison" eval="False"/>
+    <field name="filter_growth_comparison" eval="False"/>
+    <field name="custom_handler_model_id" ref="model_account_report_handler_ma_incoherences"/>
+    <field name="column_ids">
+        <record id="incoherences_column_montant" model="account.report.column">
+            <field name="name">Exercice - Montant</field>
+            <field name="expression_label">montant</field>
+            <field name="sequence">10</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="incoherences_column_ecart" model="account.report.column">
+            <field name="name">Exercice - Écart</field>
+            <field name="expression_label">ecart</field>
+            <field name="sequence">20</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="incoherences_column_montant_prev" model="account.report.column">
+            <field name="name">Exercice précédent - Montant</field>
+            <field name="expression_label">montant_prev</field>
+            <field name="sequence">30</field>
+            <field name="figure_type">monetary</field>
+        </record>
+        <record id="incoherences_column_ecart_prev" model="account.report.column">
+            <field name="name">Exercice précédent - Écart</field>
+            <field name="expression_label">ecart_prev</field>
+            <field name="sequence">40</field>
+            <field name="figure_type">monetary</field>
+        </record>
+    </field>
+</record>
+
+<record id="action_ma_incoherences_report" model="ir.actions.client">
+    <field name="name">Incohérences</field>
+    <field name="tag">account_report</field>
+    <field name="path">ma-incoherences</field>
+    <field name="context" eval="{'report_id': ref('incoherences_report')}"/>
+</record>
+
+<menuitem id="menu_ma_incoherences_report"
+          name="Incohérences"
+          action="action_ma_incoherences_report"
+          parent="account.account_reports_legal_statements_menu"
+          sequence="89"/>
+
+</odoo>

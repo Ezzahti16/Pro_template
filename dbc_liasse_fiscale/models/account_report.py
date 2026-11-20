@@ -8,40 +8,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from dateutil.relativedelta import relativedelta
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.fields import Domain
 from odoo.tools import SQL
 
 _logger = logging.getLogger(__name__)
-
-# Classes of the plan comptable marocain that hold a flow of the exercice -
-# charges and produits - rather than a standing balance. An "exercice
-# precedent" column reads these over the exercice before, not since the
-# ledger opened; see MaFiscalEvaluator._get_prefix_sums.
-_GESTION_CLASSES = ('6', '7')
-
-# Lignes de titre d'un poste. Le formulaire de la DGI les imprime a 0,00 et
-# porte le montant sur la ligne TOTAL juste en dessous ; nous l'affichons sur
-# les deux, si bien que la meme somme figure deux fois dans le meme bloc.
-#
-# Le code EDI, lui, doit continuer a calculer : ce sont ces totaux-la qui le
-# reprennent (1544 "Total" = EDI('1533'), XV. TOTAL DES CHARGES = EDI('11228')
-# + ...), donc mettre la formule a 0 casserait les totaux. Seul l'AFFICHAGE de
-# la ligne de titre est neutralise, et seulement si la base de donnees le
-# demande par le parametre systeme ci-dessous - une liasse qui sert ces cellules
-# (TEST_EDI par exemple) n'est pas touchee.
-_RUBRIQUES_A_ZERO_PARAM = 'ma_liasse.rubriques_a_zero'
-_RUBRIQUE_LINES = frozenset((
-    # C.P.C.
-    'I_PRODUITS_EXPLOITATION', 'II_CHARGES_EXPLOITATION', 'IV_PRODUITS_FINANCIERS',
-    'VIII_PRODUITS_NON_COURANTS', 'IX_CHARGES_NON_COURANTES',
-    # Detail des postes du C.P.C.
-    'DETAIL_CPC_612', 'DETAIL_CPC_613_614', 'DETAIL_CPC_617', 'DETAIL_CPC_618',
-    'DETAIL_CPC_658', 'DETAIL_CPC_712', 'DETAIL_CPC_738',
-))
 
 # --------------------------------------------------------------------------- #
 # Remote formules API
@@ -498,10 +470,6 @@ def parse_formule(text):
             return ('deb', node[1], -node[2])
         if node[0] == 'cre':
             return ('cre', node[1], -node[2])
-        if node[0] == 'sdeb':
-            return ('sdeb', node[1], -node[2])
-        if node[0] == 'scre':
-            return ('scre', node[1], -node[2])
         if node[0] == 'const':
             return ('const', -node[1])
         return ('neg', node)
@@ -555,19 +523,6 @@ def parse_formule(text):
                 # CRE('xxx') → total CREDIT only of accounts whose code starts
                 # with 'xxx' (no debit netted in, unlike SE/ASE).
                 return ('cre', arg, 1)
-            if func == 'SDEB':
-                # SDEB('xxx') → the DEBIT BALANCES of the accounts whose code
-                # starts with 'xxx', account by account: each one is netted on
-                # its own and only those left in debit are added up. This is
-                # what the liasse means by "solde debiteur", and it is neither
-                # SE (which nets the whole prefix into a single figure, so an
-                # account in credit cancels one in debit) nor DEB (which adds
-                # up debit MOVEMENTS and nets nothing at all).
-                return ('sdeb', arg, 1)
-            if func == 'SCRE':
-                # SCRE('xxx') → the same the other way round: the credit
-                # balances, account by account, as a positive figure.
-                return ('scre', arg, 1)
             if func in ('MDE', 'MCE', 'DE'):
                 return ('const', 0.0)
             raise ValueError(_("Unsupported function: %s", func))
@@ -589,7 +544,7 @@ def collect_account_prefixes(ast, formules, code, prefixes=None, stack=()):
 
     def walk(node):
         kind = node[0]
-        if kind in ('se', 'ase', 'deb', 'cre', 'sdeb', 'scre'):
+        if kind in ('se', 'ase' , 'deb', 'cre'):
             prefixes.add(node[1])
         elif kind == 'edi':
             ref = node[1]
@@ -1110,10 +1065,42 @@ class AccountReport_MaFiscal(models.Model):
             rslt['class'] = 'o_bold_tr'
         return rslt
 
+    # Decimals shown in the annex tables (dotations, emprunts, credit-bail,
+    # titres, cessions, capital, locations). Odoo's _build_column_dict
+    # defaults to digits=1 for every `float` column, so 291,06 was displayed
+    # as 291,1 - the stored value was never rounded, only its display. The
+    # liasse is kept to the centime, so the display must be too.
+    _MA_FLOAT_DIGITS = 2
+
+    def _ma_is_liasse_report(self):
+        """True when every record is one of this module's reports.
+
+        They all declare a custom handler named ``account.report.handler.ma_*``
+        (see the data/bilan_*_report.xml files), which is what keeps the
+        formatting tweaks below away from Odoo's standard reports - this
+        method is inherited by every account.report in the database.
+        """
+        return bool(self) and all(
+            (report.custom_handler_model_name or '').startswith(
+                'account.report.handler.ma_')
+            for report in self
+        )
+
     def _build_column_dict(
         self, col_value, col_data, options=None, currency=False, digits=1,
         column_expression=None, has_sublines=False, report_line_id=None,
     ):
+        # Show the centimes in the annex tables (see _MA_FLOAT_DIGITS). The
+        # figure_type is read exactly as super() reads it: from the column
+        # expression when there is one, from the column options otherwise
+        # (the data-entry handlers build their cells without an expression).
+        figure_type = (
+            (column_expression.figure_type if column_expression else None)
+            or (col_data or {}).get('figure_type')
+        )
+        if figure_type == 'float' and self._ma_is_liasse_report():
+            digits = self._MA_FLOAT_DIGITS
+
         # Highlight every cell whose EDI code is currently a manual ("Saisie")
         # entry point; the web client gets the pencil via edit_popup_data.
         rslt = super()._build_column_dict(
@@ -1483,16 +1470,9 @@ class AccountReportHandlerMaFiscal(models.AbstractModel):
         report = self.env['account.report'].browse(options['report_id'])
         evaluator = MaFiscalEvaluator(report, self.env, options, date_scope)
         results = {'has_sublines': False}
-        # Voir _RUBRIQUE_LINES : certaines liasses laissent les lignes de titre
-        # a 0,00 et ne portent le montant que sur la ligne TOTAL.
-        rubriques_a_zero = bool(self.env['ir.config_parameter'].sudo().get_param(
-            _RUBRIQUES_A_ZERO_PARAM))
 
         for expression in expressions:
             subformula = expression.subformula or ''
-            if rubriques_a_zero and expression.report_line_id.code in _RUBRIQUE_LINES:
-                results[subformula] = 0.0
-                continue
             match = re.fullmatch(r'\s*edi[_ ](\S+)\s*', subformula)
             if not match:
                 raise UserError(_(
@@ -2163,10 +2143,6 @@ class MaFiscalEvaluator:
         self._manual_exists = {}    # memo: code → bool (any saved value in scope?)
         self._manual_text_cache = {}  # memo: code → str (tableau 220's text cells)
         self._prefix_sums = {}      # memo: prefix → (debit, credit)
-        # memo: prefix → (debit balances, credit balances), account by account
-        self._prefix_balances = {}
-        # built once, by _previous_exercice_options
-        self._previous_options = None
         self._inline_cache = {}     # memo: code → float (inline table subtotal)
         # See _evaluate_nested_code: off by default, so every existing report
         # keeps evaluating a whole formula tree at the cell's own date_scope.
@@ -2527,127 +2503,25 @@ class MaFiscalEvaluator:
             # CRE('xxx') → total CREDIT only (never nets in the debit side);
             # -CRE('xxx') → its negation.
             return credit * node[2]
-        if kind == 'sdeb':
-            debit, _credit = self._get_prefix_balances(node[1])
-            # SDEB('xxx') → the debit balances, account by account
-            return debit * node[2]
-        if kind == 'scre':
-            _debit, credit = self._get_prefix_balances(node[1])
-            # SCRE('xxx') → the credit balances, account by account
-            return credit * node[2]
         raise UserError(_("Unknown formule node kind: %s", kind))
-
-    # ------------------------------------------- the exercice before this one
-    def _previous_exercice_options(self):
-        """These options with the period moved back to the exercice before.
-
-        Taken from the fiscal year that holds the selected period's end date,
-        then the one before it, so a filter anywhere inside 2025 - the whole
-        year or a month of it - reads 2024 in full, which is what an
-        "exercice precedent" column of the liasse means.
-        """
-        if self._previous_options is None:
-            company = self.report.env.company
-            current = company.compute_fiscalyear_dates(
-                fields.Date.from_string(self.options['date']['date_to']))
-            previous = company.compute_fiscalyear_dates(
-                current['date_from'] - relativedelta(days=1))
-            options = dict(self.options)
-            options['date'] = dict(
-                self.options['date'],
-                date_from=fields.Date.to_string(previous['date_from']),
-                date_to=fields.Date.to_string(previous['date_to']),
-                mode='range',
-            )
-            self._previous_options = options
-        return self._previous_options
-
-    def _prefix_query(self, prefix):
-        """The journal items this evaluator reads for *prefix*, over the
-        period its date_scope stands for - see _get_prefix_sums for why a
-        compte de gestion is read over the exercice before rather than since
-        the ledger opened."""
-        if not re.fullmatch(r'[0-9A-Za-z]+', prefix):
-            raise UserError(_("Invalid account code prefix: %r") % prefix)
-        options, date_scope = self.options, self.date_scope
-        if date_scope == 'to_beginning_of_period' and prefix[:1] in _GESTION_CLASSES:
-            options, date_scope = self._previous_exercice_options(), 'strict_range'
-        return self.report._get_report_query(
-            options,
-            date_scope,
-            domain=[('account_id.code', '=like', f"{prefix}%")],
-        )
-
-    # ------------------------------------------ account prefix balances
-    def _get_prefix_balances(self, prefix):
-        """Return (debit balances, credit balances) for the accounts whose
-        code starts with *prefix*, each account netted on its own.
-
-        This is the "solde debiteur / solde crediteur" the liasse asks for,
-        and it is a different question from the one _get_prefix_sums answers.
-        Take the Etat: the form puts on the actif what the Tresor owes the
-        company and on the passif what the company owes the Tresor, account by
-        account. Netting 345 and 445 as two blocks (SE) loses the accounts
-        standing on the wrong side of their class - on this file a 345 in
-        credit for 1 296,49 - and adding up the movements (DEB/CRE) loses the
-        netting entirely. Only a balance per account answers it.
-        """
-        if prefix in self._prefix_balances:
-            return self._prefix_balances[prefix]
-
-        query = self._prefix_query(prefix)
-        self.env.cr.execute(SQL(
-            """
-                SELECT COALESCE(SUM(GREATEST(solde, 0.0)), 0.0),
-                       COALESCE(SUM(GREATEST(-solde, 0.0)), 0.0)
-                  FROM (
-                        SELECT account_move_line.account_id AS account_id,
-                               SUM(%(debit)s) - SUM(%(credit)s) AS solde
-                          FROM %(table_references)s
-                               %(currency_table_join)s
-                         WHERE %(search_condition)s
-                         GROUP BY account_move_line.account_id
-                       ) AS soldes_par_compte
-            """,
-            debit=self.report._currency_table_apply_rate(SQL("account_move_line.debit")),
-            credit=self.report._currency_table_apply_rate(SQL("account_move_line.credit")),
-            table_references=query.from_clause,
-            currency_table_join=self.report._currency_table_aml_join(self.options),
-            search_condition=query.where_clause,
-        ))
-        debit, credit = self.env.cr.fetchone()
-        result = (debit or 0.0, credit or 0.0)
-        self._prefix_balances[prefix] = result
-        return result
 
     # ----------------------------------------------- account prefix totals
     def _get_prefix_sums(self, prefix):
         """Return (total_debit, total_credit) for all journal items posted on
         accounts whose code starts with *prefix*, within the date scope of this
         evaluator.  Results are memoised for the duration of the render.
-
-        One scope is read differently depending on what the account holds.
-        ``to_beginning_of_period`` is how every "exercice precedent" column of
-        the liasse is declared, and Odoo reads it as everything posted up to
-        the day before the period starts. On a compte de bilan that is right:
-        the balance carried into the exercice is a standing amount, and the
-        column wants it as it stood on the last day of the exercice before.
-
-        On a compte de gestion it is not. A charge or a produit is a flow, and
-        it is only ever closed by an entry in software that posts one; Odoo
-        computes the result instead, so classes 6 and 7 are never cleared and
-        everything posted since the ledger opened adds up. The "exercice
-        precedent" column of the C.P.C. then shows 2024 AND 2023 AND 2022 at
-        once - on this file, ventes of 82 240 403,17 where the exercice before
-        carried 33 318 799,59, the other 48 921 603,58 being 2023's.
-
-        So for those two classes the period itself is moved back one exercice
-        and read in full, which is what the column says it shows.
         """
         if prefix in self._prefix_sums:
             return self._prefix_sums[prefix]
 
-        query = self._prefix_query(prefix)
+        if not re.fullmatch(r'[0-9A-Za-z]+', prefix):
+            raise UserError(_("Invalid account code prefix: %r") % prefix)
+
+        query = self.report._get_report_query(
+            self.options,
+            self.date_scope,
+            domain=[('account_id.code', '=like', f"{prefix}%")],
+        )
         self.env.cr.execute(SQL(
             """
                 SELECT COALESCE(SUM(%(debit)s), 0.0),

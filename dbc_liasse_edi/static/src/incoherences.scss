@@ -1,0 +1,170 @@
+// "Incohérences" page - the look of the reference workbook's control sheet:
+// thin grey rules everywhere, a grey header band, amounts right-aligned on a
+// tabular figure, and the gaps in red. Everything is scoped under
+// .o_ma_incoh so no other account report can be touched by it.
+
+.o_ma_incoh {
+    padding: 1rem 1.25rem 2rem;
+    font-size: 13px;
+    color: #111;
+
+    // ---------------------------------------------------------- en-tête
+    .o_ma_incoh_entete {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 2rem;
+        margin-bottom: .75rem;
+    }
+
+    .o_ma_incoh_societe {
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .o_ma_incoh_modele,
+    .o_ma_incoh_exercice {
+        color: #444;
+    }
+
+    .o_ma_incoh_bandeau {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: .5rem;
+    }
+
+    .o_ma_incoh_titre {
+        font-weight: 700;
+        font-size: 15px;
+        padding-bottom: .35rem;
+    }
+
+    // -------------------------------------------------- boîtes compteurs
+    // Les deux boîtes restent collées l'une à l'autre, à droite du titre,
+    // comme sur la feuille du classeur - et non écartées aux deux bouts de
+    // l'écran, ce que donnait un simple space-between sur le bandeau.
+    .o_ma_incoh_compteurs {
+        display: flex;
+        gap: 1.25rem;
+    }
+
+    .o_ma_incoh_compteur {
+        border-collapse: collapse;
+
+        th, td {
+            border: 1px solid #9aa0a6;
+            padding: .15rem .5rem;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #dfe3e8;
+            font-weight: 600;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .o_ma_incoh_seuil {
+            color: #444;
+            font-size: 12px;
+        }
+
+        .o_ma_incoh_nombre {
+            text-align: center;
+            font-weight: 700;
+            min-width: 3rem;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    // ----------------------------------------------------- table des tests
+    .o_ma_incoh_table {
+        border-collapse: collapse;
+        width: 100%;
+
+        th, td {
+            border: 1px solid #9aa0a6;
+            padding: .2rem .5rem;
+            vertical-align: middle;
+        }
+
+        thead th {
+            background-color: #dfe3e8;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .o_ma_incoh_vs {
+            width: 2.5rem;
+            text-align: center;
+            font-weight: 700;
+            color: #555;
+            background-color: #f3f5f7;
+        }
+
+        .o_ma_incoh_test {
+            // The labels are long by nature ("Amortissements des immobilisations
+            // cédées ou retirées du T10"); let them wrap rather than push the
+            // figures off screen.
+            min-width: 22rem;
+        }
+
+        .o_ma_incoh_num {
+            text-align: right;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+            min-width: 8rem;
+        }
+
+        .o_ma_incoh_ecart {
+            text-align: center;
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+
+        // A pair of rows reads as one block: no rule between them.
+        tbody tr.o_ma_incoh_a td:not(.o_ma_incoh_vs):not(.o_ma_incoh_ecart) {
+            border-bottom-style: dashed;
+            border-bottom-color: #ccd0d4;
+        }
+
+        tbody tr:hover > td {
+            background-color: #eef4fb;
+        }
+    }
+
+    .o_ma_incoh_bandeau_couverture {
+        margin-top: 2rem;
+    }
+
+    .o_ma_incoh_couverture {
+        width: auto;
+
+        .o_ma_incoh_vs {
+            width: 3.5rem;
+        }
+
+        .o_ma_incoh_num {
+            min-width: 5rem;
+        }
+    }
+
+    // ------------------------------------------------------------ statuts
+    .o_ma_incoh_ok {
+        color: #1b6b2f;
+    }
+
+    .o_ma_incoh_ko {
+        color: #b3002d;
+        font-weight: 700;
+    }
+
+    .o_ma_incoh_warn {
+        color: #b36b00;
+        font-weight: 700;
+    }
+}

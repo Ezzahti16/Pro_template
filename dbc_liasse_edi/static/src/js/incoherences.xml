@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <!--
+        "Incohérences" - the purchased workbook's own control sheet, rendered
+        in Odoo. A copy of account_reports.AccountReportCustomizable (control
+        panel, filters, cog menu, warnings, chatter) whose "Table" section is
+        replaced by the workbook's grid: identification block, the two counter
+        boxes, then one "VS" pair of rows per test with a Montant/Écart couple
+        per exercice.
+
+        Everything it prints is prepared server side, in
+        custom_display_config.ma_incoherences (see models/incoherences.py) -
+        the template formats nothing, so a print of this page and the screen
+        can never differ.
+
+        Wired in exactly like dbc_liasse_fiscale's Tableau de financement
+        screen: custom_display_config.templates.AccountReport, set by
+        AccountReportHandlerMaIncoherences._custom_options_initializer. See
+        account_report.js / getTemplate() in account_reports.
+    -->
+    <t t-name="dbc_liasse_edi.AccountReportIncoherences">
+        <div class="o_action account_report" t-att-class="cssCustomClass" t-ref="root" t-on-keydown="onKeydown">
+            <ControlPanel>
+                <!-- Buttons bar -->
+                <t t-set-slot="control-panel-create-button">
+                    <AccountReportButtonsBar/>
+                </t>
+                <t t-set-slot="control-panel-additional-actions">
+                    <AccountReportCogMenu/>
+                </t>
+
+                <!-- Search bar (if configured for report) and filters -->
+                <t t-set-slot="layout-actions">
+                   <div class="d-flex gap-1 flex-wrap">
+                       <t t-if="controller.cachedFilterOptions.search_bar">
+                           <AccountReportSearchBar initialQuery="initialQuery"/>
+                           <br/>
+                       </t>
+                       <t t-component="env.component('AccountReportFilters')"/>
+                   </div>
+                </t>
+            </ControlPanel>
+
+            <div class="overflow-hidden d-flex flex-row h-100">
+                <div class="o_content d-flex flex-column w-100">
+                    <!-- Warnings -->
+                    <t t-if="controller.data and controller.warnings">
+                        <div id="warnings" class="warnings d-print-none">
+                            <t t-foreach="controller.warnings" t-as="warningTemplateRef" t-key="warningTemplateRef">
+                                <t t-set="warningParams" t-value="controller.warnings[warningTemplateRef]"/>
+                                <div t-att-class="`alert alert-${warningParams['alert_type'] || 'info'} text-center`">
+                                    <t t-call="{{ warningTemplateRef }}"/>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+
+                    <t t-if="controller.data === undefined">
+                        <div class="o_view_nocontent">
+                            <div class="text-center mt-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <t t-set="incoh" t-value="((controller.options || {}).custom_display_config || {}).ma_incoherences"/>
+
+                        <t t-if="incoh and incoh.erreur">
+                            <div class="o_view_nocontent">
+                                <div class="o_nocontent_help">
+                                    <p class="o_view_nocontent_neutral_face" t-out="incoh.erreur"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-elif="incoh">
+                            <div class="o_ma_incoh o_account_report_scroll_container overflow-auto">
+
+                                <!-- Identification, as rows 1 and 2 of the sheet -->
+                                <div class="o_ma_incoh_entete">
+                                    <div>
+                                        <div class="o_ma_incoh_societe" t-out="incoh.societe"/>
+                                        <div class="o_ma_incoh_modele" t-out="incoh.modele"/>
+                                    </div>
+                                    <div class="o_ma_incoh_exercice" t-out="incoh.exercice"/>
+                                </div>
+
+                                <!-- Row 3 to 5: the title and the two counter boxes -->
+                                <div class="o_ma_incoh_bandeau">
+                                    <div class="o_ma_incoh_titre" t-out="incoh.titre"/>
+                                    <div class="o_ma_incoh_compteurs">
+                                    <t t-foreach="incoh.compteurs" t-as="compteur" t-key="compteur_index">
+                                        <table class="o_ma_incoh_compteur">
+                                            <thead>
+                                                <tr><th colspan="2" t-out="compteur.titre"/></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="o_ma_incoh_seuil">de 0,01 à 0,10</td>
+                                                    <td class="o_ma_incoh_nombre" t-out="compteur.mineur"/>
+                                                </tr>
+                                                <tr>
+                                                    <td class="o_ma_incoh_seuil">au-delà de 0,10</td>
+                                                    <td t-attf-class="o_ma_incoh_nombre {{ compteur.incoherence ? 'o_ma_incoh_ko' : '' }}"
+                                                        t-out="compteur.incoherence"/>
+                                                </tr>
+                                                <tr t-if="compteur.non_teste">
+                                                    <td class="o_ma_incoh_seuil">non testés</td>
+                                                    <td class="o_ma_incoh_nombre" t-out="compteur.non_teste"/>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                    </div>
+                                </div>
+
+                                <!-- Rows 7 onwards: the tests themselves -->
+                                <table class="o_ma_incoh_table">
+                                    <thead>
+                                        <tr>
+                                            <th class="o_ma_incoh_vs" rowspan="2"/>
+                                            <th class="o_ma_incoh_test" rowspan="2" t-out="incoh.entetes.test"/>
+                                            <th colspan="2" t-out="incoh.entetes.exercice"/>
+                                            <th colspan="2" t-out="incoh.entetes.exercice_prec"/>
+                                        </tr>
+                                        <tr>
+                                            <th class="o_ma_incoh_num" t-out="incoh.entetes.montant"/>
+                                            <th class="o_ma_incoh_num" t-out="incoh.entetes.ecart"/>
+                                            <th class="o_ma_incoh_num" t-out="incoh.entetes.montant"/>
+                                            <th class="o_ma_incoh_num" t-out="incoh.entetes.ecart"/>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="incoh.tests" t-as="test" t-key="test_index">
+                                            <tr class="o_ma_incoh_a">
+                                                <td class="o_ma_incoh_vs" rowspan="2">VS</td>
+                                                <td class="o_ma_incoh_test" t-out="test.libelle_a"/>
+                                                <td class="o_ma_incoh_num" t-out="test.montant_a"/>
+                                                <td rowspan="2" t-attf-class="o_ma_incoh_num o_ma_incoh_ecart {{ test.classe }}">
+                                                    <t t-if="test.non_teste">—</t>
+                                                    <t t-else="" t-out="test.ecart"/>
+                                                </td>
+                                                <td class="o_ma_incoh_num" t-out="test.montant_a_prev"/>
+                                                <td rowspan="2" t-attf-class="o_ma_incoh_num o_ma_incoh_ecart {{ test.classe_prev }}">
+                                                    <t t-if="test.non_teste_prev">—</t>
+                                                    <t t-else="" t-out="test.ecart_prev"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="o_ma_incoh_b">
+                                                <td class="o_ma_incoh_test" t-out="test.libelle_b"/>
+                                                <td class="o_ma_incoh_num" t-out="test.montant_b"/>
+                                                <td class="o_ma_incoh_num" t-out="test.montant_b_prev"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                                <!-- EDI coverage: not in the workbook, but it is
+                                     the one check no spreadsheet can make. -->
+                                <div class="o_ma_incoh_bandeau o_ma_incoh_bandeau_couverture">
+                                    <div t-attf-class="o_ma_incoh_titre {{ incoh.couverture_vides ? 'o_ma_incoh_ko' : '' }}"
+                                         t-out="incoh.couverture_titre"/>
+                                </div>
+                                <table class="o_ma_incoh_table o_ma_incoh_couverture">
+                                    <thead>
+                                        <tr>
+                                            <th class="o_ma_incoh_vs" t-out="incoh.entetes.numero"/>
+                                            <th class="o_ma_incoh_test" t-out="incoh.entetes.tableau"/>
+                                            <th class="o_ma_incoh_num" t-out="incoh.entetes.cellules"/>
+                                            <th t-out="incoh.entetes.fichier"/>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="incoh.couverture" t-as="cov" t-key="cov.tableau">
+                                            <tr>
+                                                <td class="o_ma_incoh_vs" t-out="cov.tableau"/>
+                                                <td class="o_ma_incoh_test" t-out="cov.nom"/>
+                                                <td class="o_ma_incoh_num" t-out="cov.nombre"/>
+                                                <td t-if="cov.nombre" class="o_ma_incoh_ok" t-out="incoh.entetes.present"/>
+                                                <td t-else="" class="o_ma_incoh_ko" t-out="incoh.entetes.absent"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="o_view_nocontent">
+                                <div class="o_nocontent_help">
+                                    <p class="o_view_nocontent_neutral_face">Aucune donnée à afficher</p>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

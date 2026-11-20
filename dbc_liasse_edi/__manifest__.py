@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale EDI (Maroc)',
-    'version': '19.0.2.9.0',
+    'version': '19.0.3.2.0',
     'category': 'Accounting/Accounting',
     'summary': 'Generate the DGI Simpl-IS "EDI Liasse" XML file from the Moroccan liasse reports',
     'description': """
@@ -29,8 +29,15 @@ v1.0, for the Modele Comptable Normal (modele id 1):
     'license': 'LGPL-3',
     'depends': ['dbc_liasse_fiscale'],
     'data': [
+        'data/incoherences_report.xml',
         'views/res_company_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'dbc_liasse_edi/static/src/incoherences.scss',
+            'dbc_liasse_edi/static/src/js/**/*',
+        ],
+    },
     'installable': True,
     'application': False,
 }
