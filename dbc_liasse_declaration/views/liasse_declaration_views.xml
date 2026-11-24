@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Le formulaire de la déclaration.
+
+        La maquette de départ était une page web dessinée hors d'Odoo. Elle
+        est reprise ici dans les formes d'Odoo - barre d'état, boutons
+        statistiques, onglets, fil de discussion - plutôt que recopiée : un
+        écran qui ressemble au reste du logiciel s'apprend tout seul, et tout
+        ce que la maquette dessinait à la main (le fil des quatre étapes, le
+        pourcentage de vérification, le bandeau de l'état déposé) existe déjà
+        en standard.
+    -->
+    <record id="view_ma_liasse_declaration_form" model="ir.ui.view">
+        <field name="name">ma.liasse.declaration.form</field>
+        <field name="model">ma.liasse.declaration</field>
+        <field name="arch" type="xml">
+            <form string="Déclaration de la liasse fiscale">
+                <header>
+                    <button name="action_passer_en_controle" type="object"
+                            string="Passer en contrôle" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirmer" type="object"
+                            string="Confirmer" class="btn-primary"
+                            invisible="state != 'controle'"/>
+                    <button name="action_declarer" type="object"
+                            string="Marquer comme déclaré" class="btn-primary"
+                            invisible="state != 'confirme'"/>
+                    <button name="action_controler" type="object"
+                            string="Relancer les contrôles"
+                            invisible="state not in ('controle', 'confirme')"/>
+
+                    <!-- Les trois fichiers : disponibles à toute étape. Les
+                         produire ne change rien au dossier, et un PDF de
+                         travail est utile bien avant la confirmation. -->
+                    <button name="action_generer_pdf" type="object"
+                            string="PDF" icon="fa-file-pdf-o"/>
+                    <button name="action_generer_xlsx" type="object"
+                            string="Excel" icon="fa-file-excel-o"/>
+                    <button name="action_generer_xml" type="object"
+                            string="XML EDI" icon="fa-file-code-o"/>
+
+                    <button name="action_retour_brouillon" type="object"
+                            string="Remettre en brouillon"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,controle,confirme,declare"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Déclaré" bg_color="bg-success"
+                            invisible="state != 'declare'"/>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_ouvrir_incoherences" type="object"
+                                class="oe_stat_button" icon="fa-balance-scale"
+                                help="Ouvrir le tableau de vérification des incohérences">
+                            <field name="nb_incoherences" widget="statinfo"
+                                   string="Incohérences"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Société">
+                            <field name="company_id" options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="raison_sociale"
+                                   readonly="state in ('confirme', 'declare')"/>
+                            <field name="identifiant_fiscal"
+                                   readonly="state in ('confirme', 'declare')"/>
+                        </group>
+                        <group string="Période déclarée">
+                            <field name="date_from"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="type_declaration"
+                                   readonly="state in ('confirme', 'declare')"/>
+                            <field name="all_entries"
+                                   readonly="state in ('confirme', 'declare')"/>
+                            <field name="date_depot" invisible="state != 'declare'"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Avancement">
+                            <field name="taux_verification" widget="progressbar"/>
+                            <label for="nb_tableaux_verifies" string="Tableaux vérifiés"/>
+                            <div>
+                                <field name="nb_tableaux_verifies" class="oe_inline"/>
+                                <span> / </span>
+                                <field name="nb_tableaux" class="oe_inline"/>
+                            </div>
+                        </group>
+                        <group string="Dernier contrôle">
+                            <field name="controle_le"/>
+                            <field name="nb_cellules_edi"/>
+                            <field name="nb_mineures"/>
+                            <field name="nb_non_testes"/>
+                            <field name="nb_tableaux_vides"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Suivi des tableaux" name="tableaux">
+                            <div class="text-muted mb-2">
+                                Ouvrez chaque tableau avec la flèche, relisez-le,
+                                puis cochez « Vérifié ». La colonne « Cellules EDI »
+                                dit ce que chacun livrerait au fichier : un tableau
+                                à zéro en serait absent.
+                            </div>
+                            <field name="tableau_ids" nolabel="1"
+                                   readonly="state in ('confirme', 'declare')">
+                                <list editable="bottom" create="0" delete="0">
+                                    <field name="sequence" column_invisible="1"/>
+                                    <field name="tableau_edi" column_invisible="1"/>
+                                    <field name="numero" string="N°" readonly="1"/>
+                                    <field name="variante" string="Partie" readonly="1"
+                                           optional="show"/>
+                                    <field name="name" string="Tableau" readonly="1"/>
+                                    <field name="cellules" string="Cellules EDI"
+                                           readonly="1" optional="show"
+                                           decoration-danger="cellules == 0"/>
+                                    <field name="verifie" string="Vérifié"
+                                           widget="boolean_toggle"/>
+                                    <field name="verifie_par" string="Par"
+                                           readonly="1" optional="show"/>
+                                    <field name="verifie_le" string="Le"
+                                           readonly="1" optional="hide"/>
+                                    <button name="action_ouvrir" type="object"
+                                            icon="fa-external-link"
+                                            title="Ouvrir le tableau sur l'exercice déclaré"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Incohérences" name="incoherences">
+                            <div class="text-muted mb-2">
+                                Contrôles croisés relevés au dernier lancement et
+                                conservés tels quels. Aucun n'est une règle de la
+                                DGI : ils signalent, ils n'empêchent pas le dépôt.
+                                Seul un bilan déséquilibré arrête la génération du
+                                fichier EDI.
+                            </div>
+                            <field name="incoherence_ids" nolabel="1" readonly="1">
+                                <list create="0" delete="0"
+                                      decoration-danger="statut == 'incoherence'"
+                                      decoration-warning="statut == 'mineur'"
+                                      decoration-muted="statut in ('non_teste', 'sans_objet')">
+                                    <field name="sequence" column_invisible="1"/>
+                                    <field name="libelle_a" string="Premier terme"/>
+                                    <field name="montant_a" string="Montant"/>
+                                    <field name="libelle_b" string="Second terme"/>
+                                    <field name="montant_b" string="Montant"/>
+                                    <field name="ecart" string="Écart"/>
+                                    <field name="statut" string="Résultat"/>
+                                    <field name="ecart_prev" string="Écart N-1"
+                                           optional="show"/>
+                                    <field name="statut_prev" string="Résultat N-1"
+                                           optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ma_liasse_declaration_list" model="ir.ui.view">
+        <field name="name">ma.liasse.declaration.list</field>
+        <field name="model">ma.liasse.declaration</field>
+        <field name="arch" type="xml">
+            <list string="Déclarations de liasse"
+                  decoration-muted="state == 'declare'"
+                  decoration-bf="state == 'confirme'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="raison_sociale" optional="show"/>
+                <field name="identifiant_fiscal" optional="hide"/>
+                <field name="date_from" optional="hide"/>
+                <field name="date_to"/>
+                <field name="type_declaration" optional="show"/>
+                <field name="taux_verification" widget="progressbar"
+                       string="Vérification"/>
+                <field name="nb_incoherences" string="Incohérences"
+                       decoration-danger="nb_incoherences &gt; 0" optional="show"/>
+                <field name="date_depot" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'controle'"
+                       decoration-warning="state == 'confirme'"
+                       decoration-success="state == 'declare'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ma_liasse_declaration_search" model="ir.ui.view">
+        <field name="name">ma.liasse.declaration.search</field>
+        <field name="model">ma.liasse.declaration</field>
+        <field name="arch" type="xml">
+            <search string="Déclarations de liasse">
+                <field name="name"/>
+                <field name="raison_sociale"/>
+                <field name="identifiant_fiscal"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter name="filtre_brouillon" string="Brouillon"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filtre_controle" string="En contrôle"
+                        domain="[('state', '=', 'controle')]"/>
+                <filter name="filtre_confirme" string="Confirmé"
+                        domain="[('state', '=', 'confirme')]"/>
+                <filter name="filtre_declare" string="Déclaré"
+                        domain="[('state', '=', 'declare')]"/>
+                <separator/>
+                <filter name="filtre_incoherences" string="Avec incohérences"
+                        domain="[('nb_incoherences', '>', 0)]"/>
+                <filter name="groupe_exercice" string="Exercice"
+                        context="{'group_by': 'exercice'}"/>
+                <filter name="groupe_etat" string="État"
+                        context="{'group_by': 'state'}"/>
+                <filter name="groupe_societe" string="Société"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_ma_liasse_declaration" model="ir.actions.act_window">
+        <field name="name">Liasse fiscale</field>
+        <field name="res_model">ma.liasse.declaration</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ma_liasse_declaration_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer une déclaration de liasse fiscale
+            </p>
+            <p>
+                Une déclaration par société et par exercice : elle suit la
+                relecture des 25 tableaux, conserve les contrôles de cohérence
+                et produit le PDF, le classeur Excel et le fichier EDI.
+            </p>
+        </field>
+    </record>
+
+</odoo>

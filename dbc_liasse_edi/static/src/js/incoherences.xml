@@ -88,7 +88,10 @@
 
                                 <!-- Row 3 to 5: the title and the two counter boxes -->
                                 <div class="o_ma_incoh_bandeau">
-                                    <div class="o_ma_incoh_titre" t-out="incoh.titre"/>
+                                    <div>
+                                        <div class="o_ma_incoh_titre" t-out="incoh.titre"/>
+                                        <div class="o_ma_incoh_horodatage" t-out="incoh.calcule_le"/>
+                                    </div>
                                     <div class="o_ma_incoh_compteurs">
                                     <t t-foreach="incoh.compteurs" t-as="compteur" t-key="compteur_index">
                                         <table class="o_ma_incoh_compteur">
@@ -135,7 +138,12 @@
                                         <t t-foreach="incoh.tests" t-as="test" t-key="test_index">
                                             <tr class="o_ma_incoh_a">
                                                 <td class="o_ma_incoh_vs" rowspan="2">VS</td>
-                                                <td class="o_ma_incoh_test" t-out="test.libelle_a"/>
+                                                <td class="o_ma_incoh_test">
+                                                    <a t-if="test.cible_a" href="#"
+                                                       t-on-click="(ev) => controller.reportAction(ev, 'action_ma_ouvrir_etat', test.cible_a)"
+                                                       t-out="test.libelle_a"/>
+                                                    <t t-else="" t-out="test.libelle_a"/>
+                                                </td>
                                                 <td class="o_ma_incoh_num" t-out="test.montant_a"/>
                                                 <td rowspan="2" t-attf-class="o_ma_incoh_num o_ma_incoh_ecart {{ test.classe }}">
                                                     <t t-if="test.non_teste">—</t>
@@ -148,7 +156,12 @@
                                                 </td>
                                             </tr>
                                             <tr class="o_ma_incoh_b">
-                                                <td class="o_ma_incoh_test" t-out="test.libelle_b"/>
+                                                <td class="o_ma_incoh_test">
+                                                    <a t-if="test.cible_b" href="#"
+                                                       t-on-click="(ev) => controller.reportAction(ev, 'action_ma_ouvrir_etat', test.cible_b)"
+                                                       t-out="test.libelle_b"/>
+                                                    <t t-else="" t-out="test.libelle_b"/>
+                                                </td>
                                                 <td class="o_ma_incoh_num" t-out="test.montant_b"/>
                                                 <td class="o_ma_incoh_num" t-out="test.montant_b_prev"/>
                                             </tr>

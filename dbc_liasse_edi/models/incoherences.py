@@ -21,7 +21,8 @@ what the initializer already computed.
 """
 import logging
 
-from odoo import _, models
+from odoo import _, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -51,6 +52,67 @@ class AccountReportHandlerMaIncoherences(models.AbstractModel):
         config.setdefault('templates', {})['AccountReport'] = \
             'dbc_liasse_edi.AccountReportIncoherences'
         config['ma_incoherences'] = self._incoh_payload(report, options)
+        options.setdefault('buttons', []).append({
+            'name': _('Recalculer'),
+            'sequence': 90,
+            # Without always_show the button is filed away in the cog menu
+            # (see AccountReportButtonsBar.barButtons in account_reports);
+            # a control screen's refresh has to be in plain sight.
+            'always_show': True,
+            'action': 'action_ma_recalculer',
+        })
+
+    # -------------------------------------------------------------- actions
+
+    def action_ma_recalculer(self, options):
+        """Drop this exercice's cached figures and reopen the page.
+
+        The fingerprint already catches anything saved in Odoo; this is for
+        what it cannot see - a formula edited on the remote API, a changed
+        fiscal year - and for simple peace of mind before filing.
+        """
+        company = self.env['res.company'].browse(
+            self.env['account.report'].browse(options['report_id'])
+                .get_report_company_ids(options)) or self.env.company
+        date_from, date_to = self._dbc_edi_exercice_bounds(company[:1], options)
+        self._coh_vider_cache(self._coh_cle_cache(
+            self.env.cr.dbname, company[:1], date_from, date_to,
+            bool(options.get('all_entries'))))
+        return self._incoh_action_rapport(options['report_id'], options)
+
+    def action_ma_ouvrir_etat(self, options, xmlid):
+        """Open the liasse report a test's figure comes from, on the SAME
+        exercice - landing on today's dates would mean reading other numbers
+        than the ones just clicked."""
+        cible = self.env.ref('dbc_liasse_fiscale.%s' % xmlid, raise_if_not_found=False)
+        if not cible:
+            raise UserError(_("L'état %s est introuvable.", xmlid))
+        company = self.env['res.company'].browse(
+            self.env['account.report'].browse(options['report_id'])
+                .get_report_company_ids(options)) or self.env.company
+        date_from, date_to = self._dbc_edi_exercice_bounds(company[:1], options)
+        cible_options = cible.get_options(self._dbc_edi_period_options(
+            date_from, date_to, bool(options.get('all_entries'))))
+        return self._incoh_action_rapport(cible.id, cible_options, name=cible.name)
+
+    @staticmethod
+    def _incoh_action_rapport(report_id, options, name=None):
+        """The client action that displays a report with given options.
+
+        `params.options` + `ignore_session` is how account_reports itself
+        opens one report from another (see caret_option_open_general_ledger in
+        account_reports/models/account_report.py) - without ignore_session the
+        viewer's own stored filters would win and the period would be lost.
+        """
+        action = {
+            'type': 'ir.actions.client',
+            'tag': 'account_report',
+            'context': {'report_id': report_id},
+            'params': {'options': options, 'ignore_session': True},
+        }
+        if name:
+            action['name'] = name
+        return action
 
     def _incoh_payload(self, report, options):
         """Everything the page prints, ready to display - no formatting left
@@ -64,8 +126,9 @@ class AccountReportHandlerMaIncoherences(models.AbstractModel):
         company = companies or self.env.company
 
         date_from, date_to = self._dbc_edi_exercice_bounds(company, options)
-        values, per_tableau = self._coh_values(
+        calcul = self._coh_values_datees(
             company, date_from, date_to, bool(options.get('all_entries')))
+        values, per_tableau = calcul['values'], calcul['per_tableau']
         resultats = self._coh_resultats(values, company, date_from, date_to)
         compte = self._coh_compteurs(resultats)
         couverture, cellules, vides = self._coh_couverture_data(
@@ -80,6 +143,10 @@ class AccountReportHandlerMaIncoherences(models.AbstractModel):
                 'brut': {cle: resultat[cle] for cle in (
                     'libelle_a', 'libelle_b', 'a', 'b', 'ecart', 'statut',
                     'a_prev', 'b_prev', 'ecart_prev', 'statut_prev')},
+                # Clicking a label opens the report that figure comes from,
+                # on this same exercice (see action_ma_ouvrir_etat).
+                'cible_a': resultat['cible_a'] or '',
+                'cible_b': resultat['cible_b'] or '',
                 'libelle_a': resultat['libelle_a'],
                 'libelle_b': resultat['libelle_b'],
                 'montant_a': _montant(resultat['a']),
@@ -108,6 +175,13 @@ class AccountReportHandlerMaIncoherences(models.AbstractModel):
             # see _MODELE_NORMAL_ID in account_report.py.
             'modele': _("Modèle Normal"),
             'titre': _("Tableau de vérification des incohérences"),
+            # Reading the whole liasse takes ~25 s, so the result is cached;
+            # saying when it was computed is what makes that honest.
+            'calcule_le': _(
+                "Calculé le %(quand)s%(cache)s",
+                quand=fields.Datetime.context_timestamp(
+                    self, calcul['calcule_le']).strftime('%d/%m/%Y à %H:%M'),
+                cache=_(" (en cache)") if calcul['depuis_cache'] else ''),
             # The column headings travel with the data instead of being
             # written in the template: a bare word like "Test" sitting in a
             # QWeb template gets picked up by the web client's translation

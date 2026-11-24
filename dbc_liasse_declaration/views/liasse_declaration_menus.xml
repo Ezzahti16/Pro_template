@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Un menu « Déclarations » propre, juste après Comptabilité. La liasse
+        n'est pas un rapport de plus : c'est un dossier qu'on prépare, qu'on
+        contrôle et qu'on dépose, et le ranger sous les états le ferait passer
+        pour une consultation.
+
+        Le parent est `accountant.menu_accounting`, la racine de l'application
+        Comptabilité, et non `account.menu_finance` qui est celle de
+        Facturation - une autre application, où personne n'irait chercher une
+        liasse.
+    -->
+    <menuitem id="menu_ma_declarations"
+              name="Déclarations"
+              parent="accountant.menu_accounting"
+              sequence="5"/>
+
+    <menuitem id="menu_ma_liasse_declaration"
+              name="Liasse fiscale"
+              parent="menu_ma_declarations"
+              action="action_ma_liasse_declaration"
+              sequence="10"/>
+
+</odoo>

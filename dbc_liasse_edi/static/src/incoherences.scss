@@ -39,6 +39,11 @@
     .o_ma_incoh_titre {
         font-weight: 700;
         font-size: 15px;
+    }
+
+    .o_ma_incoh_horodatage {
+        color: #666;
+        font-size: 12px;
         padding-bottom: .35rem;
     }
 
@@ -111,6 +116,20 @@
             // cédées ou retirées du T10"); let them wrap rather than push the
             // figures off screen.
             min-width: 22rem;
+
+            // Discreet by default: the grid has 56 of these links and an
+            // underlined blue page would be unreadable. The pointer and the
+            // underline appear on hover.
+            a {
+                color: inherit;
+                text-decoration: none;
+                cursor: pointer;
+
+                &:hover {
+                    color: #0d6efd;
+                    text-decoration: underline;
+                }
+            }
         }
 
         .o_ma_incoh_num {

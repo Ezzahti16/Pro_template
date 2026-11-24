@@ -33,8 +33,9 @@ vs total credit of the balance. Double entry guarantees it in Odoo, so it would
 read 0,00 for ever and detect nothing.
 """
 import logging
+import time
 
-from odoo import _, models
+from odoo import _, fields, models
 
 from .account_report import (
     _ANNEX_TABLES,
@@ -50,6 +51,28 @@ _logger = logging.getLogger(__name__)
 # a real inconsistency. Below 0,01 nothing is reported at all.
 _SEUIL_MINEUR = 0.01
 _SEUIL_INCOHERENCE = 0.10
+
+# Rendering the 25 liasse reports takes around 25 seconds, and the screen needs
+# all of them. The result is therefore kept per (database, company, exercice,
+# draft entries) - in the worker's memory, not in the database: it is derived
+# data, and several workers each keeping their own copy costs nothing but a
+# recomputation.
+#
+# The entry is only reused while the FINGERPRINT below still matches, so a
+# posted entry, an edited annex row, a changed manual value or a reloaded
+# formula table invalidates it by itself. The TTL is only a safety net for
+# anything the fingerprint cannot see (a remote formula edited on the API, a
+# changed fiscal year), and the "Recalculer" button clears the entry outright.
+_VALEURS_CACHE = {}
+_CACHE_MAX = 8
+_CACHE_TTL = 3600.0
+
+# Models whose rows change the figures. account.move.line is scoped to the
+# exercice; the others are small enough to fingerprint whole.
+_EMPREINTE_MODELES = (
+    'account.report.external.value',     # les cellules "Saisie"
+    'ma.fiscal.setting',                 # les formules locales
+)
 
 
 def _codes(*codes):
@@ -239,12 +262,78 @@ class AccountReportHandlerMaCoherence(models.AbstractModel):
 
     # ------------------------------------------------------------ valeurs
 
+    @staticmethod
+    def _coh_cle_cache(dbname, company, date_from, date_to, all_entries):
+        return (dbname, company.id, str(date_from), str(date_to), bool(all_entries))
+
+    def _coh_empreinte(self, company, date_to):
+        """A cheap fingerprint of everything the figures are built from.
+
+        One aggregate per model - (number of rows, latest write_date) - so any
+        posted entry, edited annex row, changed manual value or reloaded
+        formula table changes it. Measured at 8 ms for the move lines against
+        25 s for the recomputation it avoids.
+        """
+        empreinte = [tuple(self.env['account.move.line'].sudo()._read_group(
+            [('company_id', '=', company.id), ('date', '<=', date_to)],
+            aggregates=['__count', 'write_date:max'])[0])]
+        modeles = list(_EMPREINTE_MODELES) + [model for model, _s in _ANNEX_TABLES.values()]
+        for nom in modeles:
+            modele = self.env.get(nom)
+            if modele is None:
+                continue
+            domaine = ([('company_id', '=', company.id)]
+                       if 'company_id' in modele._fields else [])
+            empreinte.append(tuple(modele.sudo()._read_group(
+                domaine, aggregates=['__count', 'write_date:max'])[0]))
+        return tuple(empreinte)
+
+    @staticmethod
+    def _coh_vider_cache(cle=None):
+        """Drop one cache entry, or the whole cache."""
+        if cle is None:
+            _VALEURS_CACHE.clear()
+        else:
+            _VALEURS_CACHE.pop(cle, None)
+
+    def _coh_values_datees(self, company, date_from, date_to, all_entries, force=False):
+        """The liasse figures, with when they were computed and from where.
+
+        {'values', 'per_tableau', 'calcule_le' (datetime UTC), 'depuis_cache'}
+        """
+        cle = self._coh_cle_cache(self.env.cr.dbname, company, date_from, date_to, all_entries)
+        empreinte = self._coh_empreinte(company, date_to)
+        entree = _VALEURS_CACHE.get(cle)
+        if (not force and entree and entree['empreinte'] == empreinte
+                and time.time() - entree['monotone'] < _CACHE_TTL):
+            _logger.debug("Incoherences: valeurs relues du cache pour %s", (cle,))
+            return {'values': dict(entree['values']),
+                    'per_tableau': {k: dict(v) for k, v in entree['per_tableau'].items()},
+                    'calcule_le': entree['calcule_le'],
+                    'depuis_cache': True}
+
+        values, per_tableau = self._coh_values(company, date_from, date_to, all_entries)
+        calcule_le = fields.Datetime.now()
+        if len(_VALEURS_CACHE) >= _CACHE_MAX:
+            # Bounded: drop the least recently computed entry.
+            _VALEURS_CACHE.pop(min(_VALEURS_CACHE, key=lambda k: _VALEURS_CACHE[k]['monotone']), None)
+        _VALEURS_CACHE[cle] = {
+            'empreinte': empreinte, 'values': dict(values),
+            'per_tableau': {k: dict(v) for k, v in per_tableau.items()},
+            'calcule_le': calcule_le, 'monotone': time.time(),
+        }
+        return {'values': values, 'per_tableau': per_tableau,
+                'calcule_le': calcule_le, 'depuis_cache': False}
+
     def _coh_values(self, company, date_from, date_to, all_entries):
         """({codeEdi: value}, {tableau_id: cells}) for the whole liasse.
 
         The 25 reports are all rendered, not just the ones the checks read:
         the coverage inventory has to see every tableau, including the ones
         that turn out empty - that is the whole point of it.
+
+        This is the expensive call (~25 s); go through _coh_values_datees to
+        get it from the cache when nothing has changed.
         """
         values, per_tableau = self._dbc_edi_all_values(date_from, date_to, all_entries)
 
@@ -272,7 +361,20 @@ class AccountReportHandlerMaCoherence(models.AbstractModel):
         typo, or a code that moved), and must not be silently read as 0: the
         check reports itself as untested instead.
         """
-        codes = {code for totals in _ANNEX_TOTALS.values() for code, _field in totals}
+        return frozenset(self._coh_code_report())
+
+    def _coh_code_report(self):
+        """{codeEdi: xml_id of the dbc_liasse_fiscale report that owns it}.
+
+        Serves two purposes: the set of its keys tells a blank cell from a
+        wrong code (see _coh_declared_codes), and the value tells the screen
+        which report to open when a test's label is clicked - derived rather
+        than written down, so it cannot drift from the reports.
+        """
+        tableau_report = {tid: xmlid for xmlid, tid in _REPORT_TABLEAU.items()}
+        codes = {code: tableau_report.get(tableau_id)
+                 for tableau_id, totals in _ANNEX_TOTALS.items()
+                 for code, _field in totals}
         for xmlid in _REPORT_TABLEAU:
             target = self.env.ref(f'dbc_liasse_fiscale.{xmlid}', raise_if_not_found=False)
             if not target:
@@ -282,8 +384,20 @@ class AccountReportHandlerMaCoherence(models.AbstractModel):
             for expression in expressions:
                 code = self._dbc_edi_code_of(expression, xmlids, set())
                 if code:
-                    codes.add(code)
-        return frozenset(codes)
+                    codes.setdefault(code, xmlid)
+        return codes
+
+    @staticmethod
+    def _coh_cible(term, codes):
+        """The report a check's side comes from, as an xml_id, or None."""
+        if not term:
+            return None
+        if term[0] == 'annex':
+            return {tid: xmlid for xmlid, tid in _REPORT_TABLEAU.items()}.get(term[1])
+        for _signe, code in term[1]:
+            if codes.get(code):
+                return codes[code]
+        return None
 
     def _coh_term(self, term, values, company, date_from, date_to, declares=frozenset()):
         """The value of one side of a check, or None when it cannot be read.
@@ -341,8 +455,9 @@ class AccountReportHandlerMaCoherence(models.AbstractModel):
         ever carry the exercice being filed. That is not a failure to test,
         it is nothing to test, and it is counted as neither.
         """
+        codes_report = self._coh_code_report()
         if declares is None:
-            declares = self._coh_declared_codes()
+            declares = frozenset(codes_report)
         resultats = []
         for label_a, a, a_prev, label_b, b, b_prev in _CHECKS:
             valeur_a = self._coh_term(a, values, company, date_from, date_to, declares)
@@ -359,6 +474,8 @@ class AccountReportHandlerMaCoherence(models.AbstractModel):
                 'a_prev': valeur_a_prev, 'b_prev': valeur_b_prev,
                 'ecart_prev': ecart_prev, 'statut_prev': self._coh_statut(ecart_prev),
                 'applicable_prev': a_prev is not None and b_prev is not None,
+                'cible_a': self._coh_cible(a, codes_report),
+                'cible_b': self._coh_cible(b, codes_report),
             })
         return resultats
 
