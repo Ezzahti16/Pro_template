@@ -356,7 +356,7 @@ class AccountReportCustomHandlerXlsx(models.AbstractModel):
     def _dbc_xlsx_write_headers(self, workbook, company, date_from, date_to, anchors):
         """Company, identifiant fiscal and exercice, in the places the form
         prints them - which differ from sheet to sheet."""
-        identifiant = (company.ma_identifiant_fiscal or '').strip()
+        identifiant = company._dbc_liasse_identifiant_fiscal()
         decision = company.ma_date_decision_affectation
         texts = {
             'company': company.display_name,
@@ -370,9 +370,11 @@ class AccountReportCustomHandlerXlsx(models.AbstractModel):
             'raison_sociale': company._dbc_liasse_raison_sociale(),
             'adresse': company._dbc_liasse_adresse(),
             'lieu_date': company._dbc_liasse_lieu_date(),
-            # no field holds the taxe professionnelle yet, so its line stays
-            # as blank as it is on an unfilled form
-            'taxe_professionnelle': None,
+            # The taxe professionnelle comes from the company's Identifiants
+            # Fiscaux tab (field TP). It used to be left blank because nothing
+            # held it; now something does, and the cover page of a filed
+            # liasse carries it.
+            'taxe_professionnelle': company._dbc_liasse_taxe_professionnelle() or None,
             # "Decision du ..." on the Tableau d'Affectation. The liasse has no
             # code for it, so it comes from the company rather than the
             # accounts; left blank when unset, as the form would be.

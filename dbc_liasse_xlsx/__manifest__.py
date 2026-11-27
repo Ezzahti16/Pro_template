@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale XLSX (Maroc)',
-    'version': '19.0.4.0.0',
+    'version': '19.0.6.2.0',
     'category': 'Accounting/Accounting',
     'summary': "Export the Moroccan liasse fiscale as the DGI's own Excel workbook",
     'description': """
@@ -27,6 +27,16 @@ fiscal, address, and the city and date above the signature.
 
 Values come from the same engine as the EDI XML export, so the workbook and
 the XML always agree.
+
+The module also builds the Etat des ventes workbook, a separate file of a
+single sheet, because the Etat des ventes is a separate declaration and not
+one of the 25 tableaux. It is laid out as the four tables of the BILAN
+workbook's "Etat ventes" sheet - detail of sales per client with their ICE,
+sundry local customers, export customers, and the total - stacked one under
+the other instead of side by side, so every amount falls in the same two
+columns. Its figures come from dbc_liasse_edi, which computes them for the
+matching EDI file, so the workbook and that file cannot disagree. Both are
+produced from the Declaration screen.
 """,
     'author': 'DBC',
     'website': '',

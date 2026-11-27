@@ -28,13 +28,24 @@ _logger = logging.getLogger(__name__)
 # lequel des 25 ferait l'affaire - autant en nommer un seul et s'y tenir.
 _REPORT_PORTEUR = 'dbc_liasse_fiscale.bilan_actif_report'
 
-# Les trois fichiers que la liasse sait produire.
-#   bouton -> (méthode du générateur, extension, type MIME)
+# Les fichiers que la déclaration sait produire.
+#   bouton -> (méthode du générateur, type MIME, nom lisible pour le fil)
+#
+# Les trois premiers sont la liasse elle-même. Les deux derniers sont l'état
+# des ventes, qui est une déclaration séparée : elle se dépose à part, elle a
+# son propre fichier EDI (<LesEtatDesVentes>) et son propre classeur, et elle
+# ne porte aucun code de la liasse. Un seul bouton de plus ne suffisait pas :
+# le classeur se produit toujours, le XML refuse tant qu'un client nommé n'a
+# pas d'ICE - les deux ne servent donc pas au même moment.
+_XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 _GENERATEURS = {
-    'pdf':  ('dbc_liasse_pdf_export',  'pdf',  'application/pdf'),
-    'xlsx': ('dbc_liasse_xlsx_export', 'xlsx',
-             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
-    'xml':  ('dbc_liasse_edi_export',  'zip',  'application/zip'),
+    'pdf':  ('dbc_liasse_pdf_export',  'application/pdf', "PDF"),
+    'xlsx': ('dbc_liasse_xlsx_export', _XLSX_MIME, "Excel"),
+    'xml':  ('dbc_liasse_edi_export',  'application/zip', "XML EDI"),
+    'ventes_xlsx': ('dbc_etat_ventes_xlsx_export', _XLSX_MIME,
+                    "Excel de l'état des ventes"),
+    'ventes_xml':  ('dbc_etat_ventes_xml_export', 'application/zip',
+                    "XML EDI de l'état des ventes"),
 }
 
 
@@ -56,9 +67,8 @@ class MaLiasseDeclaration(models.Model):
         string="Raison sociale", compute='_compute_identite',
         store=True, readonly=False, tracking=True,
         help="Dénomination telle qu'elle doit figurer sur la liasse. Reprise "
-             "de la fiche société (Raison sociale, à défaut le nom), et "
-             "modifiable ici : c'est la déclaration qui fait foi, pas la "
-             "fiche, qui peut changer après le dépôt.")
+             "du nom de la société, et modifiable ici : c'est la déclaration "
+             "qui fait foi, pas la fiche, qui peut changer après le dépôt.")
     identifiant_fiscal = fields.Char(
         string="Identifiant fiscal", compute='_compute_identite',
         store=True, readonly=False, tracking=True,
@@ -110,18 +120,29 @@ class MaLiasseDeclaration(models.Model):
         'ma.liasse.declaration.incoherence', 'declaration_id',
         string="Contrôles de cohérence", readonly=True, copy=False)
 
+    # « Arrêtés », pas « lancés » : le moteur sert son cache tant que ni les
+    # écritures ni les annexes n'ont bougé, donc relancer les contrôles à
+    # 20:47 peut légitimement laisser 20:20. C'est la date des chiffres qui
+    # compte, et c'est elle que porte le champ ; l'étiquette doit la nommer.
     controle_le = fields.Datetime(
-        string="Contrôles lancés le", readonly=True, copy=False,
+        string="Chiffres arrêtés le", readonly=True, copy=False,
         help="Quand les contrôles de cohérence affichés ci-dessous ont été "
-             "relevés. Ils sont figés : ils disent ce qui était vrai à ce "
-             "moment, pas ce que les comptes disent maintenant.")
+             "calculés. Ils sont figés : ils disent ce qui était vrai à ce "
+             "moment, pas ce que les comptes disent maintenant. Relancer les "
+             "contrôles ne change cette date que si quelque chose a bougé "
+             "depuis.")
 
     nb_tableaux = fields.Integer(
         string="Tableaux", compute='_compute_verification', store=True)
     nb_tableaux_verifies = fields.Integer(
         string="Tableaux vérifiés", compute='_compute_verification', store=True)
+    # `avg` et non la somme par défaut : additionner deux pourcentages donne
+    # un nombre qui ne veut rien dire, et un groupe de 100 % + 0 % affichait
+    # « 100,00 % », ce qui rassure à tort. Toutes les déclarations portent les
+    # mêmes 25 tableaux, donc la moyenne est exacte.
     taux_verification = fields.Float(
-        string="Vérification", compute='_compute_verification', store=True)
+        string="Vérification", compute='_compute_verification', store=True,
+        aggregator='avg')
     nb_cellules_edi = fields.Integer(
         string="Cellules EDI", readonly=True, copy=False,
         help="Nombre de cellules que le fichier EDI contiendrait, relevé au "
@@ -150,7 +171,8 @@ class MaLiasseDeclaration(models.Model):
         for declaration in self:
             company = declaration.company_id
             declaration.raison_sociale = company._dbc_liasse_raison_sociale() if company else False
-            declaration.identifiant_fiscal = company.ma_identifiant_fiscal or False
+            declaration.identifiant_fiscal = \
+                company._dbc_liasse_identifiant_fiscal() if company else False
 
     @api.depends('company_id', 'date_to')
     def _compute_date_from(self):
@@ -420,8 +442,15 @@ class MaLiasseDeclaration(models.Model):
         return True
 
     def action_retour_brouillon(self):
+        """Déclaré/Confirmé -> Brouillon.
+
+        La date de dépôt repart avec l'état. Un brouillon qui garde sa date de
+        dépôt est simplement faux : le champ est masqué sur l'écran, mais une
+        recherche, un filtre ou un export le verraient toujours et diraient
+        déposé quelque chose qui ne l'a jamais été.
+        """
         for declaration in self:
-            declaration.state = 'draft'
+            declaration.write({'state': 'draft', 'date_depot': False})
         return True
 
     # ---------------------------------------------------------- ouvertures
@@ -466,8 +495,14 @@ class MaLiasseDeclaration(models.Model):
     def action_generer_xml(self):
         return self._generer('xml')
 
+    def action_generer_ventes_xlsx(self):
+        return self._generer('ventes_xlsx')
+
+    def action_generer_ventes_xml(self):
+        return self._generer('ventes_xml')
+
     def _generer(self, genre):
-        """Produire un des trois fichiers, l'attacher et le télécharger.
+        """Produire un des fichiers, l'attacher et le télécharger.
 
         Les générateurs sont ceux des boutons des états : même code, mêmes
         chiffres. On les appelle directement plutôt que par
@@ -479,7 +514,7 @@ class MaLiasseDeclaration(models.Model):
         et une déclaration qui ne garde pas ses pièces n'en est pas une.
         """
         self.ensure_one()
-        methode, extension, mimetype = _GENERATEURS[genre]
+        methode, mimetype, libelle = _GENERATEURS[genre]
         report = self._report_porteur()
         handler = self.env[report._get_custom_handler_model()] \
             .with_company(self.company_id) \
@@ -488,17 +523,47 @@ class MaLiasseDeclaration(models.Model):
         resultat = getattr(handler, methode)(options)
 
         attachment = self.env['ir.attachment'].create({
-            'name': resultat['file_name'],
+            'name': self._nom_date(resultat['file_name']),
             'datas': base64.b64encode(resultat['file_content']),
             'res_model': self._name,
             'res_id': self.id,
             'mimetype': mimetype,
         })
         self.message_post(
-            body=_("Fichier %(genre)s généré.", genre=genre.upper()),
+            body=_("Fichier %(libelle)s généré.", libelle=libelle),
             attachment_ids=attachment.ids)
         return {
             'type': 'ir.actions.act_url',
             'url': '/web/content/%d?download=true' % attachment.id,
             'target': 'self',
         }
+
+    def _nom_date(self, nom):
+        """Dater la pièce jointe produite.
+
+        Le même bouton pressé deux fois laissait deux pièces de nom
+        identique, octet pour octet indiscernables tant que rien n'avait
+        changé — et impossibles à départager dès qu'un chiffre bougeait entre
+        les deux. Or l'intérêt d'attacher le fichier est justement de savoir
+        lequel a été déposé. L'heure est celle du poste qui génère, pas l'UTC,
+        parce que c'est celle-là qu'on relit.
+        """
+        self.ensure_one()
+        racine, point, extension = nom.rpartition('.')
+        if not point:
+            racine, extension = nom, ''
+        horodatage = fields.Datetime.context_timestamp(
+            self, fields.Datetime.now()).strftime('%Y%m%d-%H%M')
+        return '%s_%s%s%s' % (racine, horodatage, point, extension)
+
+    # ------------------------------------------------------------ fil de discussion
+
+    def _creation_message(self):
+        """Le premier message du fil.
+
+        Odoo compose « <description du modèle> créé » : le masculin est
+        inévitable pour lui, pas pour nous, et une déclaration est féminine.
+        C'est la première ligne que l'utilisateur lit sur l'enregistrement.
+        """
+        self.ensure_one()
+        return _("Déclaration de la liasse fiscale créée.")

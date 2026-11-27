@@ -14,6 +14,11 @@ c'est dbc_liasse_edi qui s'en charge.
 """
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import formatLang
+
+# Les trois statuts où une comparaison a réellement eu lieu. Les deux autres
+# (« Non testé », « Sans objet ») n'ont pas de chiffre à montrer.
+_STATUTS_TESTES = ('ok', 'mineur', 'incoherence')
 
 
 class MaLiasseDeclarationIncoherence(models.Model):
@@ -62,6 +67,46 @@ class MaLiasseDeclarationIncoherence(models.Model):
 
     company_id = fields.Many2one(
         related='declaration_id.company_id', store=True, index=True)
+
+    # ------------------------------------------------------------- affichage
+    #
+    # Un montant n'existe que si le contrôle a pu être fait. Écrire 0,00 sur
+    # une ligne « Sans objet » revient à affirmer que les deux termes
+    # concordaient, alors que rien n'a été comparé — et sur un exercice sans
+    # antécédent, c'est 24 lignes sur 28 qui mentent de cette façon. L'état
+    # Incohérences laisse ces cases vides ; la déclaration doit dire la même
+    # chose, sinon deux écrans du même produit se contredisent.
+    #
+    # Les flottants restent en base, intacts : seul l'affichage se tait.
+
+    # Les libellés disent « à l'écran » : ils ne doivent pas porter le même
+    # nom que les flottants dont ils dérivent, sinon Odoo signale deux champs
+    # de même étiquette et l'export propose deux fois la même colonne.
+    montant_a_texte = fields.Char(
+        string="Montant A à l'écran", compute='_compute_affichage')
+    montant_b_texte = fields.Char(
+        string="Montant B à l'écran", compute='_compute_affichage')
+    ecart_texte = fields.Char(
+        string="Écart à l'écran", compute='_compute_affichage')
+    ecart_prev_texte = fields.Char(
+        string="Écart N-1 à l'écran", compute='_compute_affichage')
+
+    @api.depends('montant_a', 'montant_b', 'ecart', 'ecart_prev',
+                 'statut', 'statut_prev')
+    def _compute_affichage(self):
+        for ligne in self:
+            teste = ligne.statut in _STATUTS_TESTES
+            teste_prev = ligne.statut_prev in _STATUTS_TESTES
+            ligne.montant_a_texte = ligne._chiffre(ligne.montant_a, teste)
+            ligne.montant_b_texte = ligne._chiffre(ligne.montant_b, teste)
+            ligne.ecart_texte = ligne._chiffre(ligne.ecart, teste)
+            ligne.ecart_prev_texte = ligne._chiffre(ligne.ecart_prev, teste_prev)
+
+    def _chiffre(self, valeur, teste):
+        """Le montant mis en forme, ou rien du tout s'il n'a pas été testé."""
+        if not teste:
+            return ''
+        return formatLang(self.env, valeur or 0.0, digits=2)
 
     @api.depends('libelle_a', 'libelle_b')
     def _compute_display_name(self):

@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--
+        La date de décision d'affectation, et elle seule. Tout le reste de ce
+        que la liasse lit sur la société - raison sociale, IF, ICE, taxe
+        professionnelle - est porté et affiché par
+        identifiants_fiscaux_maroc, dans son onglet « Identifiants Fiscaux ».
+        Celle-ci n'est pas un identifiant mais une date d'assemblée, d'où sa
+        place sur l'onglet général, sous le numéro de TVA.
+    -->
     <record id="view_company_form_ma_xlsx" model="ir.ui.view">
         <field name="name">res.company.form.ma.xlsx</field>
         <field name="model">res.company</field>
-        <field name="inherit_id" ref="dbc_liasse_edi.view_company_form_ma_edi"/>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <!-- Après identifiants_fiscaux_maroc, qui remplace l'onglet entier.
+             Les vues héritées s'appliquent par priorité croissante, et à
+             priorité égale par ordre d'identifiant - donc par ordre
+             d'installation, ce qui ne garantit rien. -->
+        <field name="priority">20</field>
         <field name="arch" type="xml">
-            <field name="ma_identifiant_fiscal" position="after">
-                <field name="ma_raison_sociale"
-                       placeholder="Nom de la société si différent"/>
+            <field name="vat" position="after">
                 <field name="ma_date_decision_affectation"/>
             </field>
         </field>

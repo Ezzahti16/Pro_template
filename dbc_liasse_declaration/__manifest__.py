@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Déclaration de la Liasse Fiscale (Maroc)',
-    'version': '19.0.1.0.0',
+    'version': '19.0.2.0.0',
     'category': 'Accounting/Accounting',
     'summary': "Piloter le dépôt de la liasse fiscale : états, contrôles et génération des fichiers",
     'description': """

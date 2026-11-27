@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        La seule chose que l'état des ventes demande à la fiche du client :
+        s'il doit être fondu dans les divers clients locaux. Le reste se lit
+        ailleurs - l'export sur la devise de la facture, l'ICE sur
+        `company_registry`, que l'onglet « Identifiants Fiscaux » affiche
+        déjà sous ce nom.
+    -->
+    <record id="view_partner_form_ma_etat_ventes" model="ir.ui.view">
+        <field name="name">res.partner.form.ma.etat.ventes</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <!-- Après identifiants_fiscaux_maroc, qui remanie cette même page. -->
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']/group[@name='container_row_2']"
+                   position="inside">
+                <group name="ma_etat_ventes" string="État des ventes (liasse fiscale)">
+                    <field name="ma_client_divers"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

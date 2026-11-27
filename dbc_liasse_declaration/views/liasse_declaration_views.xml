@@ -24,11 +24,16 @@
                     <button name="action_confirmer" type="object"
                             string="Confirmer" class="btn-primary"
                             invisible="state != 'controle'"/>
+                    <!-- Libellé court : avec six boutons dans l'en-tête, la
+                         barre d'état n'a plus la place d'afficher « Déclaré »
+                         et le replie derrière des points de suspension. -->
                     <button name="action_declarer" type="object"
-                            string="Marquer comme déclaré" class="btn-primary"
+                            string="Marquer déposé" class="btn-primary"
+                            title="Enregistrer le dépôt de cette liasse auprès de la DGI"
                             invisible="state != 'confirme'"/>
                     <button name="action_controler" type="object"
-                            string="Relancer les contrôles"
+                            string="Relancer" icon="fa-refresh"
+                            title="Relancer les contrôles de cohérence"
                             invisible="state not in ('controle', 'confirme')"/>
 
                     <!-- Les trois fichiers : disponibles à toute étape. Les
@@ -40,6 +45,20 @@
                             string="Excel" icon="fa-file-excel-o"/>
                     <button name="action_generer_xml" type="object"
                             string="XML EDI" icon="fa-file-code-o"/>
+
+                    <!-- L'état des ventes est une déclaration séparée : ses
+                         deux fichiers sont à elle, ils ne reprennent rien de
+                         la liasse et se déposent à part. D'où deux boutons
+                         distincts plutôt qu'une feuille de plus dans le
+                         classeur de la liasse. Libellés courts : l'en-tête
+                         porte déjà six boutons, et la barre d'état doit
+                         rester lisible. -->
+                    <button name="action_generer_ventes_xlsx" type="object"
+                            string="Ventes Excel" icon="fa-file-excel-o"
+                            title="Produire le classeur Excel de l'état des ventes"/>
+                    <button name="action_generer_ventes_xml" type="object"
+                            string="Ventes XML" icon="fa-file-code-o"
+                            title="Produire le fichier EDI de l'état des ventes (ZIP)"/>
 
                     <button name="action_retour_brouillon" type="object"
                             string="Remettre en brouillon"
@@ -123,6 +142,7 @@
                                     <field name="name" string="Tableau" readonly="1"/>
                                     <field name="cellules" string="Cellules EDI"
                                            readonly="1" optional="show"
+                                           width="130px"
                                            decoration-danger="cellules == 0"/>
                                     <field name="verifie" string="Vérifié"
                                            widget="boolean_toggle"/>
@@ -144,6 +164,10 @@
                                 DGI : ils signalent, ils n'empêchent pas le dépôt.
                                 Seul un bilan déséquilibré arrête la génération du
                                 fichier EDI.
+                                <strong>Une case vide n'est pas un zéro :</strong>
+                                elle dit qu'il n'y avait rien à comparer, le plus
+                                souvent parce que l'annexe ne porte que l'exercice
+                                déclaré.
                             </div>
                             <field name="incoherence_ids" nolabel="1" readonly="1">
                                 <list create="0" delete="0"
@@ -152,13 +176,20 @@
                                       decoration-muted="statut in ('non_teste', 'sans_objet')">
                                     <field name="sequence" column_invisible="1"/>
                                     <field name="libelle_a" string="Premier terme"/>
-                                    <field name="montant_a" string="Montant"/>
+                                    <!-- Les colonnes chiffrées passent par les
+                                         champs texte : un contrôle non testé ne
+                                         doit pas afficher 0,00, qui se lirait
+                                         comme une concordance. -->
+                                    <field name="montant_a_texte" string="Montant"
+                                           class="text-end"/>
                                     <field name="libelle_b" string="Second terme"/>
-                                    <field name="montant_b" string="Montant"/>
-                                    <field name="ecart" string="Écart"/>
+                                    <field name="montant_b_texte" string="Montant"
+                                           class="text-end"/>
+                                    <field name="ecart_texte" string="Écart"
+                                           class="text-end"/>
                                     <field name="statut" string="Résultat"/>
-                                    <field name="ecart_prev" string="Écart N-1"
-                                           optional="show"/>
+                                    <field name="ecart_prev_texte" string="Écart N-1"
+                                           class="text-end" optional="show"/>
                                     <field name="statut_prev" string="Résultat N-1"
                                            optional="hide"/>
                                 </list>
@@ -187,7 +218,7 @@
                 <field name="type_declaration" optional="show"/>
                 <field name="taux_verification" widget="progressbar"
                        string="Vérification"/>
-                <field name="nb_incoherences" string="Incohérences"
+                <field name="nb_incoherences" string="Incohérences" width="130px"
                        decoration-danger="nb_incoherences &gt; 0" optional="show"/>
                 <field name="date_depot" optional="hide"/>
                 <field name="state" widget="badge"

@@ -2,3 +2,4 @@ from . import res_company
 from . import account_report
 from . import coherence
 from . import incoherences
+from . import etat_ventes

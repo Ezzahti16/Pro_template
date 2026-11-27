@@ -139,10 +139,10 @@ class AccountReportCustomHandlerPdf(models.AbstractModel):
     def _dbc_pdf_cover(self, company, date_from, date_to):
         return {
             'raison_sociale': company._dbc_liasse_raison_sociale(),
-            # nothing holds the taxe professionnelle yet, so its line is left
-            # as blank as it is on an unfilled form
-            'taxe_professionnelle': '',
-            'identifiant': (company.ma_identifiant_fiscal or '').strip(),
+            # The taxe professionnelle comes from the company's Identifiants
+            # Fiscaux tab (field TP), like the identifiant fiscal just below.
+            'taxe_professionnelle': company._dbc_liasse_taxe_professionnelle(),
+            'identifiant': company._dbc_liasse_identifiant_fiscal(),
             'adresse': company._dbc_liasse_adresse(),
             'exercice': _("Exercice du %(start)s au %(end)s",
                           start=date_from.strftime('%d/%m/%Y'),

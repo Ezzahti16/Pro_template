@@ -13,21 +13,14 @@ class ResCompany(models.Model):
              "DGI workbook's Tableau 14 declares only its thirteen amounts - "
              "so it cannot be derived from the accounts and is kept here.",
     )
-    ma_raison_sociale = fields.Char(
-        string="Raison sociale",
-        help="Legal name as it is to appear on the cover page of the liasse. "
-             "Kept apart from the company name because the name Odoo is run "
-             "under is often a trading or short name, while the cover page of "
-             "a tax return has to carry the registered one. Left empty, the "
-             "company name is used.",
-    )
 
     # ------------------------------------------------------------------ liasse
-
-    def _dbc_liasse_raison_sociale(self):
-        """What the cover page prints as the raison sociale."""
-        self.ensure_one()
-        return (self.ma_raison_sociale or '').strip() or self.display_name
+    #
+    # La raison sociale et les trois identifiants ne sont pas ici : ils vivent
+    # dans l'onglet « Identifiants Fiscaux » de la fiche société, et
+    # dbc_liasse_edi/models/res_company.py dit lequel répond à quoi. Ce qui
+    # reste ci-dessous est de la mise en forme pour la page de garde, pas de
+    # l'identité.
 
     def _dbc_liasse_adresse(self):
         """The company's address, on one line, as the cover page prints it."""

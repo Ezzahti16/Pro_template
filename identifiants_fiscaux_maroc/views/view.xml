@@ -97,6 +97,8 @@
                     <group name="container_row_2">
 
                         <group name="identifiant">
+                            <field name="raison_sociale"
+                                   placeholder="Laisser vide : le nom de la société sert"/>
                             <field name="rc"/>
                             <field name="tp"/>
                             <field name="iff"/>

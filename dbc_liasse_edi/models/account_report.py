@@ -631,13 +631,14 @@ class AccountReportCustomHandlerEdi(models.AbstractModel):
         report = self.env['account.report'].browse(options['report_id'])
         company = self._dbc_edi_company(report, options)
 
-        identifiant = (company.ma_identifiant_fiscal or '').strip()
+        identifiant = company._dbc_liasse_identifiant_fiscal()
         if not identifiant:
             raise UserError(_(
                 "No Identifiant Fiscal is set on company %(company)s.\n\n"
                 "Simpl-IS rejects an EDI file whose <identifiantFiscal> does not "
                 "match the declaring taxpayer, so it cannot be generated without "
-                "it. Set it in Settings > Users & Companies > Companies.",
+                "it. Set it in Settings > Users & Companies > Companies, on the "
+                "\"Identifiants Fiscaux\" tab, field IF (iff).",
                 company=company.display_name,
             ))
 

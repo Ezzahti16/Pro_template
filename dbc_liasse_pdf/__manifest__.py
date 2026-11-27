@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale PDF (Maroc)',
-    'version': '19.0.2.5.0',
+    'version': '19.0.2.6.0',
     'category': 'Accounting/Accounting',
     'summary': "Print the Moroccan liasse fiscale as the DGI's own form, in PDF",
     'description': """

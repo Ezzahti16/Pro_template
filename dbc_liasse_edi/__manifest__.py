@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'DBC - Liasse Fiscale EDI (Maroc)',
-    'version': '19.0.3.2.0',
+    'version': '19.0.5.1.0',
     'category': 'Accounting/Accounting',
     'summary': 'Generate the DGI Simpl-IS "EDI Liasse" XML file from the Moroccan liasse reports',
     'description': """
@@ -27,10 +27,21 @@ v1.0, for the Modele Comptable Normal (modele id 1):
     'author': 'DBC',
     'website': '',
     'license': 'LGPL-3',
-    'depends': ['dbc_liasse_fiscale'],
+    'depends': [
+        'dbc_liasse_fiscale',
+        # L'identite fiscale du declarant - IF, ICE, taxe professionnelle -
+        # est portee par ce module, sur la societe comme sur le client. La
+        # liasse la lit, elle ne la redeclare pas : deux champs IF cote a cote
+        # finissent par porter deux nombres differents, et Simpl-IS rejette
+        # un fichier dont l'identifiantFiscal n'est pas celui du deposant.
+        'identifiants_fiscaux_maroc',
+    ],
     'data': [
         'data/incoherences_report.xml',
-        'views/res_company_views.xml',
+        # Pas de vue société : les quatre renseignements que la liasse lit sur
+        # elle sont déjà affichés par identifiants_fiscaux_maroc, dans son
+        # onglet « Identifiants Fiscaux ». Rien à ajouter au formulaire.
+        'views/res_partner_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

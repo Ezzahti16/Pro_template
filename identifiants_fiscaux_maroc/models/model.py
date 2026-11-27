@@ -118,6 +118,12 @@ class ResPartner(models.Model):
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+    # Dénomination légale, telle qu'elle doit figurer sur une déclaration
+    # fiscale. Séparée du nom de la société parce que le nom sous lequel Odoo
+    # tourne est souvent un nom commercial ou abrégé, alors qu'une liasse ou
+    # un état des ventes doit porter le nom enregistré. Laissée vide, c'est le
+    # nom de la société qui sert.
+    raison_sociale = fields.Char(string='Raison sociale')
     rc = fields.Char(string='RC')
     tp = fields.Char(string='TP')
     iff = fields.Char(string='IF')
